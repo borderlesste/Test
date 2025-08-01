@@ -1,0 +1,1093 @@
+
+> server@1.0.0 start
+> node src/index.js
+
+=� Notification Service initialized
+💳 Payment Gateway Service initialized for development
+📝 Stripe: Not configured
+📝 PayPal: Configured
+🚀 Servidor corriendo en puerto 4000
+📧 Servicio de email configurado para desarrollo
+🔑 Usuario de prueba: nnhvfgazryfsajuj@ethereal.email
+🔄 Sincronizando integraciones automáticamente...
+✅ Integraciones sincronizadas: 0 creadas, 2 actualizadas
+🔒 Evento de seguridad registrado: login_exitoso - IP: 127.0.0.1 - Usuario: 3
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando rol de administrador. req.user: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Rol en sesión: admin
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+Verificando sesión. SessionID: 5d-byYvmVNOQTrLEUZ3JkLLILHpBusR7
+Usuario en sesión: 2
+Usuario autenticado: {
+  id: 2,
+  role: 'admin',
+  email: 'hackemate2@gmail.com',
+  nombre: 'Admin'
+}
+🔒 Evento de seguridad registrado: logout - IP: 127.0.0.1 - Usuario: 2
+🔒 Evento de seguridad registrado: login_exitoso - IP: 127.0.0.1 - Usuario: 3
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando rol de cliente. req.user: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Rol en sesión: cliente
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+Verificando sesión. SessionID: KaYSBST7TENkl_f3uv8uyWhDjZfKWgn5
+Usuario en sesión: 3
+Usuario autenticado: {
+  id: 3,
+  role: 'cliente',
+  email: 'edithjo2015@gmail.com',
+  nombre: 'Cliente'
+}
+🔒 Evento de seguridad registrado: logout - IP: 127.0.0.1 - Usuario: 3
+Verificando sesión. SessionID: iOEzg-a2YTplWuFuZLkisrcxROdV_oHt
+Usuario en sesión: undefined
+Verificando sesión. SessionID: 8uy8MxrCqylE8OTDV1aRLduChD28qkit
+Usuario en sesión: undefined
+🔒 Evento de seguridad registrado: acceso_denegado - IP: 127.0.0.1 - Usuario: null
+🔒 Evento de seguridad registrado: acceso_denegado - IP: 127.0.0.1 - Usuario: null
+Verificando sesión. SessionID: KQetb-QGWJ46TmKHWH7oxUyX0inaya5D
+Usuario en sesión: undefined
+Verificando sesión. SessionID: FlGw6bB5yug-Gi5YlBuM9ldA3oPRfX58
+Usuario en sesión: undefined
+🔒 Evento de seguridad registrado: acceso_denegado - IP: 127.0.0.1 - Usuario: null
+🔒 Evento de seguridad registrado: acceso_denegado - IP: 127.0.0.1 - Usuario: null
+Verificando sesión. SessionID: 8Bf1ZyQwNKiE34vqTzzD2j-ugn8bp0Tn
+Usuario en sesión: undefined
+Verificando sesión. SessionID: ugOLULEvtihyMbi04XKThp2y03yp2974
+Usuario en sesión: undefined
+🔒 Evento de seguridad registrado: acceso_denegado - IP: 127.0.0.1 - Usuario: null
+❌ Error registrando evento de seguridad: Error: connect ETIMEDOUT
+    at PromisePool.query (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/mysql2/lib/promise/pool.js:36:22)
+    at SecurityLogService.logSecurityEvent (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/services/securityLogService.js:35:35)
+    at SecurityLogService.logAccessDenied (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/services/securityLogService.js:114:23)
+    at isAuthenticated (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/middleware/authMiddleware.js:12:24)
+    at Layer.handle [as handle_request] (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/layer.js:95:5)
+    at /home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:346:12) {
+  code: 'ETIMEDOUT',
+  errno: undefined,
+  sql: undefined,
+  sqlState: undefined,
+  sqlMessage: undefined
+}
+Error logging access denied: Error: connect ETIMEDOUT
+    at PromisePool.query (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/mysql2/lib/promise/pool.js:36:22)
+    at SecurityLogService.logSecurityEvent (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/services/securityLogService.js:35:35)
+    at SecurityLogService.logAccessDenied (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/services/securityLogService.js:114:23)
+    at isAuthenticated (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/middleware/authMiddleware.js:12:24)
+    at Layer.handle [as handle_request] (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/layer.js:95:5)
+    at /home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:346:12) {
+  code: 'ETIMEDOUT',
+  errno: undefined,
+  sql: undefined,
+  sqlState: undefined,
+  sqlMessage: undefined
+}
+Error al obtener proyectos: Error: read ENETUNREACH
+    at PromisePool.execute (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/mysql2/lib/promise/pool.js:54:22)
+    at getAllProjects (/home/enrrique/Desktop/Boderless/boderles-1/1/server/src/controllers/projectsController.js:24:31)
+    at Layer.handle [as handle_request] (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/layer.js:95:5)
+    at next (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/route.js:149:13)
+    at Route.dispatch (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/route.js:119:3)
+    at Layer.handle [as handle_request] (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/layer.js:95:5)
+    at /home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:346:12)
+    at next (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:280:10)
+    at Function.handle (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express/lib/router/index.js:175:3) {
+  code: 'ENETUNREACH',
+  errno: -101,
+  sql: undefined,
+  sqlState: undefined,
+  sqlMessage: undefined
+}
+/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/mysql2/lib/promise/pool.js:36
+    const localErr = new Error();
+                     ^
+
+Error: read ETIMEDOUT
+    at PromisePool.query (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/mysql2/lib/promise/pool.js:36:22)
+    at /home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express-mysql-session/index.js:384:30
+    at new Promise (<anonymous>)
+    at MySQLStore.query (/home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express-mysql-session/index.js:381:10)
+    at /home/enrrique/Desktop/Boderless/boderles-1/1/server/node_modules/express-mysql-session/index.js:372:16 {
+  code: 'ETIMEDOUT',
+  errno: -110,
+  sql: undefined,
+  sqlState: undefined,
+  sqlMessage: undefined
+}
+
+Node.js v22.17.0

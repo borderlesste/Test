@@ -1,0 +1,169 @@
+ Perfecto! La base de datos está completamente configurada. Credenciales de prueba:
+
+https://ethereal.email/message/aIw7mUtUvPQABmyEaIw8HWXUKwn.yeJhAAAAAYDLeVhq9Xvg9D-rHfKriXc?tab=envelope
+
+  Admin: admin@borderlesstechno.com / passwordCliente: juan@example.com / password
+nohup npm run start:production & 
+  La base de datos contiene:
+  - 4 clientes (incluyendo admin)
+  - 3 cotizaciones de ejemplo
+  - 3 pedidos/proyectos
+  - 3 pagos registrados
+  - 3 notificaciones
+
+sudo apt update && sudo apt upgrade code
+
+   Registros de la tabla clientes:
+
+  | ID  | Nombre         | Email                      | Dirección                 | Teléfono         | Fecha
+   Registro      | Estado | Role  |
+  |-----|----------------|----------------------------|---------------------------|------------------|------
+  ---------------|--------|-------|
+  | 1   | Administrador  | admin@borderlesstechno.com | Oficina Principal         | +52 55 1234 5678 |
+  2025-07-21 16:41:46 | Activo | admin |
+  | 2   | Juan Pérez     | juan@example.com           | Calle Principal 123, CDMX | +52 55 1111 2222 |
+  2025-07-21 16:41:46 | Activo | user  |
+  | 3   | María González | maria@example.com          | Av. Reforma 456, CDMX     | +52 55 3333 4444 |
+  2025-07-21 16:41:46 | Activo | user  |
+  | 4   | Carlos Ruiz    | carlos@example.com         | Zona Rosa 789, CDMX       | +52 55 5555 6666 |
+  2025-07-21 16:41:46 | Activo | user  |
+
+  Total: 4 registros (1 admin, 3 usuarios)
+
+
+ahora trabaja en la seccion de Pedidos y Cotizaciones: sus    │
+│   tres modulos o paginas como se le clasifica mejor, tenemos    │
+│   cotizaciones, pedidos, y historial; tu trabajo es             │
+│   desarrollar estas tres partes de dicha seccion, y deben       │
+│   estar conectadas a la base de datos.  
+
+create a todo list when working on complex tasks to track progress and remain on track.
+
+Bash(lsof -ti:4000 | xargs kill -9 2>/dev/null; echo "Puerto 4000 liberado")
+
+
+│ Experto en bases de datos que me ayuda a crear bases de datos con las mejores practicas posibles.
+
+.claude/agents/database-architect.md 
+
+ Use this agent when you need to design, create, or optimize database schemas, tables, relationships, or │
+│    queries following industry best practices. Examples: <example>Context: User needs to design a database │
+│    schema for an e-commerce applicat…
+
+System prompt:                                                                                            │
+│                                                                                                           │
+│   You are a Senior Database Architect with over 15 years of experience designing and optimizing databases │
+│    across various industries and scales. You specialize in MySQL, PostgreSQL, and database design best    │
+│   practices.
+
+Experto en ingenieria de software que me ayuda a resolver las inconsistencias en mi codigo, mi proyecto, y la arquitectura, basandose en las mejores practicas.
+
+¡Perfecto! He creado exitosamente 5 usuarios de ejemplo:
+
+  Usuario Admin (primero):
+  - Nombre: Administrador Principal
+  - Email: admin@borderlesstechno.com
+  - Contraseña: admin123
+  - Rol: admin
+
+  Usuarios Cliente:
+  1. Juan Carlos Pérez - juan.perez@ejemplo.com / cliente123
+  2. María Elena González - maria.gonzalez@ejemplo.com / cliente123
+  3. Roberto Silva Martinez - roberto.silva@ejemplo.com / cliente123
+
+  Usuario Empleado:
+  - Ana Patricia Rodríguez - ana.rodriguez@ejemplo.com / empleado123
+
+  Todos los usuarios tienen información completa incluyendo:
+  - Teléfonos de contacto
+  - Direcciones
+  - Empresas
+  - RFCs
+  - Estados activos
+
+  Las contraseñas están hasheadas con bcrypt por seguridad. Ya puedes usar estas credenciales para
+  probar el sistema con diferentes roles de usuario.
+
+
+¡Proyecto preparado para
+  producción! He configurado:
+
+  ✅ Configuración de Build:
+  - Scripts de build optimizados
+  con Vite
+  - Minificación con Terser
+  - Code splitting automático
+  - Eliminación de console.log en
+  producción
+
+  ✅ Variables de Entorno:
+  - .env.production para cliente y
+   servidor
+  - Configuración para
+  borderlesstechno.com
+  - URLs de producción
+  configuradas
+
+  ✅ Base de Datos:
+  - Script de setup para
+  producción
+  - Configuración específica para
+  BanaHosting
+  - Solo usuario admin inicial
+  (sin datos de prueba)
+
+  ✅ Seguridad:
+  - Headers de seguridad
+  (X-Frame-Options, CSP, etc.)
+  - Rate limiting en producción
+  - CORS configurado para dominio
+  específico
+  - Cookies seguras con HTTPS
+
+  ✅ Deployment:
+  - Script automatizado
+  ./deploy.sh
+  - Guía completa en
+  DEPLOYMENT_GUIDE.md
+  - Configuración PM2 para gestión
+   de procesos
+  - Archivos listos para subir a
+  BanaHosting
+
+  Siguientes pasos:
+  1. Ejecutar ./deploy.sh para
+  generar el paquete
+  2. Subir
+  borderless-production.tar.gz a
+  tu hosting
+  3. Configurar credenciales
+  reales en .env
+  4. Instalar dependencias y
+  configurar base de datos
+  5. Iniciar con PM2
+
+
+
+PORT=4000
+#DATABASE_URL=mysql://root:enrrique@localhost:3306/dblzyyrh_techno
+
+DATABASE_URL=mysql://dblzyyrh_techno:dblzyyrh_techno@216.246.47.89:3306/dblzyyrh_techno?multipleStatements=true
+# Database connection variables for migration scripts
+
+SESSION_SECRET=2jH4^fl9!aD84@k2!3jeOwlz1@MnQ
+JWT_SECRET=Wop39Jd!lf0d$w9v1qXL4$dOl1wP
+JWT_EXPIRATION=1h
+
+# Payment Gateway Configuration
+# Para PayPal: Obtener de https://developer.paypal.com/
+PAYPAL_CLIENT_ID=AYV0BQVyuO5QedqdZT6Fjm5_eFuaVNRoJSy06KcUloqdjsgA3K3nlZQ1H_WyPih70QXgqA9lB32s1LbX
+PAYPAL_CLIENT_SECRET=EM8ymJGKlhFx4tuBG8wJIfGhCRliwbHsY8xTnvqn18Io1UYTu1M7iJPPTtdFcamrN6_ZCSTbaDLRrMXS
+PAYPAL_ENVIRONMENT=live
+
+# Para Stripe: Obtener de https://dashboard.stripe.com/
+# STRIPE_SECRET_KEY=sk_test_xxxxx
+# STRIPE_PUBLISHABLE_KEY=pk_test_xxxxx
+
+
+  ¿Necesitas ayuda con algún paso
+  específico del deployment?

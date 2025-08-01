@@ -1,0 +1,235 @@
+Plan de desarrollo para Panel del Cliente - Sistema        │ │
+│ │ Completo                                                   │ │
+│ │                                                            │ │
+│ │ Fase 1: Análisis y Preparación (1-2 días)                  │ │
+│ │                                                            │ │
+│ │ 1.1 Auditoría del código existente                         │ │
+│ │                                                            │ │
+│ │ - Revisar APIs existentes en /server/src/controllers/      │ │
+│ │ - Identificar componentes reutilizables en                 │ │
+│ │ /client/src/components/                                    │ │
+│ │ - Mapear estructura de base de datos actual                │ │
+│ │ - Documentar endpoints disponibles                         │ │
+│ │                                                            │ │
+│ │ 1.2 Definición de especificaciones                         │ │
+│ │                                                            │ │
+│ │ - Definir funcionalidades exactas de cada sección          │ │
+│ │ - Crear wireframes/mockups para cada página                │ │
+│ │ - Establecer flujos de usuario (user flows)                │ │
+│ │ - Definir permisos y validaciones                          │ │
+│ │                                                            │ │
+│ │ Fase 2: Backend - APIs y Servicios (3-4 días)              │ │
+│ │                                                            │ │
+│ │ 2.1 APIs faltantes                                         │ │
+│ │                                                            │ │
+│ │ - Cotizaciones del cliente: GET /api/client/quotes         │ │
+│ │ - Pedidos del cliente: GET /api/client/orders, PUT         │ │
+│ │ /api/client/orders/:id                                     │ │
+│ │ - Historial de pagos: GET /api/client/payments/history     │ │
+│ │ - Facturas del cliente: GET /api/client/invoices           │ │
+│ │ - Mensajes: CRUD completo /api/client/messages             │ │
+│ │ - Tickets de soporte: CRUD completo /api/client/support    │ │
+│ │ - Nueva solicitud: POST /api/client/requests               │ │
+│ │                                                            │ │
+│ │ 2.2 Servicios adicionales                                  │ │
+│ │                                                            │ │
+│ │ - Servicio de mensajería interna                           │ │
+│ │ - Sistema de tickets de soporte                            │ │
+│ │ - Generación de reportes PDF                               │ │
+│ │ - Sistema de archivos adjuntos                             │ │
+│ │                                                            │ │
+│ │ Fase 3: Frontend - Componentes Base (2-3 días)             │ │
+│ │                                                            │ │
+│ │ 3.1 Componentes reutilizables                              │ │
+│ │                                                            │ │
+│ │ - DataTable - Tabla con filtros, paginación, búsqueda      │ │
+│ │ - StatusBadge - Badges de estado (pendiente, completado,   │ │
+│ │ etc.)                                                      │ │
+│ │ - FileUploader - Subida de archivos                        │ │
+│ │ - DateRangePicker - Selector de fechas                     │ │
+│ │ - Modal genérico para formularios                          │ │
+│ │ - LoadingState y ErrorState                                │ │
+│ │                                                            │ │
+│ │ 3.2 Layouts específicos                                    │ │
+│ │                                                            │ │
+│ │ - ListLayout - Para listas con filtros                     │ │
+│ │ - FormLayout - Para formularios complejos                  │ │
+│ │ - DetailLayout - Para vistas de detalle                    │ │
+│ │                                                            │ │
+│ │ Fase 4: Desarrollo por Secciones (8-10 días)               │ │
+│ │                                                            │ │
+│ │ 4.1 📊 Dashboard (1 día)                                   │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - ClientStatsPanel (ya existe - mejorar)                   │ │
+│ │ - RecentActivity - Actividad reciente                      │ │
+│ │ - QuickActions - Acciones rápidas                          │ │
+│ │ - UpcomingDeadlines - Próximos vencimientos                │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/dashboard/stats                          │ │
+│ │ - GET /api/client/dashboard/activity                       │ │
+│ │                                                            │ │
+│ │ 4.2 👤 Mi Perfil (1 día)                                   │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - ProfileForm - Formulario de edición                      │ │
+│ │ - PasswordChangeForm - Cambio de contraseña                │ │
+│ │ - NotificationPreferences - Preferencias de notificaciones │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/profile                                  │ │
+│ │ - PUT /api/client/profile                                  │ │
+│ │ - PUT /api/client/change-password                          │ │
+│ │                                                            │ │
+│ │ 4.3 📋 Mis Cotizaciones (1.5 días)                         │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - QuotesList - Lista filtrable de cotizaciones             │ │
+│ │ - QuoteDetail - Detalle de cotización                      │ │
+│ │ - QuoteActions - Aceptar/rechazar cotización               │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/quotes (con filtros)                     │ │
+│ │ - GET /api/client/quotes/:id                               │ │
+│ │ - PUT /api/client/quotes/:id/status                        │ │
+│ │                                                            │ │
+│ │ 4.4 📦 Mis Pedidos (1.5 días)                              │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - OrdersList - Lista de pedidos con filtros                │ │
+│ │ - OrderDetail - Detalle completo del pedido                │ │
+│ │ - OrderTimeline - Línea de tiempo del progreso             │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/orders (con filtros)                     │ │
+│ │ - GET /api/client/orders/:id                               │ │
+│ │ - GET /api/client/orders/:id/timeline                      │ │
+│ │                                                            │ │
+│ │ 4.5 ➕ Nueva Solicitud (1.5 días)                           │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - RequestForm - Formulario multistep                       │ │
+│ │ - ServiceSelector - Selector de servicios                  │ │
+│ │ - FileAttachment - Adjuntar archivos                       │ │
+│ │ - RequestSummary - Resumen antes de enviar                 │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/services - Lista de servicios disponibles       │ │
+│ │ - POST /api/client/requests                                │ │
+│ │ - POST /api/client/upload - Subir archivos                 │ │
+│ │                                                            │ │
+│ │ 4.6 💰 Mis Pagos (1 día)                                   │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - PaymentHistory - Historial completo                      │ │
+│ │ - PaymentDetail - Detalle de pago                          │ │
+│ │ - PaymentMethods - Métodos de pago guardados               │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/payments/history                         │ │
+│ │ - GET /api/client/payments/:id                             │ │
+│ │ - GET /api/client/payment-methods                          │ │
+│ │                                                            │ │
+│ │ 4.7 🧾 Facturas (1 día)                                    │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - InvoicesList - Lista de facturas                         │ │
+│ │ - InvoiceViewer - Visor de factura                         │ │
+│ │ - InvoiceDownload - Descarga de PDF                        │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/invoices                                 │ │
+│ │ - GET /api/client/invoices/:id                             │ │
+│ │ - GET /api/client/invoices/:id/pdf                         │ │
+│ │                                                            │ │
+│ │ 4.8 💬 Mensajes (1.5 días)                                 │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - MessagesList - Lista de conversaciones                   │ │
+│ │ - MessageThread - Hilo de mensajes                         │ │
+│ │ - MessageComposer - Redactar mensaje                       │ │
+│ │ - AttachmentPreview - Vista previa de archivos             │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/messages                                 │ │
+│ │ - GET /api/client/messages/:threadId                       │ │
+│ │ - POST /api/client/messages                                │ │
+│ │ - PUT /api/client/messages/:id/read                        │ │
+│ │                                                            │ │
+│ │ 4.9 🆘 Soporte (1.5 días)                                  │ │
+│ │                                                            │ │
+│ │ Componentes:                                               │ │
+│ │ - SupportTickets - Lista de tickets                        │ │
+│ │ - TicketForm - Crear nuevo ticket                          │ │
+│ │ - TicketDetail - Detalle y respuestas                      │ │
+│ │ - FAQ - Preguntas frecuentes                               │ │
+│ │ - KnowledgeBase - Base de conocimientos                    │ │
+│ │                                                            │ │
+│ │ APIs necesarias:                                           │ │
+│ │ - GET /api/client/support/tickets                          │ │
+│ │ - POST /api/client/support/tickets                         │ │
+│ │ - GET /api/client/support/tickets/:id                      │ │
+│ │ - POST /api/client/support/tickets/:id/replies             │ │
+│ │ - GET /api/client/support/faq                              │ │
+│ │                                                            │ │
+│ │ Fase 5: Integración y Refinamiento (2-3 días)              │ │
+│ │                                                            │ │
+│ │ 5.1 Integración completa                                   │ │
+│ │                                                            │ │
+│ │ - Conectar todas las secciones                             │ │
+│ │ - Implementar navegación fluida                            │ │
+│ │ - Sincronizar estados globales                             │ │
+│ │ - Optimizar rendimiento                                    │ │
+│ │                                                            │ │
+│ │ 5.2 UX/UI Polish                                           │ │
+│ │                                                            │ │
+│ │ - Animaciones y transiciones                               │ │
+│ │ - Estados de carga uniformes                               │ │
+│ │ - Manejo de errores consistente                            │ │
+│ │ - Responsive design completo                               │ │
+│ │                                                            │ │
+│ │ 5.3 Funcionalidades transversales                          │ │
+│ │                                                            │ │
+│ │ - Notificaciones en tiempo real                            │ │
+│ │ - Búsqueda global                                          │ │
+│ │ - Shortcuts de teclado                                     │ │
+│ │ - Modo offline básico                                      │ │
+│ │                                                            │ │
+│ │ Fase 6: Testing y Documentación (2 días)                   │ │
+│ │                                                            │ │
+│ │ 6.1 Testing                                                │ │
+│ │                                                            │ │
+│ │ - Tests unitarios para componentes críticos                │ │
+│ │ - Tests de integración para APIs                           │ │
+│ │ - Tests E2E para flujos principales                        │ │
+│ │ - Testing de usabilidad                                    │ │
+│ │                                                            │ │
+│ │ 6.2 Documentación                                          │ │
+│ │                                                            │ │
+│ │ - Documentación técnica                                    │ │
+│ │ - Guía de usuario                                          │ │
+│ │ - Manual de administración                                 │ │
+│ │ - Changelog detallado                                      │ │
+│ │                                                            │ │
+│ │ Cronograma Total: 18-24 días                               │ │
+│ │                                                            │ │
+│ │ Distribución de tiempo:                                    │ │
+│ │                                                            │ │
+│ │ - Backend: 35% (6-8 días)                                  │ │
+│ │ - Frontend: 50% (10-12 días)                               │ │
+│ │ - Testing/Docs: 15% (3-4 días)                             │ │
+│ │                                                            │ │
+│ │ Hitos importantes:                                         │ │
+│ │                                                            │ │
+│ │ - Día 7: APIs core completadas                             │ │
+│ │ - Día 12: Primeras 4 secciones funcionales                 │ │
+│ │ - Día 18: Sistema completo integrado                       │ │
+│ │ - Día 22: Testing y refinamiento completado                │ │
+│ │                                                            │ │
+│ │ Recursos necesarios:                                       │ │
+│ │                                                            │ │
+│ │ - 1 desarrollador full-stack senior                        │ │
+│ │ - Acceso a servidor de desarrollo                          │ │
+│ │ - Herramientas de testing                                  │ │
+│ │ - Documentación de APIs existentes  
