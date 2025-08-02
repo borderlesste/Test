@@ -5,17 +5,19 @@ import { useLanguage } from '../context/LanguageContext';
 const Footer = () => {
   const { t } = useLanguage();
   const socialLinks = [
-    { icon: "📘", href: "https://facebook.com/borderlesstechno", label: "Facebook" },
-    { icon: "🐦", href: "https://twitter.com/borderlesstechno", label: "Twitter" },
-    { icon: "💼", href: "https://linkedin.com/company/borderless-techno", label: "LinkedIn" },
-    { icon: "🐱", href: "https://github.com/borderlesstechno", label: "GitHub" }
-  ];
+    { icon: "f", href: "https://www.facebook.com/people/Borderless-Tec/61579093850608/", label: "Facebook" },
+    { icon: "𝕏", href: "https://twitter.com/borderlesstechno", label: "Twitter" },
+    { icon: "in", href: "https://linkedin.com/company/borderless-techno", label: "LinkedIn" },
+    { icon: "📷", href: "https://www.instagram.com/p/DM0zxo9P1kd/", label: "Instagram" },
+    { icon: "♪", href: "https://www.tiktok.com/search?q=borderlesstechno7", label: "TikTok" }
+];
 
   const quickLinks = [
-    { name: "Inicio", href: "#inicio" },
-    { name: "Servicios", href: "#servicios" },
-    { name: "Nosotros", href: "#nosotros" },
-    { name: "Contacto", href: "#contacto" }
+    { name: "Inicio", href: "/" },
+    { name: "Servicios", href: "/servicios" },
+    { name: "Portafolio", href: "/portafolio" },
+    { name: "Nosotros", href: "/nosotros" },
+    { name: "Contacto", href: "/contacto" }
   ];
 
   const services = [
@@ -36,8 +38,8 @@ const Footer = () => {
             <div className="flex items-center space-x-2">
               <Code2 className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600 dark:text-blue-400 flex-shrink-0" />
               <span className="text-base sm:text-xl font-bold text-gray-900 dark:text-white break-words">
-                <span className="hidden sm:inline">BODERLESS TECHNO COMPANY</span>
-                <span className="sm:hidden">BODERLESS</span>
+                <span className="hidden sm:inline">BORDERLESS TECHNO COMPANY</span>
+                <span className="sm:hidden">BORDERLESS</span>
               </span>
             </div>
             <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
@@ -49,10 +51,13 @@ const Footer = () => {
                 <a
                   key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group p-2 sm:p-3 backdrop-blur-xl bg-white/30 dark:bg-slate-800/30 border border-white/20 dark:border-slate-700/30 rounded-xl
                            hover:bg-gradient-to-r hover:from-blue-500 hover:to-cyan-500 hover:border-blue-500 hover:text-white hover:scale-110
                            transition-all duration-300 shadow-sm hover:shadow-lg flex-shrink-0"
-                  aria-label={social.label}
+                  aria-label={`Visitar ${social.label}`}
+                  title={`Síguenos en ${social.label}`}
                 >
                   <span className="text-xl group-hover:animate-pulse">{social.icon}</span>
                 </a>
@@ -66,12 +71,12 @@ const Footer = () => {
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300"
+                  <Link
+                    to={link.href}
+                    className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 inline-block"
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -114,7 +119,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-white/20 dark:border-slate-700/30 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-gray-600 dark:text-gray-300 text-xs sm:text-sm text-center md:text-left">
-            © 2025 BODERLESS TECHNO COMPANY. Todos los derechos reservados.
+            © 2025 BORDERLESS TECHNO COMPANY. Todos los derechos reservados.
           </div>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <Link to="/privacy-policy" className="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 text-xs sm:text-sm transition-colors text-center">
