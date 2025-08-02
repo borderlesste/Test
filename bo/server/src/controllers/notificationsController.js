@@ -108,9 +108,106 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+// Create new notification
+const createNotification = async (req, res) => {
+  try {
+    const { usuario_id, tipo, titulo, mensaje, prioridad = 'normal', entidad_tipo, entidad_id, accion_url } = req.body;
+    
+    if (!usuario_id || !tipo || !titulo || !mensaje) {
+      return res.status(400).json({
+        success: false,
+        message: 'Campos requeridos: usuario_id, tipo, titulo, mensaje'
+      });
+    }
+    
+    const [result] = await pool.execute(
+      'INSERT INTO notificaciones (usuario_id, tipo, titulo, mensaje, prioridad, entidad_tipo, entidad_id, accion_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [usuario_id, tipo, titulo, mensaje, prioridad, entidad_tipo, entidad_id, accion_url]
+    );
+    
+    res.status(201).json({
+      success: true,
+      message: 'Notificación creada exitosamente',
+      data: {
+        id: result.insertId,
+        usuario_id,
+        tipo,
+        titulo,
+        mensaje,
+        prioridad,
+        entidad_tipo,
+        entidad_id,
+        accion_url
+      }
+    });
+  } catch (error) {
+    console.error('Error creating notification:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor'
+    });
+  }
+};
+
+// Get unread count for user
+const getUnreadCount = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    
+    const [result] = await pool.execute(
+      'SELECT COUNT(*) as count FROM notificaciones WHERE usuario_id = ? AND leida = false',
+      [userId]
+    );
+    
+    res.json({
+      success: true,
+      data: {
+        unreadCount: result[0].count
+      }
+    });
+  } catch (error) {
+    console.error('Error getting unread count:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor'
+    });
+  }
+};
+
+// Utility function to create system notifications
+const createSystemNotification = async (userId, type, title, message, priority = 'normal', entityType = null, entityId = null, actionUrl = null) => {
+  try {
+    await pool.execute(
+      'INSERT INTO notificaciones (usuario_id, tipo, titulo, mensaje, prioridad, entidad_tipo, entidad_id, accion_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [userId, type, title, message, priority, entityType, entityId, actionUrl]
+    );
+  } catch (error) {
+    console.error('Error creating system notification:', error);
+  }
+};
+
+// Notify all admins
+const notifyAdmins = async (type, title, message, priority = 'normal', entityType = null, entityId = null, actionUrl = null) => {
+  try {
+    const [admins] = await pool.execute(
+      'SELECT id FROM usuarios WHERE rol = "admin" AND estado = "activo"'
+    );
+    
+    for (const admin of admins) {
+      await createSystemNotification(admin.id, type, title, message, priority, entityType, entityId, actionUrl);
+    }
+  } catch (error) {
+    console.error('Error notifying admins:', error);
+  }
+};
+
 module.exports = {
   getNotifications,
   markAsRead,
   markAllAsRead,
-  deleteNotification
+  deleteNotification,
+  createNotification,
+  getUnreadCount,
+  createSystemNotification,
+  notifyAdmins
 };

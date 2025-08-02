@@ -4,6 +4,9 @@ import { useApi } from '../context/ApiContext';
 import { useLanguage } from '../context/LanguageContext';
 import useClickOutside from '../hooks/useClickOutside';
 import Button from './Button';
+import NotificationCenter from './NotificationCenter';
+import { Bell } from 'lucide-react';
+import { getUnreadCount } from '../api/axios';
 
 import PropTypes from 'prop-types';
 
@@ -12,6 +15,8 @@ function Header({ companyName = "Borderless Techno Company" }) {
   const { t, currentLanguage, supportedLanguages, changeLanguage } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   
   const menuRef = useClickOutside(() => {
     setMenuOpen(false);
@@ -27,10 +32,11 @@ function Header({ companyName = "Borderless Techno Company" }) {
       if (event.key === 'Escape') {
         setMenuOpen(false);
         setLangMenuOpen(false);
+        setNotificationOpen(false);
       }
     };
 
-    if (menuOpen || langMenuOpen) {
+    if (menuOpen || langMenuOpen || notificationOpen) {
       document.addEventListener('keydown', handleEscape);
       // Prevent body scroll when menu is open
       document.body.style.overflow = 'hidden';
@@ -42,7 +48,29 @@ function Header({ companyName = "Borderless Techno Company" }) {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [menuOpen, langMenuOpen]);
+  }, [menuOpen, langMenuOpen, notificationOpen]);
+
+  // Fetch unread notifications count
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      if (user) {
+        try {
+          const response = await getUnreadCount();
+          if (response.data.success) {
+            setUnreadCount(response.data.data.unreadCount);
+          }
+        } catch (error) {
+          console.error('Error fetching unread count:', error);
+        }
+      }
+    };
+
+    fetchUnreadCount();
+    
+    // Poll for new notifications every 30 seconds
+    const interval = setInterval(fetchUnreadCount, 30000);
+    return () => clearInterval(interval);
+  }, [user]);
 
   // Eliminamos la lógica de tema local, ahora usa ThemeContext
 
@@ -136,6 +164,30 @@ function Header({ companyName = "Borderless Techno Company" }) {
 
           {/* User Section & Controls */}
           <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+            {/* Notifications Bell (only for authenticated users) */}
+            {user && (
+              <div className="relative">
+                <button
+                  onClick={() => setNotificationOpen(!notificationOpen)}
+                  className="relative p-2 rounded-lg bg-white/30 dark:bg-slate-800/60 hover:bg-white/50 dark:hover:bg-slate-800/80 transition-colors duration-200 backdrop-blur-sm"
+                  aria-label="Notificaciones"
+                  aria-expanded={notificationOpen}
+                >
+                  <Bell className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full min-w-[1.25rem] h-5 flex items-center justify-center px-1">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
+                </button>
+                
+                <NotificationCenter 
+                  isOpen={notificationOpen}
+                  onClose={() => setNotificationOpen(false)}
+                />
+              </div>
+            )}
+
             {/* Desktop Auth Links */}
             <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
               {authLinks.map(link => (

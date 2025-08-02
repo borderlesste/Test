@@ -107,10 +107,20 @@ export const updateClientOrderStatus = (id, data) => api.put(`/api/client/orders
 export const getAdminStats = () => api.get('/api/admin/stats');
 export const getRecentActivity = () => api.get('/api/admin/recent-activity');
 export const getTopClients = () => api.get('/api/admin/top-clients');
+export const getChartsData = (period = 'month') => api.get(`/api/admin/charts?period=${period}`);
+export const getFinancialSummary = () => api.get('/api/admin/financial-summary');
 
 // --- Projects Management ---
 export const getProjects = () => api.get('/api/projects');
 export const getProject = (id) => api.get(`/api/projects/${id}`);
+export const uploadProjectImage = (formData) => api.post('/api/projects/upload-image', formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const uploadProjectGallery = (projectId, formData) => api.post(`/api/projects/${projectId}/gallery`, formData, {
+  headers: { 'Content-Type': 'multipart/form-data' }
+});
+export const getProjectGallery = (projectId) => api.get(`/api/projects/${projectId}/gallery`);
+export const deleteProjectImage = (imageId) => api.delete(`/api/projects/images/${imageId}`);
 export const createProject = (projectData) => api.post('/api/projects', projectData);
 export const updateProject = (id, projectData) => api.put(`/api/projects/${id}`, projectData);
 export const deleteProject = (id) => api.delete(`/api/projects/${id}`);
@@ -197,5 +207,13 @@ export const generateInvoiceFromPayment = (paymentId) => api.post('/api/invoices
 export const updateOverdueInvoices = () => api.post('/api/invoices/update-overdue');
 export const getInvoiceItems = (invoiceId) => api.get(`/api/invoices/${invoiceId}/items`);
 export const generateInvoiceFromOrder = (orderId) => api.post('/api/invoices/generate-from-order', { pedido_id: orderId });
+
+// --- Notifications Management ---
+export const getNotifications = () => api.get('/api/notifications');
+export const getUnreadCount = () => api.get('/api/notifications/unread-count');
+export const createNotification = (notificationData) => api.post('/api/notifications', notificationData);
+export const markNotificationAsRead = (id) => api.put(`/api/notifications/${id}/read`);
+export const markAllNotificationsAsRead = () => api.put('/api/notifications/mark-all-read');
+export const deleteNotification = (id) => api.delete(`/api/notifications/${id}`);
 
 export default api;

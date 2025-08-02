@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from '../components';
+import ImageUpload from '../components/ImageUpload';
 import api from '../api/axios';
 import { 
   Plus,
@@ -123,7 +124,7 @@ const ProjectsAdminPage = ({ showNavigation = true }) => {
 
     try {
       setSaving(true);
-      await axios.delete(`/api/projects/${id}`);
+      await api.delete(`/api/projects/${id}`);
       await fetchProjects();
       showMessage('Proyecto eliminado exitosamente', 'success');
     } catch (error) {
@@ -503,20 +504,20 @@ const ProjectsAdminPage = ({ showNavigation = true }) => {
                     />
                   </div>
 
+                  {/* Imagen del Proyecto */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Imagen del Proyecto
+                    </label>
+                    <ImageUpload
+                      currentImage={formData.imagen}
+                      onImageUploaded={(imageUrl) => setFormData(prev => ({ ...prev, imagen: imageUrl }))}
+                      placeholder="Subir imagen del proyecto"
+                    />
+                  </div>
+
                   {/* URLs */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        URL de Imagen
-                      </label>
-                      <input
-                        type="url"
-                        value={formData.imagen}
-                        onChange={(e) => setFormData(prev => ({ ...prev, imagen: e.target.value }))}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-violet-500 focus:border-transparent dark:bg-slate-700 dark:text-white"
-                        placeholder="https://ejemplo.com/imagen.jpg"
-                      />
-                    </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         URL del Demo

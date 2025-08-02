@@ -1,124 +1,145 @@
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
+import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 
 const Toast = ({ 
-  message, 
+  id,
   type = 'info', 
+  title, 
+  message, 
   duration = 5000, 
   onClose,
-  position = 'top-right'
+  actionButton = null
 }) => {
-  const [isVisible, setIsVisible] = useState(true);
-  const [isExiting, setIsExiting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsExiting(true);
-      setTimeout(() => {
-        setIsVisible(false);
-        onClose?.();
-      }, 300);
-    }, duration);
+    // Animate in
+    setTimeout(() => setIsVisible(true), 10);
 
-    return () => clearTimeout(timer);
-  }, [duration, onClose]);
+    // Auto close
+    if (duration > 0) {
+      const timer = setTimeout(() => {
+        handleClose();
+      }, duration);
 
-  if (!isVisible) return null;
+      return () => clearTimeout(timer);
+    }
+  }, [duration]);
 
-  const types = {
-    success: {
-      bg: 'bg-green-500',
-      text: 'text-white',
-      icon: '✅'
-    },
-    error: {
-      bg: 'bg-red-500', 
-      text: 'text-white',
-      icon: '❌'
-    },
-    warning: {
-      bg: 'bg-yellow-500',
-      text: 'text-white', 
-      icon: '⚠️'
-    },
-    info: {
-      bg: 'bg-blue-500',
-      text: 'text-white',
-      icon: 'ℹ️'
+  const handleClose = () => {
+    setIsLeaving(true);
+    setTimeout(() => {
+      onClose?.(id);
+    }, 300);
+  };
+
+  const getToastStyles = () => {
+    const baseStyles = "relative flex items-start p-4 rounded-lg shadow-lg border-l-4 backdrop-blur-sm";
+    
+    switch (type) {
+      case 'success':
+        return `${baseStyles} bg-green-50 dark:bg-green-900/20 border-green-500 text-green-800 dark:text-green-200`;
+      case 'error':
+        return `${baseStyles} bg-red-50 dark:bg-red-900/20 border-red-500 text-red-800 dark:text-red-200`;
+      case 'warning':
+        return `${baseStyles} bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500 text-yellow-800 dark:text-yellow-200`;
+      case 'info':
+      default:
+        return `${baseStyles} bg-blue-50 dark:bg-blue-900/20 border-blue-500 text-blue-800 dark:text-blue-200`;
     }
   };
 
-  const positions = {
-    'top-right': 'top-4 right-4',
-    'top-left': 'top-4 left-4',
-    'bottom-right': 'bottom-4 right-4',
-    'bottom-left': 'bottom-4 left-4',
-    'top-center': 'top-4 left-1/2 transform -translate-x-1/2',
-    'bottom-center': 'bottom-4 left-1/2 transform -translate-x-1/2'
+  const getIcon = () => {
+    const iconProps = { className: "w-5 h-5 flex-shrink-0 mt-0.5" };
+    
+    switch (type) {
+      case 'success':
+        return <CheckCircle {...iconProps} />;
+      case 'error':
+        return <AlertCircle {...iconProps} />;
+      case 'warning':
+        return <AlertTriangle {...iconProps} />;
+      case 'info':
+      default:
+        return <Info {...iconProps} />;
+    }
   };
 
-  const animationClass = isExiting 
-    ? 'animate-slideInRight opacity-0 transform translate-x-full'
-    : 'animate-slideInLeft';
+  const animationClasses = isLeaving 
+    ? 'transform translate-x-full opacity-0' 
+    : isVisible 
+      ? 'transform translate-x-0 opacity-100' 
+      : 'transform translate-x-full opacity-0';
 
   return (
     <div 
-      className={`fixed z-50 ${positions[position]} ${animationClass}`}
+      className={`${getToastStyles()} transition-all duration-300 ease-in-out ${animationClasses} max-w-md w-full`}
     >
-      <div className={`
-        ${types[type].bg} ${types[type].text}
-        px-6 py-4 rounded-lg shadow-xl
-        flex items-center space-x-3
-        max-w-sm backdrop-blur-sm
-        border border-white/20
-        transition-all duration-300
-      `}>
-        <span className="text-lg">{types[type].icon}</span>
-        <p className="font-medium">{message}</p>
-        <button
-          onClick={() => {
-            setIsExiting(true);
-            setTimeout(() => {
-              setIsVisible(false);
-              onClose?.();
-            }, 300);
-          }}
-          className="ml-auto text-white/80 hover:text-white transition-colors duration-200"
-        >
-          ✕
-        </button>
+      {/* Icon */}
+      <div className="mr-3">
+        {getIcon()}
       </div>
-    </div>
-  );
-};
 
-const ToastContainer = ({ toasts = [] }) => {
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50">
-      {toasts.map((toast, index) => (
-        <div 
-          key={toast.id || index}
-          className="pointer-events-auto"
-          style={{ zIndex: 50 + index }}
-        >
-          <Toast {...toast} />
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        {title && (
+          <h4 className="text-sm font-semibold mb-1">
+            {title}
+          </h4>
+        )}
+        <p className="text-sm">
+          {message}
+        </p>
+        
+        {/* Action Button */}
+        {actionButton && (
+          <div className="mt-3">
+            {actionButton}
+          </div>
+        )}
+      </div>
+
+      {/* Close Button */}
+      <button
+        onClick={handleClose}
+        className="ml-3 flex-shrink-0 p-1 rounded-md hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+      >
+        <X className="w-4 h-4" />
+      </button>
+
+      {/* Progress Bar (only for auto-close) */}
+      {duration > 0 && (
+        <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/10 dark:bg-white/10 rounded-b-lg overflow-hidden">
+          <div 
+            className="h-full bg-current transition-all ease-linear"
+            style={{
+              width: '100%',
+              animation: `toast-progress ${duration}ms linear forwards`
+            }}
+          />
         </div>
-      ))}
+      )}
+
+      <style jsx>{`
+        @keyframes toast-progress {
+          from { width: 100%; }
+          to { width: 0%; }
+        }
+      `}</style>
     </div>
   );
 };
 
 Toast.propTypes = {
-  message: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   type: PropTypes.oneOf(['success', 'error', 'warning', 'info']),
+  title: PropTypes.string,
+  message: PropTypes.string.isRequired,
   duration: PropTypes.number,
   onClose: PropTypes.func,
-  position: PropTypes.oneOf(['top-right', 'top-left', 'bottom-right', 'bottom-left', 'top-center', 'bottom-center'])
-};
-
-ToastContainer.propTypes = {
-  toasts: PropTypes.array
+  actionButton: PropTypes.node
 };
 
 export default Toast;
-export { ToastContainer };

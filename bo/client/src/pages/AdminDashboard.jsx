@@ -42,7 +42,9 @@ import {
   updateConfig,
   getAdminStats,
   getRecentActivity,
-  getTopClients
+  getTopClients,
+  getChartsData,
+  getFinancialSummary
 } from '../api/axios';
 import UserModal from '../components/UserModal';
 import OrderModal from '../components/OrderModal';
@@ -69,6 +71,8 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({});
   const [recentActivity, setRecentActivity] = useState([]);
   const [topClients, setTopClients] = useState([]);
+  const [chartsData, setChartsData] = useState({});
+  const [financialSummary, setFinancialSummary] = useState({});
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('month');
   const [activeTab, setActiveTab] = useState("dashboard");
@@ -132,10 +136,12 @@ const AdminDashboard = () => {
     const fetchDashboardData = async () => {
       setLoading(true);
       try {
-        const [statsRes, activityRes, clientsRes] = await Promise.all([
+        const [statsRes, activityRes, clientsRes, chartsRes, financialRes] = await Promise.all([
           getAdminStats(),
           getRecentActivity(),
-          getTopClients()
+          getTopClients(),
+          getChartsData(timeRange),
+          getFinancialSummary()
         ]);
 
         if (statsRes.data.success) {
@@ -149,12 +155,24 @@ const AdminDashboard = () => {
         if (clientsRes.data.success) {
           setTopClients(clientsRes.data.data);
         }
+
+        if (chartsRes.data.success) {
+          setChartsData(chartsRes.data.data);
+        }
+
+        if (financialRes.data.success) {
+          setFinancialSummary(financialRes.data.data);
+        }
         
       } catch (error) {
         console.error('Error al cargar datos del dashboard:', error);
+        setError('Error al cargar los datos del dashboard');
+        // Establecer valores por defecto en caso de error
         setStats({});
         setRecentActivity([]);
         setTopClients([]);
+        setChartsData({});
+        setFinancialSummary({});
       } finally {
         setLoading(false);
       }
@@ -608,6 +626,7 @@ const AdminDashboard = () => {
             {/* Advanced Statistics */}
             <AdvancedStats 
               stats={stats} 
+              financialSummary={financialSummary}
               formatCurrency={formatCurrency}
               className="mb-8"
             />
@@ -615,6 +634,7 @@ const AdminDashboard = () => {
             {/* Charts Section */}
             <ChartsSection 
               stats={stats}
+              chartsData={chartsData}
               recentActivity={recentActivity}
               topClients={topClients}
               formatCurrency={formatCurrency}
@@ -721,6 +741,7 @@ const AdminDashboard = () => {
           <div className="space-y-8">
             <ChartsSection 
               stats={stats}
+              chartsData={chartsData}
               recentActivity={recentActivity}
               topClients={topClients}
               formatCurrency={formatCurrency}
