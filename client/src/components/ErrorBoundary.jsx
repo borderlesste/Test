@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import logger from '../utils/logger';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -19,8 +20,8 @@ class ErrorBoundary extends React.Component {
       errorInfo: errorInfo
     });
 
-    // También puedes loggear el error a un servicio de monitoreo
-    console.error('ErrorBoundary capturó un error:', error, errorInfo);
+    // Log error using our logger utility
+    logger.setContext('ErrorBoundary').error('Component error caught:', error, errorInfo);
   }
 
   render() {

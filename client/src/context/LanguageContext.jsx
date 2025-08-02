@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import logger from '../utils/logger';
 
 const LanguageContext = createContext();
 
@@ -28,20 +29,20 @@ export const LanguageProvider = ({ children }) => {
     const loadTranslations = async () => {
       try {
         setIsLoading(true);
-        console.log(`Loading translations for language: ${currentLanguage}`);
+        logger.setContext('LanguageContext').info(`Loading translations for language: ${currentLanguage}`);
         const response = await import(`../translations/${currentLanguage}.js`);
-        console.log('Translations loaded:', response.default ? 'Success' : 'Failed - no default export');
+        logger.info('Translations loaded:', response.default ? 'Success' : 'Failed - no default export');
         setTranslations(response.default || {});
       } catch (error) {
-        console.error(`Error loading translations for ${currentLanguage}:`, error);
+        logger.error(`Error loading translations for ${currentLanguage}:`, error);
         // Fallback to Spanish if translation fails
         if (currentLanguage !== 'es') {
           try {
-            console.log('Loading fallback translations (Spanish)');
+            logger.info('Loading fallback translations (Spanish)');
             const fallback = await import('../translations/es.js');
             setTranslations(fallback.default || {});
           } catch (fallbackError) {
-            console.error('Error loading fallback translations:', fallbackError);
+            logger.error('Error loading fallback translations:', fallbackError);
             setTranslations({});
           }
         } else {

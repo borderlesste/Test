@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getClientPayments } from '../api/axios';
+import logger from '../utils/logger';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
@@ -69,7 +70,7 @@ const PaymentsList = () => {
       const errorMessage = err.response?.data?.message || 'Error al cargar pagos';
       setError(errorMessage);
       showError(errorMessage);
-      console.error('Error fetching payments:', err);
+      logger.setContext('PaymentsList').error('Error fetching payments:', err);
       setPayments([]);
     } finally {
       setLoading(false);

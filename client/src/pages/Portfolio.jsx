@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import api from '../api/axios';
+import logger from '../utils/logger';
 
 function Portfolio() {
   const [projects, setProjects] = useState([]);
@@ -35,7 +36,7 @@ function Portfolio() {
         setProjects([]);
       }
     } catch (err) {
-      console.error('Error fetching projects:', err);
+      logger.setContext('Portfolio').error('Error fetching projects:', err);
       setProjects([]);
       setError('Error al cargar proyectos');
     } finally {

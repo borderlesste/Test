@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import api from '../api/axios';
+import logger from '../utils/logger';
 
 const ApiContext = createContext();
 
@@ -41,7 +42,7 @@ export const ApiProvider = ({ children }) => {
       // Llamar al endpoint de logout para destruir la sesión en el servidor
       await api.post('/api/auth/logout');
     } catch (error) {
-      console.error('Error al cerrar sesión:', error);
+      logger.setContext('ApiContext').error('Error al cerrar sesión:', error);
     }
     // Limpiar estado local
     setUser(null);
@@ -59,7 +60,7 @@ export const ApiProvider = ({ children }) => {
       const res = await api.get('/api/orders');
       setOrders(res.data);
     } catch (error) {
-      console.error('Error loading orders:', error);
+      logger.error('Error loading orders:', error);
       setOrders([]);
     }
   };
@@ -69,7 +70,7 @@ export const ApiProvider = ({ children }) => {
       const res = await api.get('/api/payments');
       setPayments(res.data);
     } catch (error) {
-      console.error('Error loading payments:', error);
+      logger.error('Error loading payments:', error);
       setPayments([]);
     }
   };
@@ -81,7 +82,7 @@ export const ApiProvider = ({ children }) => {
     } catch (error) {
       // Silently handle auth errors
       if (error.response?.status !== 403 && error.response?.status !== 401) {
-        console.error('Error loading quotes:', error);
+        logger.error('Error loading quotes:', error);
       }
       setQuotes([]);
     }
@@ -92,7 +93,7 @@ export const ApiProvider = ({ children }) => {
       const res = await api.get('/api/invoices');
       setInvoices(res.data);
     } catch (error) {
-      console.error('Error loading invoices:', error);
+      logger.error('Error loading invoices:', error);
       setInvoices([]);
     }
   };
@@ -102,7 +103,7 @@ export const ApiProvider = ({ children }) => {
       const res = await api.get('/api/projects');
       setProjects(res.data);
     } catch (error) {
-      console.error('Error loading projects:', error);
+      logger.error('Error loading projects:', error);
       setProjects([]);
     }
   };
@@ -116,7 +117,7 @@ export const ApiProvider = ({ children }) => {
     } catch (error) {
       // Silently handle auth errors
       if (error.response?.status !== 403 && error.response?.status !== 401) {
-        console.error('Error loading clients:', error);
+        logger.error('Error loading clients:', error);
       }
       setClients([]);
     }
@@ -127,7 +128,7 @@ export const ApiProvider = ({ children }) => {
       const res = await api.get('/api/notifications');
       setNotifications(res.data);
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      logger.error('Error loading notifications:', error);
       setNotifications([]);
     }
   };
@@ -142,7 +143,7 @@ export const ApiProvider = ({ children }) => {
         // Si falla, significa que no hay sesión válida
         if (error?.response?.status !== 401) {
           // Solo log errores que no sean 401 (unauthorized)
-          console.error("Failed to load user from session:", error);
+          logger.error("Failed to load user from session:", error);
         }
         setUser(null);
       }

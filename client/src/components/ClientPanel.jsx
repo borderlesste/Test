@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { createClientPayment, updateClientPayment, getOrders, getPayments } from '../api/axios';
 import ClientPaymentModal from './ClientPaymentModal';
+import logger from '../utils/logger';
 
 function ClientPanel() {
   const [pedidos, setPedidos] = useState([]);
@@ -100,7 +101,7 @@ function ClientPanel() {
       handleClosePaymentModal();
     } catch (err) {
       setError('Error al procesar el pago. Por favor, inténtelo de nuevo.');
-      console.error(err);
+      logger.setContext('ClientPanel').error('Error in ClientPanel:', err);
     }
   };
 
@@ -127,7 +128,7 @@ function ClientPanel() {
         setPagos(fetchedPayments);
       } catch (err) {
         setError("Error al cargar los datos");
-        console.error(err);
+        logger.setContext('ClientPanel').error('Error in ClientPanel:', err);
       } finally {
         setLoading(false);
       }
