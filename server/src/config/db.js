@@ -4,7 +4,11 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const pool = mysql.createPool(`${process.env.DATABASE_URL}?multipleStatements=true`);
+// Usar DATABASE_URL si está disponible, sino construir desde variables individuales
+const databaseUrl = process.env.DATABASE_URL || 
+  `mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
+
+const pool = mysql.createPool(`${databaseUrl}?multipleStatements=true`);
 
 const beginTransaction = async () => {
   const connection = await pool.getConnection();
