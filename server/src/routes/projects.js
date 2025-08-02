@@ -273,6 +273,24 @@ router.post('/setup-database', async (req, res) => {
       tables.push('proyectos (ya existía)');
     }
     
+    // 5. Crear tabla de actividades faltante
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS actividades (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario_id INT NOT NULL,
+        tipo VARCHAR(50) NOT NULL,
+        descripcion TEXT NOT NULL,
+        entidad_tipo VARCHAR(50) NULL,
+        entidad_id INT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_usuario_id (usuario_id),
+        INDEX idx_tipo (tipo),
+        INDEX idx_created_at (created_at),
+        FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB
+    `);
+    tables.push('actividades');
+    
     res.json({
       success: true,
       message: 'Base de datos configurada exitosamente',
