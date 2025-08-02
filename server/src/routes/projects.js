@@ -182,6 +182,113 @@ router.post('/simple-login', async (req, res) => {
   }
 });
 
+// Endpoint para configurar todas las tablas faltantes
+router.post('/setup-database', async (req, res) => {
+  try {
+    const { pool } = require('../config/db.js');
+    
+    const tables = [];
+    
+    // 1. Crear tabla de sesiones con estructura correcta
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS sessions (
+        session_id VARCHAR(128) COLLATE utf8mb4_bin NOT NULL,
+        expires INT(11) UNSIGNED NOT NULL,
+        data MEDIUMTEXT COLLATE utf8mb4_bin,
+        PRIMARY KEY (session_id)
+      ) ENGINE=InnoDB
+    `);
+    tables.push('sessions');
+    
+    // 2. Crear tabla de logs de seguridad
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS seguridad_log (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario_id INT NULL,
+        tipo ENUM('login', 'logout', 'login_fallido', 'acceso_denegado', 'cambio_password', 'registro', 'intento_acceso') NOT NULL,
+        email_intento VARCHAR(255) NULL,
+        ip VARCHAR(45) NULL,
+        user_agent TEXT NULL,
+        dispositivo VARCHAR(100) NULL,
+        ubicacion VARCHAR(100) NULL,
+        detalles JSON NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_usuario_id (usuario_id),
+        INDEX idx_tipo (tipo),
+        INDEX idx_created_at (created_at),
+        INDEX idx_ip (ip)
+      ) ENGINE=InnoDB
+    `);
+    tables.push('seguridad_log');
+    
+    // 3. Verificar que tabla de usuarios existe
+    const [userTables] = await pool.execute("SHOW TABLES LIKE 'usuarios'");
+    if (userTables.length === 0) {
+      await pool.execute(`
+        CREATE TABLE IF NOT EXISTS usuarios (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          nombre VARCHAR(255) NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password VARCHAR(255) NOT NULL,
+          rol ENUM('admin', 'cliente', 'empleado') DEFAULT 'cliente',
+          estado ENUM('activo', 'inactivo', 'pendiente') DEFAULT 'activo',
+          telefono VARCHAR(20),
+          direccion TEXT,
+          empresa VARCHAR(255),
+          rfc VARCHAR(20),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB
+      `);
+      tables.push('usuarios (creada)');
+    } else {
+      tables.push('usuarios (ya existía)');
+    }
+    
+    // 4. Verificar que tabla de proyectos existe
+    const [projectTables] = await pool.execute("SHOW TABLES LIKE 'proyectos'");
+    if (projectTables.length === 0) {
+      await pool.execute(`
+        CREATE TABLE IF NOT EXISTS proyectos (
+          id INT AUTO_INCREMENT PRIMARY KEY,
+          codigo VARCHAR(20) UNIQUE NOT NULL,
+          nombre VARCHAR(255) NOT NULL,
+          descripcion TEXT,
+          imagen_principal VARCHAR(500),
+          repositorio VARCHAR(500),
+          url_demo VARCHAR(500),
+          tecnologias JSON,
+          categoria VARCHAR(50) DEFAULT 'web',
+          estado VARCHAR(50) DEFAULT 'planificacion',
+          es_publico BOOLEAN DEFAULT 1,
+          es_destacado BOOLEAN DEFAULT 0,
+          orden_portfolio INT DEFAULT 0,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB
+      `);
+      tables.push('proyectos (creada)');
+    } else {
+      tables.push('proyectos (ya existía)');
+    }
+    
+    res.json({
+      success: true,
+      message: 'Base de datos configurada exitosamente',
+      tables: tables,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('Error configurando base de datos:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error configurando base de datos',
+      error: error.message
+    });
+  }
+});
+
 // Ruta para crear datos de muestra (temporal)
 router.post('/create-sample-data', async (req, res) => {
   try {
