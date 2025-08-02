@@ -13,6 +13,75 @@ const {
 router.get('/', getAllProjects);
 router.get('/:id', getProjectById);
 
+// Ruta para crear tabla de usuarios y admin (temporal)
+router.post('/setup-admin', async (req, res) => {
+  try {
+    const bcrypt = require('bcryptjs');
+    const { pool } = require('../config/db.js');
+    
+    // Crear tabla usuarios si no existe
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(255) NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL,
+        rol ENUM('admin', 'cliente', 'empleado') DEFAULT 'cliente',
+        estado ENUM('activo', 'inactivo', 'pendiente') DEFAULT 'activo',
+        telefono VARCHAR(20),
+        direccion TEXT,
+        empresa VARCHAR(255),
+        rfc VARCHAR(20),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Verificar si ya existe el admin
+    const [existingAdmin] = await pool.execute('SELECT id FROM usuarios WHERE email = ?', ['admin@borderlesstechno.com']);
+    if (existingAdmin.length > 0) {
+      return res.json({
+        success: true,
+        message: 'La tabla usuarios y el admin ya existen',
+        admin: { email: 'admin@borderlesstechno.com', password: '123456' }
+      });
+    }
+    
+    // Crear usuario admin
+    const hashedPassword = await bcrypt.hash('123456', 10);
+    
+    await pool.execute(
+      `INSERT INTO usuarios (nombre, email, password, rol, estado, telefono, direccion, empresa, rfc) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        'Administrador Principal',
+        'admin@borderlesstechno.com',
+        hashedPassword,
+        'admin',
+        'activo',
+        '+52 55 1234 5678',
+        'Av. Insurgentes Sur 123, CDMX',
+        'Borderless Techno Company',
+        'BTC123456789'
+      ]
+    );
+    
+    res.json({
+      success: true,
+      message: 'Tabla usuarios creada y admin configurado exitosamente',
+      admin: { email: 'admin@borderlesstechno.com', password: '123456' }
+    });
+    
+  } catch (error) {
+    console.error('Error configurando admin:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error configurando admin',
+      error: error.message
+    });
+  }
+});
+
 // Ruta para crear datos de muestra (temporal)
 router.post('/create-sample-data', async (req, res) => {
   try {
