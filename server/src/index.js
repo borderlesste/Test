@@ -31,8 +31,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Configure trust proxy GLOBALLY for Render deployment
-app.set('trust proxy', true);
+// Configure trust proxy specifically for Render deployment
+app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 
 // Opciones para el almacén de sesiones con configuración específica para Render
 const sessionStore = new MySQLStore({
