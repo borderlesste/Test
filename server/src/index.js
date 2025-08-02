@@ -1,14 +1,14 @@
-
 // server/src/index.js
-// Ruta base: monta todas las rutas del backend
 const express = require('express');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const cors = require('cors');
 const dotenv = require('dotenv');
-const path = require('path'); // Importar path
-const { pool } = require('./config/db.js'); // Importar el pool de conexión
+const path = require('path');
+const morgan = require('morgan');
+const { pool } = require('./config/db.js');
 
+// Rutas principales
 const authRoutes = require('./routes/auth.js');
 const ordersRoutes = require('./routes/orders.js');
 const paymentsRoutes = require('./routes/payments.js');
@@ -31,15 +31,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Configure trust proxy specifically for Render deployment
+// Render: configurar confianza en proxy
 app.set('trust proxy', ['loopback', 'linklocal', 'uniquelocal']);
 
-// Opciones para el almacén de sesiones con configuración específica para Render
+// Sesiones con MySQLStore
 const sessionStore = new MySQLStore({
   expiration: 1000 * 60 * 60 * 24 * 7, // 7 días
-  createDatabaseTable: false, // No crear tabla, ya existe
+  createDatabaseTable: false,
   clearExpired: true,
-  checkExpirationInterval: 900000, // 15 minutos
+  checkExpirationInterval: 900000,
   schema: {
     tableName: 'sessions',
     columnNames: {
@@ -48,34 +48,21 @@ const sessionStore = new MySQLStore({
       data: 'data'
     }
   }
-}, pool); // Usar pool directamente
+}, pool);
 
-// Configuración CORS adaptable para desarrollo y producción
+// Configuración CORS
 const corsOptions = {
   origin: function (origin, callback) {
-    // Permitir solicitudes sin origin (aplicaciones móviles, Postman, etc.)
-    if (!origin) return callback(null, true);
-    
     const isProduction = process.env.NODE_ENV === 'production';
-    
-    const allowedOrigins = isProduction ? [
-      'https://borderlesstechno.com',
-      'https://www.borderlesstechno.com',
-      'https://saas-backend-33g1.onrender.com'
-    ] : [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:3000',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:5174'
-    ];
-    
-    // En desarrollo, permitir cualquier localhost
+    const allowedOrigins = isProduction
+      ? ['https://borderlesstechno.com', 'https://www.borderlesstechno.com', 'https://salas-taupe.vercel.app']
+      : ['http://localhost:5173', 'http://localhost:4000', 'http://127.0.0.1:5173'];
+
+    if (!origin) return callback(null, true);
     if (!isProduction && (origin.includes('localhost') || origin.includes('127.0.0.1'))) {
       return callback(null, true);
     }
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('No permitido por CORS'));
@@ -87,9 +74,8 @@ const corsOptions = {
   exposedHeaders: ['Content-Range', 'X-Content-Range']
 };
 
-// Security middleware
+// Seguridad en producción
 if (process.env.NODE_ENV === 'production') {
-  // Security headers for production
   app.use((req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
@@ -98,44 +84,53 @@ if (process.env.NODE_ENV === 'production') {
     res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
     next();
   });
-  
-  // Rate limiting for production - simplified for Render
+
   const rateLimit = require('express-rate-limit');
-  const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // Increased limit for production
+  app.use('/api/', rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 200,
     message: {
       error: 'Too many requests, please try again later.',
       retryAfter: '15 minutes'
     },
     standardHeaders: true,
     legacyHeaders: false,
-    // Remove trustProxy from here since it's set globally
-    skip: (req) => {
-      // Skip rate limiting for health checks
-      return req.path === '/api/health';
-    }
-  });
-  app.use('/api/', limiter);
+    skip: req => req.path === '/api/health'
+  }));
 }
 
 app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
+
+// Morgan logging middleware
+if (process.env.NODE_ENV === 'production') {
+  // Formato combinado para producción con información completa
+  app.use(morgan('combined', {
+    skip: (req, res) => {
+      // Skip logging para endpoints de health check y assets estáticos
+      return req.path === '/api/health' || req.path.startsWith('/favicon');
+    }
+  }));
+} else {
+  // Formato dev para desarrollo con colores
+  app.use(morgan('dev'));
+}
+
 app.use(session({
   name: 'sid',
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  store: sessionStore, // Usar el almacén de MySQL
-  cookie: { 
-    httpOnly: true, 
-    secure: process.env.NODE_ENV === 'production', // Secure en producción
-    maxAge: 1000 * 60 * 60 * 24 * 7, // 7 días
+  store: sessionStore,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24 * 7,
     sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax'
   }
 }));
 
-// Rutas de la API
+// Rutas API
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', ordersRoutes);
 app.use('/api/payments', paymentsRoutes);
@@ -154,24 +149,22 @@ app.use('/api/integrations', integrationsRoutes);
 app.use('/api/security', securityRoutes);
 app.use('/api/configuration', configurationRoutes);
 
-// Static files removed - frontend is deployed separately
-
-// API Health Check (solo para ruta específica)
+// Ruta de estado de la API
 app.get('/api/health', (req, res) => {
   const isProduction = process.env.NODE_ENV === 'production';
-  res.json({ 
-    message: `API Borderless Techno - ${isProduction ? 'Production' : 'Development'}`, 
+  res.json({
+    message: `API Borderless Techno - ${isProduction ? 'Production' : 'Development'}`,
     version: '1.0.0',
     status: 'active',
     environment: isProduction ? 'production' : 'development'
   });
 });
 
-// Root endpoint for API status
+// Ruta raíz
 app.get('/', (req, res) => {
   const isProduction = process.env.NODE_ENV === 'production';
-  res.json({ 
-    message: `API Borderless Techno - ${isProduction ? 'Production' : 'Development'}`, 
+  res.json({
+    message: `API Borderless Techno - ${isProduction ? 'Production' : 'Development'}`,
     version: '1.0.0',
     status: 'active',
     environment: isProduction ? 'production' : 'development',
@@ -179,19 +172,17 @@ app.get('/', (req, res) => {
   });
 });
 
-// Inicializar integraciones automáticamente al arrancar
+// Integraciones al iniciar
 const integrationsService = require('./services/integrationsService.js');
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
-  
-  // Sincronizar integraciones automáticamente (sin bloquear el servidor)
+
   setTimeout(async () => {
     try {
       console.log('🔄 Sincronizando integraciones automáticamente...');
       const results = await integrationsService.syncIntegrations();
       console.log(`✅ Integraciones sincronizadas: ${results.created} creadas, ${results.updated} actualizadas`);
-      
       if (results.errors.length > 0) {
         console.log('⚠️ Errores en sincronización:', results.errors);
       }
@@ -199,7 +190,7 @@ app.listen(PORT, '0.0.0.0', () => {
       console.log('❌ Error sincronizando integraciones:', error.message);
       console.error(error);
     }
-  }, 1000); // Delay 1 second to ensure server is fully started
+  }, 1000);
 });
-// Exportar la aplicación para pruebas
+
 module.exports = app;
