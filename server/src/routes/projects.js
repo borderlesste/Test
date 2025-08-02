@@ -112,6 +112,47 @@ router.get('/check-admin', async (req, res) => {
   }
 });
 
+// Endpoint para listar tablas y usuarios (temporal para debugging)
+router.get('/database-info', async (req, res) => {
+  try {
+    const { pool } = require('../config/db.js');
+    
+    // Listar todas las tablas
+    const [tables] = await pool.execute('SHOW TABLES');
+    const tableNames = tables.map(table => Object.values(table)[0]);
+    
+    // Listar todos los usuarios
+    const [users] = await pool.execute('SELECT id, nombre, email, rol, estado, created_at FROM usuarios ORDER BY created_at DESC');
+    
+    // Contar registros en tablas principales
+    const counts = {};
+    for (const tableName of ['usuarios', 'proyectos', 'sessions', 'actividades', 'seguridad_log']) {
+      try {
+        const [countResult] = await pool.execute(`SELECT COUNT(*) as count FROM ${tableName}`);
+        counts[tableName] = countResult[0].count;
+      } catch (error) {
+        counts[tableName] = 'N/A (tabla no existe)';
+      }
+    }
+    
+    res.json({
+      success: true,
+      tables: tableNames,
+      users: users,
+      record_counts: counts,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('Error obteniendo información de base de datos:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error obteniendo información de base de datos',
+      error: error.message
+    });
+  }
+});
+
 // Endpoint de login simplificado (temporal para debugging)
 router.post('/simple-login', async (req, res) => {
   try {
