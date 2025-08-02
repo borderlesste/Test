@@ -48,7 +48,7 @@ const sessionStore = new MySQLStore({
       data: 'data'
     }
   }
-}, pool.promise ? pool : pool.promise()); // Usar pool compatible
+}, pool); // Usar pool directamente
 
 // Configuración CORS adaptable para desarrollo y producción
 const corsOptions = {
