@@ -112,6 +112,76 @@ router.get('/check-admin', async (req, res) => {
   }
 });
 
+// Endpoint de login simplificado (temporal para debugging)
+router.post('/simple-login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email y contraseña son requeridos'
+      });
+    }
+    
+    const bcrypt = require('bcryptjs');
+    const { pool } = require('../config/db.js');
+    
+    // Buscar usuario por email
+    const [users] = await pool.execute(
+      'SELECT id, nombre, email, password, rol, estado FROM usuarios WHERE email = ? AND estado = ?',
+      [email, 'activo']
+    );
+    
+    if (users.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'Credenciales inválidas - usuario no encontrado'
+      });
+    }
+    
+    const user = users[0];
+    
+    // Verificar contraseña
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({
+        success: false,
+        message: 'Credenciales inválidas - contraseña incorrecta'
+      });
+    }
+    
+    // Crear sesión
+    req.session.userId = user.id;
+    req.session.userRole = user.rol;
+    req.session.userEmail = user.email;
+    req.session.userName = user.nombre;
+    
+    // Remover contraseña de la respuesta
+    delete user.password;
+    
+    res.json({
+      success: true,
+      message: 'Login exitoso',
+      user: user,
+      session: {
+        userId: req.session.userId,
+        userRole: req.session.userRole,
+        userEmail: req.session.userEmail,
+        userName: req.session.userName
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error en login simplificado:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error interno del servidor',
+      error: error.message
+    });
+  }
+});
+
 // Ruta para crear datos de muestra (temporal)
 router.post('/create-sample-data', async (req, res) => {
   try {
