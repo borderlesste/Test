@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useApi } from '../context/ApiContext';
 import { useLanguage } from '../context/LanguageContext';
 import useClickOutside from '../hooks/useClickOutside';
@@ -20,6 +20,29 @@ function Header({ companyName = "Borderless Techno Company" }) {
   const langMenuRef = useClickOutside(() => {
     setLangMenuOpen(false);
   });
+
+  // Handle escape key to close menus
+  useEffect(() => {
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false);
+        setLangMenuOpen(false);
+      }
+    };
+
+    if (menuOpen || langMenuOpen) {
+      document.addEventListener('keydown', handleEscape);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [menuOpen, langMenuOpen]);
 
   // Eliminamos la lógica de tema local, ahora usa ThemeContext
 
@@ -78,49 +101,53 @@ function Header({ companyName = "Borderless Techno Company" }) {
       <nav className="container mx-auto px-4 py-3" aria-label="Main navigation">
         <div className="flex items-center justify-between gap-4 min-h-[60px]">
           {/* Logo */}
-          <div className="flex items-center space-x-3 flex-shrink-0">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">B</span>
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm sm:text-lg">B</span>
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
+            <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white hidden xs:block">
               {companyName}
+            </span>
+            <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white xs:hidden">
+              Borderless
             </span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-2 flex-1 justify-center">
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-2 flex-1 justify-center">
             {allLinks.map(link => (
               <NavLink
                 key={link.to}
                 to={link.to}
                 className={({ isActive }) =>
-                  `flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/30 dark:hover:bg-slate-800/60 ${
+                  `flex items-center px-2 lg:px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:bg-white/30 dark:hover:bg-slate-800/60 whitespace-nowrap ${
                     isActive 
                       ? 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 shadow-sm' 
                       : 'text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
                   }`
                 }
               >
-                <span className="hidden xl:inline mr-2">{link.icon}</span>
-                {link.label}
+                <span className="hidden lg:inline mr-2">{link.icon}</span>
+                <span className="hidden md:inline">{link.label}</span>
+                <span className="md:hidden text-lg">{link.icon}</span>
               </NavLink>
             ))}
           </div>
 
           {/* User Section & Controls */}
-          <div className="flex items-center space-x-3 flex-shrink-0">
+          <div className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0">
             {/* Desktop Auth Links */}
-            <div className="hidden lg:flex items-center space-x-3">
+            <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
               {authLinks.map(link => (
                 link.action === 'logout' ? (
-                  <div key="user-menu" className="flex items-center space-x-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full flex items-center justify-center">
-                        <span className="text-white font-medium text-sm">
+                  <div key="user-menu" className="flex items-center space-x-2 lg:space-x-3">
+                    <div className="flex items-center space-x-2 lg:space-x-3">
+                      <div className="w-7 h-7 lg:w-8 lg:h-8 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full flex items-center justify-center">
+                        <span className="text-white font-medium text-xs lg:text-sm">
                           {(link.user?.charAt(0) || 'U').toUpperCase()}
                         </span>
                       </div>
-                      <div className="text-right">
+                      <div className="text-right hidden lg:block">
                         <p className="text-sm font-medium text-gray-900 dark:text-white">
                           {link.user}
                         </p>
@@ -133,11 +160,19 @@ function Header({ companyName = "Borderless Techno Company" }) {
                       onClick={handleLogout}
                       variant="ghost"
                       size="sm"
-                      className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                      className="text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 hidden lg:flex"
                       icon={<span className="hidden xl:inline mr-2">{link.icon}</span>}
                     >
                       {link.label}
                     </Button>
+                    <button
+                      onClick={handleLogout}
+                      className="lg:hidden p-2 rounded-lg text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200"
+                      aria-label={link.label}
+                      title={link.label}
+                    >
+                      <span className="text-lg">{link.icon}</span>
+                    </button>
                   </div>
                 ) : (
                   <NavLink
@@ -209,13 +244,13 @@ function Header({ companyName = "Borderless Techno Company" }) {
 
             {/* Mobile Menu Button */}
             <button
-              className="lg:hidden p-2 rounded-lg bg-white/30 dark:bg-slate-800/60 hover:bg-white/50 dark:hover:bg-slate-800/80 transition-colors duration-200 backdrop-blur-sm"
+              className="md:hidden p-2 rounded-lg bg-white/30 dark:bg-slate-800/60 hover:bg-white/50 dark:hover:bg-slate-800/80 transition-colors duration-200 backdrop-blur-sm"
               aria-label={t('accessibility.openMenu')}
               aria-expanded={menuOpen}
               onClick={() => setMenuOpen(!menuOpen)}
             >
               <svg 
-                className={`w-6 h-6 transition-transform duration-200 text-gray-700 dark:text-gray-300`} 
+                className={`w-5 h-5 sm:w-6 sm:h-6 transition-transform duration-200 text-gray-700 dark:text-gray-300`} 
                 fill="none" 
                 stroke="currentColor" 
                 viewBox="0 0 24 24"
@@ -233,78 +268,98 @@ function Header({ companyName = "Borderless Techno Company" }) {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <div 
-            ref={menuRef}
-            className="lg:hidden mt-4 p-4 backdrop-blur-xl bg-white/90 dark:bg-slate-800/90 rounded-xl border border-white/20 dark:border-slate-700/30 shadow-lg animate-slideInLeft"
-          >
+          <>
+            {/* Overlay */}
+            <div 
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden"
+              onClick={() => setMenuOpen(false)}
+              aria-hidden="true"
+            />
+            
+            {/* Menu Content */}
+            <div 
+              ref={menuRef}
+              className="md:hidden mt-4 p-4 backdrop-blur-xl bg-white/95 dark:bg-slate-800/95 rounded-xl border border-white/20 dark:border-slate-700/30 shadow-xl animate-slideInLeft relative z-50"
+              role="menu"
+              aria-orientation="vertical"
+            >
             {/* User Info Mobile */}
             {user && (
               <div className="mb-4 p-3 bg-white/40 dark:bg-slate-700/40 rounded-lg backdrop-blur-sm">
-                <p className="font-medium text-gray-900 dark:text-white">
-                  {user.nombre || user.email}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {user.rol === 'admin' ? t('roles.admin') : t('roles.client')}
-                </p>
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-violet-500 to-blue-500 rounded-full flex items-center justify-center">
+                    <span className="text-white font-medium text-sm">
+                      {(user.nombre?.charAt(0) || user.email?.charAt(0) || 'U').toUpperCase()}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">
+                      {user.nombre || user.email}
+                    </p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {user.rol === 'admin' ? t('roles.admin') : t('roles.client')}
+                    </p>
+                  </div>
+                </div>
               </div>
             )}
 
             {/* Navigation Links Mobile */}
-            <div className="space-y-1 mb-4">
+            <div className="space-y-2 mb-6">
               {allLinks.map(link => (
                 <NavLink
                   key={link.to}
                   to={link.to}
                   className={({ isActive }) =>
-                    `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                    `flex items-center px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 group ${
                       isActive 
-                        ? 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400' 
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-white/40 dark:hover:bg-slate-700/40'
+                        ? 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 shadow-sm' 
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-slate-700/50 hover:scale-105'
                     }`
                   }
                   onClick={() => setMenuOpen(false)}
                 >
-                  <span className="mr-3">{link.icon}</span>
-                  {link.label}
+                  <span className="mr-4 text-xl group-hover:scale-110 transition-transform duration-200">{link.icon}</span>
+                  <span className="font-semibold">{link.label}</span>
                 </NavLink>
               ))}
             </div>
 
             {/* Auth Links Mobile */}
-            <div className="border-t border-white/20 dark:border-slate-700/30 pt-4 space-y-1">
+            <div className="border-t border-white/20 dark:border-slate-700/30 pt-4 space-y-2">
               {authLinks.map(link => (
                 link.action === 'logout' ? (
-                  <Button
+                  <button
                     key="logout"
                     onClick={handleLogout}
-                    variant="ghost"
-                    className="w-full justify-start text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                    icon={<span className="mr-3">{link.icon}</span>}
+                    className="w-full flex items-center justify-start px-4 py-3 rounded-lg text-base font-semibold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200 group hover:scale-105"
                   >
+                    <span className="mr-4 text-xl group-hover:scale-110 transition-transform duration-200">{link.icon}</span>
                     {link.label}
-                  </Button>
+                  </button>
                 ) : (
                   <NavLink
                     key={link.to}
                     to={link.to}
                     className={({ isActive }) =>
-                      `flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
+                      `flex items-center px-4 py-3 rounded-lg text-base font-semibold transition-all duration-200 group ${
                         link.to === '/register'
-                          ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg'
+                          ? 'bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg hover:shadow-xl hover:scale-105'
                           : isActive
-                            ? 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-white/40 dark:hover:bg-slate-700/40'
+                            ? 'bg-blue-500/10 dark:bg-blue-500/20 text-blue-600 dark:text-blue-400 shadow-sm'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-slate-700/50 hover:scale-105'
                       }`
                     }
                     onClick={() => setMenuOpen(false)}
                   >
-                    <span className="mr-3">{link.icon}</span>
+                    <span className="mr-4 text-xl group-hover:scale-110 transition-transform duration-200">{link.icon}</span>
                     {link.label}
                   </NavLink>
                 )
               ))}
             </div>
           </div>
+          </>
         )}
       </nav>
     </header>
