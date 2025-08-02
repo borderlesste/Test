@@ -82,6 +82,36 @@ router.post('/setup-admin', async (req, res) => {
   }
 });
 
+// Ruta para verificar usuario admin (temporal)
+router.get('/check-admin', async (req, res) => {
+  try {
+    const { pool } = require('../config/db.js');
+    
+    const [users] = await pool.execute('SELECT id, nombre, email, rol, estado FROM usuarios WHERE email = ?', ['admin@borderlesstechno.com']);
+    
+    if (users.length === 0) {
+      return res.json({
+        success: false,
+        message: 'Usuario admin no encontrado'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Usuario admin encontrado',
+      user: users[0]
+    });
+    
+  } catch (error) {
+    console.error('Error verificando admin:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error verificando admin',
+      error: error.message
+    });
+  }
+});
+
 // Ruta para crear datos de muestra (temporal)
 router.post('/create-sample-data', async (req, res) => {
   try {
