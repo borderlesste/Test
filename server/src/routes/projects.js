@@ -189,16 +189,17 @@ router.post('/setup-database', async (req, res) => {
     
     const tables = [];
     
-    // 1. Crear tabla de sesiones con estructura correcta
+    // 1. Recrear tabla de sesiones con estructura exacta de express-mysql-session
+    await pool.execute('DROP TABLE IF EXISTS sessions');
     await pool.execute(`
-      CREATE TABLE IF NOT EXISTS sessions (
+      CREATE TABLE sessions (
         session_id VARCHAR(128) COLLATE utf8mb4_bin NOT NULL,
         expires INT(11) UNSIGNED NOT NULL,
         data MEDIUMTEXT COLLATE utf8mb4_bin,
         PRIMARY KEY (session_id)
-      ) ENGINE=InnoDB
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin
     `);
-    tables.push('sessions');
+    tables.push('sessions (recreated)');
     
     // 2. Crear tabla de logs de seguridad
     await pool.execute(`

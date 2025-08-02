@@ -31,10 +31,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Opciones para el almacén de sesiones
+// Configure trust proxy GLOBALLY for Render deployment
+app.set('trust proxy', true);
+
+// Opciones para el almacén de sesiones con configuración específica para Render
 const sessionStore = new MySQLStore({
   expiration: 1000 * 60 * 60 * 24 * 7, // 7 días
-  createDatabaseTable: true, // Crea la tabla de sesiones si no existe
+  createDatabaseTable: false, // No crear tabla, ya existe
+  clearExpired: true,
+  checkExpirationInterval: 900000, // 15 minutos
   schema: {
     tableName: 'sessions',
     columnNames: {
@@ -43,7 +48,7 @@ const sessionStore = new MySQLStore({
       data: 'data'
     }
   }
-}, pool); // Usar el pool de conexión existente
+}, pool.promise ? pool : pool.promise()); // Usar pool compatible
 
 // Configuración CORS adaptable para desarrollo y producción
 const corsOptions = {
@@ -94,15 +99,22 @@ if (process.env.NODE_ENV === 'production') {
     next();
   });
   
-  // Rate limiting for production
+  // Rate limiting for production - simplified for Render
   const rateLimit = require('express-rate-limit');
   const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit each IP to 100 requests per windowMs
-    message: 'Too many requests, please try again later.',
-    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-    trustProxy: true // Trust proxy headers from Render
+    max: 200, // Increased limit for production
+    message: {
+      error: 'Too many requests, please try again later.',
+      retryAfter: '15 minutes'
+    },
+    standardHeaders: true,
+    legacyHeaders: false,
+    // Remove trustProxy from here since it's set globally
+    skip: (req) => {
+      // Skip rate limiting for health checks
+      return req.path === '/api/health';
+    }
   });
   app.use('/api/', limiter);
 }
