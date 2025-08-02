@@ -113,7 +113,7 @@ router.get('/check-admin', async (req, res) => {
 });
 
 // Endpoint para listar tablas y usuarios (temporal para debugging)
-router.get('/database-info', async (req, res) => {
+router.post('/database-info', async (req, res) => {
   try {
     const { pool } = require('../config/db.js');
     
