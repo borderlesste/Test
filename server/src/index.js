@@ -139,10 +139,7 @@ app.use('/api/integrations', integrationsRoutes);
 app.use('/api/security', securityRoutes);
 app.use('/api/configuration', configurationRoutes);
 
-// Serve static files in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../public')));
-}
+// Static files removed - frontend is deployed separately
 
 // API Health Check (solo para ruta específica)
 app.get('/api/health', (req, res) => {
@@ -155,24 +152,17 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Catch all handler: send back React's index.html file for SPA routing
-if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res) => {
-    if (!req.url.startsWith('/api')) {
-      res.sendFile(path.join(__dirname, '../public/index.html'));
-    }
+// Root endpoint for API status
+app.get('/', (req, res) => {
+  const isProduction = process.env.NODE_ENV === 'production';
+  res.json({ 
+    message: `API Borderless Techno - ${isProduction ? 'Production' : 'Development'}`, 
+    version: '1.0.0',
+    status: 'active',
+    environment: isProduction ? 'production' : 'development',
+    frontend: 'https://borderlesstechno.com'
   });
-} else {
-  // En desarrollo, mantener el health check en la raíz
-  app.get('/', (req, res) => {
-    res.json({ 
-      message: 'API Borderless Techno - Development', 
-      version: '1.0.0',
-      status: 'active',
-      environment: 'development'
-    });
-  });
-}
+});
 
 // Inicializar integraciones automáticamente al arrancar
 const integrationsService = require('./services/integrationsService.js');
