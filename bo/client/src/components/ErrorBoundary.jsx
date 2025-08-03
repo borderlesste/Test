@@ -22,6 +22,38 @@ class ErrorBoundary extends React.Component {
 
     // Log error using our logger utility
     logger.setContext('ErrorBoundary').error('Component error caught:', error, errorInfo);
+
+    // Report error to monitoring service (only in production)
+    if (import.meta.env.PROD) {
+      this.reportError(error, errorInfo);
+    }
+  }
+
+  reportError = async (error, errorInfo) => {
+    try {
+      const errorReport = {
+        message: error.message,
+        stack: error.stack,
+        componentStack: errorInfo.componentStack,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        url: window.location.href,
+        userId: this.props.userId || 'anonymous'
+      };
+
+      // In a real app, you would send this to your error reporting service
+      // For now, we'll just log it
+      console.error('Error Report:', errorReport);
+      
+      // Example: Send to your backend
+      // await fetch('/api/errors', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify(errorReport)
+      // });
+    } catch (reportingError) {
+      console.error('Failed to report error:', reportingError);
+    }
   }
 
   render() {

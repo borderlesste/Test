@@ -9,8 +9,18 @@ const {
   getUnreadCount
 } = require('../controllers/notificationsController.js');
 const { isAuthenticated } = require('../middleware/authMiddleware.js');
+const { 
+  sanitizationMiddleware,
+  validateNotificationMiddleware,
+  validateIdMiddleware,
+  createRateLimitMiddleware
+} = require('../middleware/validationMiddleware.js');
 
 const router = express.Router();
+
+// Aplicar rate limiting y sanitización a todas las rutas
+router.use(createRateLimitMiddleware(200, 15 * 60 * 1000)); // 200 requests per 15 minutes
+router.use(sanitizationMiddleware);
 
 // Get user notifications
 router.get('/', isAuthenticated, getNotifications);
@@ -21,23 +31,17 @@ router.get('/unread-count', isAuthenticated, getUnreadCount);
 // Create notification
 router.post('/', 
   isAuthenticated,
-  [
-    body('usuario_id').isInt().withMessage('Usuario ID debe ser un número'),
-    body('tipo').notEmpty().withMessage('Tipo es requerido'),
-    body('titulo').notEmpty().withMessage('Título es requerido'),
-    body('mensaje').notEmpty().withMessage('Mensaje es requerido'),
-    body('prioridad').optional().isIn(['baja', 'normal', 'alta', 'urgente']).withMessage('Prioridad inválida')
-  ],
+  validateNotificationMiddleware,
   createNotification
 );
 
 // Mark notification as read
-router.put('/:id/read', isAuthenticated, markAsRead);
+router.put('/:id/read', isAuthenticated, validateIdMiddleware('id'), markAsRead);
 
 // Mark all notifications as read
 router.put('/mark-all-read', isAuthenticated, markAllAsRead);
 
 // Delete notification
-router.delete('/:id', isAuthenticated, deleteNotification);
+router.delete('/:id', isAuthenticated, validateIdMiddleware('id'), deleteNotification);
 
 module.exports = router;

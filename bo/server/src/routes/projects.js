@@ -13,10 +13,21 @@ const {
   getProjectGallery
 } = require('../controllers/projectsController.js');
 const { uploadProjectImage: uploadMiddleware, handleMulterError } = require('../middleware/uploadMiddleware.js');
+const { 
+  sanitizationMiddleware,
+  validateProjectMiddleware,
+  validateIdMiddleware,
+  validateFileMiddleware,
+  createRateLimitMiddleware
+} = require('../middleware/validationMiddleware.js');
+
+// Aplicar rate limiting y sanitización a todas las rutas
+router.use(createRateLimitMiddleware(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
+router.use(sanitizationMiddleware);
 
 // Rutas públicas
 router.get('/', getAllProjects);
-router.get('/:id', getProjectById);
+router.get('/:id', validateIdMiddleware('id'), getProjectById);
 
 // Ruta para crear tabla de usuarios y admin (temporal)
 router.post('/setup-admin', async (req, res) => {
@@ -476,15 +487,36 @@ router.post('/create-sample-data', async (req, res) => {
 });
 
 // Rutas para gestión de imágenes
-router.post('/upload-image', uploadMiddleware.single('image'), handleMulterError, uploadProjectImage);
-router.post('/:projectId/gallery', uploadMiddleware.array('images', 5), handleMulterError, uploadProjectGallery);
-router.get('/:projectId/gallery', getProjectGallery);
-router.delete('/images/:imageId', deleteProjectImage);
+router.post('/upload-image', 
+  uploadMiddleware.single('image'), 
+  handleMulterError,
+  validateFileMiddleware({
+    maxSize: 10 * 1024 * 1024, // 10MB
+    allowedMimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
+    required: true
+  }), 
+  uploadProjectImage
+);
+
+router.post('/:projectId/gallery', 
+  validateIdMiddleware('projectId'),
+  uploadMiddleware.array('images', 5), 
+  handleMulterError,
+  validateFileMiddleware({
+    maxSize: 10 * 1024 * 1024, // 10MB
+    allowedMimeTypes: ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'],
+    required: true
+  }),
+  uploadProjectGallery
+);
+
+router.get('/:projectId/gallery', validateIdMiddleware('projectId'), getProjectGallery);
+router.delete('/images/:imageId', validateIdMiddleware('imageId'), deleteProjectImage);
 
 // Rutas protegidas (requieren autenticación admin)
 // TODO: Agregar middleware de autenticación para admin
-router.post('/', createProject);
-router.put('/:id', updateProject);
-router.delete('/:id', deleteProject);
+router.post('/', validateProjectMiddleware, createProject);
+router.put('/:id', validateIdMiddleware('id'), validateProjectMiddleware, updateProject);
+router.delete('/:id', validateIdMiddleware('id'), deleteProject);
 
 module.exports = router;

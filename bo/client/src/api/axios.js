@@ -15,6 +15,143 @@ const api = axios.create({
   timeout: 10000,
 });
 
+// Request interceptor para logging y modificaciones de request
+api.interceptors.request.use(
+  (config) => {
+    // Agregar timestamp a requests para debugging
+    config.metadata = { startTime: new Date() };
+    
+    // Log request en modo desarrollo
+    if (import.meta.env.DEV) {
+      console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`, config.data);
+    }
+    
+    return config;
+  },
+  (error) => {
+    console.error('❌ Request Error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor para manejo de errores y logging
+api.interceptors.response.use(
+  (response) => {
+    // Calcular tiempo de respuesta
+    const endTime = new Date();
+    const duration = endTime - response.config.metadata.startTime;
+    
+    // Log response en modo desarrollo
+    if (import.meta.env.DEV) {
+      console.log(`✅ API Response: ${response.config.method?.toUpperCase()} ${response.config.url} (${duration}ms)`, response.data);
+    }
+    
+    return response;
+  },
+  (error) => {
+    // Calcular tiempo de respuesta para errores
+    let duration = 'unknown';
+    if (error.config?.metadata?.startTime) {
+      const endTime = new Date();
+      duration = endTime - error.config.metadata.startTime;
+    }
+    
+    // Log error
+    console.error(`❌ API Error: ${error.config?.method?.toUpperCase() || 'UNKNOWN'} ${error.config?.url || 'UNKNOWN'} (${duration}ms)`, error);
+    
+    // Manejo específico de errores
+    const errorMessage = getErrorMessage(error);
+    const enhancedError = {
+      ...error,
+      userMessage: errorMessage,
+      statusCode: error.response?.status,
+      duration: duration
+    };
+    
+    // Mostrar toast automático para ciertos errores (si toast está disponible)
+    if (typeof window !== 'undefined' && window.showToast) {
+      if (error.response?.status >= 500) {
+        window.showToast({
+          type: 'error',
+          message: 'Error del servidor. Intenta de nuevo más tarde.',
+          duration: 5000
+        });
+      } else if (error.response?.status === 401) {
+        window.showToast({
+          type: 'warning',
+          message: 'Sesión expirada. Por favor, inicia sesión nuevamente.',
+          duration: 5000
+        });
+      } else if (error.response?.status === 403) {
+        window.showToast({
+          type: 'error',
+          message: 'No tienes permisos para realizar esta acción.',
+          duration: 5000
+        });
+      } else if (error.response?.status === 429) {
+        window.showToast({
+          type: 'warning',
+          message: 'Demasiadas solicitudes. Intenta de nuevo en unos momentos.',
+          duration: 5000
+        });
+      }
+    }
+    
+    return Promise.reject(enhancedError);
+  }
+);
+
+// Función para extraer mensajes de error user-friendly
+const getErrorMessage = (error) => {
+  // Error de red
+  if (error.code === 'NETWORK_ERROR' || !error.response) {
+    return 'Error de conexión. Verifica tu conexión a internet.';
+  }
+  
+  // Error de timeout
+  if (error.code === 'ECONNABORTED') {
+    return 'La solicitud tardó demasiado. Intenta de nuevo.';
+  }
+  
+  // Errores con respuesta del servidor
+  if (error.response) {
+    const { status, data } = error.response;
+    
+    // Mensaje específico del servidor
+    if (data?.message) {
+      return data.message;
+    }
+    
+    // Mensajes por código de estado
+    switch (status) {
+      case 400:
+        return 'Datos de entrada inválidos.';
+      case 401:
+        return 'No autorizado. Inicia sesión nuevamente.';
+      case 403:
+        return 'No tienes permisos para realizar esta acción.';
+      case 404:
+        return 'Recurso no encontrado.';
+      case 409:
+        return 'Conflicto con el estado actual del recurso.';
+      case 422:
+        return 'Los datos proporcionados no son válidos.';
+      case 429:
+        return 'Demasiadas solicitudes. Intenta más tarde.';
+      case 500:
+        return 'Error interno del servidor.';
+      case 502:
+        return 'Servidor no disponible temporalmente.';
+      case 503:
+        return 'Servicio no disponible.';
+      default:
+        return `Error del servidor (${status}).`;
+    }
+  }
+  
+  return 'Ha ocurrido un error inesperado.';
+};
+
 // Con sesiones basadas en cookies, no necesitamos el interceptor de tokens
 // Las cookies se envían automáticamente con withCredentials: true
 
