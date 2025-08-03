@@ -353,4 +353,27 @@ export const markNotificationAsRead = (id) => api.put(`/api/notifications/${id}/
 export const markAllNotificationsAsRead = () => api.put('/api/notifications/mark-all-read');
 export const deleteNotification = (id) => api.delete(`/api/notifications/${id}`);
 
+// --- Clients Management ---
+export const getClients = (params = {}) => api.get('/api/clients', { params });
+export const getClient = (id) => api.get(`/api/clients/${id}`);
+export const createClient = (clientData) => api.post('/api/clients', clientData);
+export const updateClient = (id, clientData) => api.put(`/api/clients/${id}`, clientData);
+export const deleteClient = (id) => api.delete(`/api/clients/${id}`);
+export const getClientStats = () => api.get('/api/clients/stats');
+export const sendMessageToClient = (id, messageData) => api.post(`/api/clients/${id}/message`, messageData);
+
+// --- Quotations Management ---
+export const getQuotations = (params = {}) => api.get('/api/quotations', { params });
+export const getQuotation = (id) => api.get(`/api/quotations/${id}`);
+export const createQuotation = (quotationData) => api.post('/api/quotations', quotationData);
+export const updateQuotation = (id, quotationData) => api.put(`/api/quotations/${id}`, quotationData);
+export const deleteQuotation = (id) => api.delete(`/api/quotations/${id}`);
+export const updateQuotationStatus = (id, statusData) => api.put(`/api/quotations/${id}/status`, statusData);
+export const convertQuotationToProject = (id) => api.post(`/api/quotations/${id}/convert`);
+export const getQuotationStats = () => api.get('/api/quotations/stats');
+
+// --- Database Update (temporary) ---
+export const updateDatabaseForClients = () => api.post('/api/db-update/update-for-clients');
+export const createSampleClients = () => api.post('/api/db-update/create-sample-clients');
+
 export default api;

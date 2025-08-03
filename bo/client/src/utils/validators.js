@@ -10,6 +10,47 @@ export const validatePhone = (phone) => {
   return phoneRegex.test(phone.replace(/\s/g, ''));
 };
 
+export const validateClient = (clientData) => {
+  const errors = {};
+  
+  if (!clientData.nombre || clientData.nombre.trim().length < 2) {
+    errors.nombre = 'El nombre debe tener al menos 2 caracteres';
+  }
+  
+  if (clientData.nombre && clientData.nombre.length > 255) {
+    errors.nombre = 'El nombre no puede exceder los 255 caracteres';
+  }
+  
+  if (!clientData.email || !validateEmail(clientData.email)) {
+    errors.email = 'El email es requerido y debe tener un formato válido';
+  }
+  
+  if (clientData.telefono && !validatePhone(clientData.telefono)) {
+    errors.telefono = 'El formato del teléfono no es válido';
+  }
+  
+  if (clientData.empresa && clientData.empresa.length > 255) {
+    errors.empresa = 'El nombre de la empresa no puede exceder los 255 caracteres';
+  }
+  
+  if (clientData.direccion && clientData.direccion.length > 500) {
+    errors.direccion = 'La dirección no puede exceder los 500 caracteres';
+  }
+  
+  if (clientData.rfc && (clientData.rfc.length < 10 || clientData.rfc.length > 13)) {
+    errors.rfc = 'El RFC debe tener entre 10 y 13 caracteres';
+  }
+  
+  if (clientData.estado && !['activo', 'inactivo', 'pendiente'].includes(clientData.estado)) {
+    errors.estado = 'El estado debe ser: activo, inactivo o pendiente';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
 export const validatePassword = (password) => {
   const errors = [];
   

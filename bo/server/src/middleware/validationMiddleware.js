@@ -175,6 +175,137 @@ const validateUser = (userData) => {
   };
 };
 
+const validateClient = (clientData) => {
+  const errors = {};
+  
+  if (!clientData.nombre || clientData.nombre.trim().length < 2) {
+    errors.nombre = 'El nombre debe tener al menos 2 caracteres';
+  }
+  
+  if (clientData.nombre && clientData.nombre.length > 255) {
+    errors.nombre = 'El nombre no puede exceder los 255 caracteres';
+  }
+  
+  if (!clientData.email || !validateEmail(clientData.email)) {
+    errors.email = 'El email es requerido y debe tener un formato válido';
+  }
+  
+  if (clientData.telefono && !validatePhone(clientData.telefono)) {
+    errors.telefono = 'El formato del teléfono no es válido';
+  }
+  
+  if (clientData.empresa && clientData.empresa.length > 255) {
+    errors.empresa = 'El nombre de la empresa no puede exceder los 255 caracteres';
+  }
+  
+  if (clientData.direccion && clientData.direccion.length > 500) {
+    errors.direccion = 'La dirección no puede exceder los 500 caracteres';
+  }
+  
+  if (clientData.rfc && (clientData.rfc.length < 10 || clientData.rfc.length > 13)) {
+    errors.rfc = 'El RFC debe tener entre 10 y 13 caracteres';
+  }
+  
+  if (clientData.estado && !['activo', 'inactivo', 'pendiente'].includes(clientData.estado)) {
+    errors.estado = 'El estado debe ser: activo, inactivo o pendiente';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+const validateMessage = (messageData) => {
+  const errors = {};
+  
+  if (!messageData.tipo || messageData.tipo.trim().length < 2) {
+    errors.tipo = 'El tipo de mensaje es requerido';
+  }
+  
+  if (!messageData.titulo || messageData.titulo.trim().length < 3) {
+    errors.titulo = 'El título debe tener al menos 3 caracteres';
+  }
+  
+  if (messageData.titulo && messageData.titulo.length > 255) {
+    errors.titulo = 'El título no puede exceder los 255 caracteres';
+  }
+  
+  if (!messageData.mensaje || messageData.mensaje.trim().length < 10) {
+    errors.mensaje = 'El mensaje debe tener al menos 10 caracteres';
+  }
+  
+  if (messageData.mensaje && messageData.mensaje.length > 1000) {
+    errors.mensaje = 'El mensaje no puede exceder los 1000 caracteres';
+  }
+  
+  if (messageData.prioridad && !['baja', 'normal', 'alta', 'critica'].includes(messageData.prioridad)) {
+    errors.prioridad = 'La prioridad debe ser: baja, normal, alta o critica';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+const validateQuotation = (quotationData) => {
+  const errors = {};
+  
+  if (!quotationData.cliente_id || !Number.isInteger(Number(quotationData.cliente_id))) {
+    errors.cliente_id = 'ID de cliente requerido y debe ser un número válido';
+  }
+  
+  if (!quotationData.titulo || quotationData.titulo.trim().length < 3) {
+    errors.titulo = 'El título debe tener al menos 3 caracteres';
+  }
+  
+  if (quotationData.titulo && quotationData.titulo.length > 255) {
+    errors.titulo = 'El título no puede exceder los 255 caracteres';
+  }
+  
+  if (quotationData.descripcion && quotationData.descripcion.length > 1000) {
+    errors.descripcion = 'La descripción no puede exceder los 1000 caracteres';
+  }
+  
+  if (quotationData.impuestos && (quotationData.impuestos < 0 || quotationData.impuestos > 100)) {
+    errors.impuestos = 'Los impuestos deben estar entre 0 y 100%';
+  }
+  
+  if (quotationData.moneda && !['MXN', 'USD', 'EUR'].includes(quotationData.moneda)) {
+    errors.moneda = 'La moneda debe ser MXN, USD o EUR';
+  }
+  
+  if (quotationData.validez_dias && (quotationData.validez_dias < 1 || quotationData.validez_dias > 365)) {
+    errors.validez_dias = 'La validez debe estar entre 1 y 365 días';
+  }
+  
+  if (quotationData.items && Array.isArray(quotationData.items)) {
+    quotationData.items.forEach((item, index) => {
+      if (!item.descripcion || item.descripcion.trim().length < 3) {
+        errors[`item_${index}_descripcion`] = `Item ${index + 1}: La descripción es requerida (min 3 caracteres)`;
+      }
+      
+      if (!item.cantidad || item.cantidad <= 0) {
+        errors[`item_${index}_cantidad`] = `Item ${index + 1}: La cantidad debe ser mayor a 0`;
+      }
+      
+      if (!item.precio_unitario || item.precio_unitario <= 0) {
+        errors[`item_${index}_precio`] = `Item ${index + 1}: El precio unitario debe ser mayor a 0`;
+      }
+    });
+  }
+  
+  if (quotationData.notas && quotationData.notas.length > 1000) {
+    errors.notas = 'Las notas no pueden exceder los 1000 caracteres';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
 const sanitizeObjectInputs = (obj) => {
   const sanitized = {};
   
@@ -229,6 +360,9 @@ const createValidationMiddleware = (validator) => {
 const validateProjectMiddleware = createValidationMiddleware(validateProject);
 const validateNotificationMiddleware = createValidationMiddleware(validateNotification);
 const validateUserMiddleware = createValidationMiddleware(validateUser);
+const validateClientMiddleware = createValidationMiddleware(validateClient);
+const validateMessageMiddleware = createValidationMiddleware(validateMessage);
+const validateQuotationMiddleware = createValidationMiddleware(validateQuotation);
 
 // Middleware de validación de login
 const validateLoginMiddleware = (req, res, next) => {
@@ -349,6 +483,9 @@ module.exports = {
   validateProjectMiddleware,
   validateNotificationMiddleware,
   validateUserMiddleware,
+  validateClientMiddleware,
+  validateMessageMiddleware,
+  validateQuotationMiddleware,
   validateLoginMiddleware,
   createRateLimitMiddleware,
   validateFileMiddleware,
@@ -359,6 +496,9 @@ module.exports = {
   validateProject,
   validateNotification,
   validateUser,
+  validateClient,
+  validateMessage,
+  validateQuotation,
   validateEmail,
   validatePassword,
   validatePhone,

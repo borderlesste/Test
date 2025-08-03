@@ -24,6 +24,7 @@ import HistoryPage from './pages/HistoryPage';
 import ClientsViewPage from './pages/ClientsViewPage';
 import ClientsNewPage from './pages/ClientsNewPage';
 import ClientsStatsPage from './pages/ClientsStatsPage';
+import ClientsAdminPage from './pages/ClientsAdminPage';
 import FinancePaymentsPage from './pages/FinancePaymentsPage';
 import FinanceReportsPage from './pages/FinanceReportsPage';
 import FinanceInvoicesPage from './pages/FinanceInvoicesPage';
@@ -114,7 +115,7 @@ function App() {
             path="/ver-clientes"
             element={
               <ProtectedRoute adminOnly={true}>
-                <ClientsViewPage />
+                <ClientsAdminPage />
               </ProtectedRoute>
             }
           />

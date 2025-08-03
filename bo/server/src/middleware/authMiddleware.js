@@ -57,4 +57,31 @@ const isAdmin = (req, res, next) => {
   return res.status(403).json({ message: 'Acceso denegado - Se requiere rol de administrador' });
 };
 
-module.exports = { isAuthenticated, isAdmin };
+const requireRole = (role) => {
+  return (req, res, next) => {
+    console.log(`Verificando rol requerido: ${role}. Usuario actual:`, req.user);
+    
+    if (!req.user || req.user.role !== role) {
+      // Registrar acceso denegado por falta de permisos
+      const ip = securityLogService.constructor.extractIP(req);
+      const userAgent = securityLogService.constructor.extractUserAgent(req);
+      
+      securityLogService.logAccessDenied(
+        req.user?.id || null,
+        req.user?.email || null,
+        ip,
+        userAgent,
+        req.originalUrl,
+        `permisos_insuficientes_${role}`
+      ).catch(err => console.error('Error logging access denied:', err));
+      
+      return res.status(403).json({ 
+        message: `Acceso denegado - Se requiere rol de ${role}` 
+      });
+    }
+    
+    next();
+  };
+};
+
+module.exports = { isAuthenticated, isAdmin, requireRole };
