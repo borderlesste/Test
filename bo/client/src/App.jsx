@@ -1,43 +1,65 @@
 
 // src/App.jsx
 
-import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate, lazy, Suspense } from 'react-router-dom';
 import { ToastProvider } from './hooks/useToast';
 import { LanguageProvider } from './context/LanguageContext';
 
 import Header from './components/Header';
 import ToastContainer from './components/ToastContainer';
 import Footer from './components/Footer';
-import Home from './pages/Home';
-import Services from './pages/Services';
-import Portfolio from './pages/Portfolio';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import Profile from './pages/Profile';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import QuotesPage from './pages/QuotesPage';
-import OrdersPage from './pages/OrdersPage';
-import HistoryPage from './pages/HistoryPage';
-import ClientsViewPage from './pages/ClientsViewPage';
-import ClientsNewPage from './pages/ClientsNewPage';
-import ClientsStatsPage from './pages/ClientsStatsPage';
-import ClientsAdminPage from './pages/ClientsAdminPage';
-import FinancePaymentsPage from './pages/FinancePaymentsPage';
-import FinanceReportsPage from './pages/FinanceReportsPage';
-import FinanceInvoicesPage from './pages/FinanceInvoicesPage';
-import CommunicationNotificationsPage from './pages/CommunicationNotificationsPage';
-import CommunicationMessagesPage from './pages/CommunicationMessagesPage';
-import CommunicationEmailMarketingPage from './pages/CommunicationEmailMarketingPage';
-import PaymentsPage from './pages/PaymentsPage';
-import NotificationsPage from './pages/NotificationsPage';
-import AdminDashboard from './pages/AdminDashboard';
-import ProjectsAdminPage from './pages/ProjectsAdminPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import ClientDashboard from './pages/ClientDashboard';
-import RequestForm from './components/RequestForm';
+import LoadingSpinner from './components/ui/LoadingSpinner';
+
+// Lazy load public pages
+const Home = lazy(() => import('./pages/Home'));
+const Services = lazy(() => import('./pages/Services'));
+const Portfolio = lazy(() => import('./pages/Portfolio'));
+const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+
+// Lazy load auth pages
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Profile = lazy(() => import('./pages/Profile'));
+
+// Lazy load client pages
+const ClientDashboard = lazy(() => import('./pages/ClientDashboard'));
+const QuotesPage = lazy(() => import('./pages/QuotesPage'));
+const OrdersPage = lazy(() => import('./pages/OrdersPage'));
+const HistoryPage = lazy(() => import('./pages/HistoryPage'));
+const PaymentsPage = lazy(() => import('./pages/PaymentsPage'));
+const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
+
+// Lazy load admin pages
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const ProjectsAdminPage = lazy(() => import('./pages/ProjectsAdminPage'));
+const ClientsAdminPage = lazy(() => import('./pages/ClientsAdminPage'));
+const ClientsViewPage = lazy(() => import('./pages/ClientsViewPage'));
+const ClientsNewPage = lazy(() => import('./pages/ClientsNewPage'));
+const ClientsStatsPage = lazy(() => import('./pages/ClientsStatsPage'));
+const QuotationsAdminPage = lazy(() => import('./pages/QuotationsAdminPage'));
+const InvoicesAdminPage = lazy(() => import('./pages/InvoicesAdminPage'));
+const FinancePaymentsPage = lazy(() => import('./pages/FinancePaymentsPage'));
+const FinanceReportsPage = lazy(() => import('./pages/FinanceReportsPage'));
+const FinanceInvoicesPage = lazy(() => import('./pages/FinanceInvoicesPage'));
+const CommunicationNotificationsPage = lazy(() => import('./pages/CommunicationNotificationsPage'));
+const CommunicationMessagesPage = lazy(() => import('./pages/CommunicationMessagesPage'));
+const CommunicationEmailMarketingPage = lazy(() => import('./pages/CommunicationEmailMarketingPage'));
+
+// Lazy load components
+const RequestForm = lazy(() => import('./components/RequestForm'));
+
+// Loading fallback component
+const PageLoader = () => (
+  <LoadingSpinner 
+    size="lg" 
+    message="Cargando página..." 
+    className="min-h-[400px]"
+  />
+);
 
 function App() {
   const location = useLocation();
@@ -49,16 +71,17 @@ function App() {
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-grow pt-20">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/servicios" element={<Services />} />
-          <Route path="/portafolio" element={<Portfolio />} />
-          <Route path="/nosotros" element={<About />} />
-          <Route path="/contacto" element={<Contact />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<TermsOfService />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+            <Suspense fallback={<PageLoader />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/servicios" element={<Services />} />
+                <Route path="/portafolio" element={<Portfolio />} />
+                <Route path="/nosotros" element={<About />} />
+                <Route path="/contacto" element={<Contact />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
           <Route
             path="/solicitud"
             element={
@@ -215,7 +238,32 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin/clientes"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <ClientsAdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/cotizaciones"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <QuotationsAdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/facturas"
+            element={
+              <ProtectedRoute adminOnly={true}>
+                <InvoicesAdminPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
+            </Suspense>
           </main>
           {!isDashboard && <Footer />}
           <ToastContainer />

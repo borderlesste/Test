@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, memo } from 'react';
 import { useApi } from '../context/ApiContext';
 import { useLanguage } from '../context/LanguageContext';
 import useClickOutside from '../hooks/useClickOutside';
@@ -10,7 +10,7 @@ import { getUnreadCount } from '../api/axios';
 
 import PropTypes from 'prop-types';
 
-function Header({ companyName = "Borderless Techno Company" }) {
+const Header = memo(function Header({ companyName = "Borderless Techno Company" }) {
   const { user, logout } = useApi();
   const { t, currentLanguage, supportedLanguages, changeLanguage } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -74,19 +74,19 @@ function Header({ companyName = "Borderless Techno Company" }) {
 
   // Eliminamos la lógica de tema local, ahora usa ThemeContext
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
     setMenuOpen(false);
-  };
+  }, [logout]);
 
   // Enlaces públicos (siempre visibles)
-  const publicLinks = [
+  const publicLinks = useCallback(() => [
     { to: '/', label: t('nav.home'), icon: '🏠' },
     { to: '/servicios', label: t('nav.services'), icon: '⚙️' },
     { to: '/portafolio', label: t('nav.portfolio'), icon: '💼' },
     { to: '/nosotros', label: t('nav.about'), icon: '👥' },
     //{ to: '/solicitud', label: 'Solicitud', icon: '📋' },
-  ];
+  ], [t]);
 
   // Enlaces mínimos para usuarios autenticados (solo panel personal)
   const getPrivateLinks = () => {
@@ -121,7 +121,7 @@ function Header({ companyName = "Borderless Techno Company" }) {
     ];
   };
 
-  const allLinks = [...publicLinks, ...getPrivateLinks()];
+  const allLinks = [...publicLinks(), ...getPrivateLinks()];
   const authLinks = getAuthLinks();
 //min-h-screen bg-gradient-to-br from-violet-50 via-white to-pink-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center
   return (
@@ -416,7 +416,7 @@ function Header({ companyName = "Borderless Techno Company" }) {
       </nav>
     </header>
   );
-}
+});
 
 export default Header;
 
