@@ -20,7 +20,7 @@ import {
   Download
 } from 'lucide-react';
 import { getClients, deleteClient, getClientStats, sendMessageToClient } from '../api/axios';
-import { useToast } from '../components/ui/Toast';
+import { useToast } from '../components/ui/use-toast';
 import CreateClientModal from '../components/clients/CreateClientModal';
 import EditClientModal from '../components/clients/EditClientModal';
 import MessageClientModal from '../components/clients/MessageClientModal';

@@ -22,7 +22,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { getInvoices, deleteInvoice, getInvoiceStats, updateInvoiceStatus, generateInvoiceFromQuotation } from '../api/axios';
-import { useToast } from '../components/ui/Toast';
+import { useToast } from '../components/ui/use-toast';
 
 const InvoicesAdminPage = () => {
   const [invoices, setInvoices] = useState([]);

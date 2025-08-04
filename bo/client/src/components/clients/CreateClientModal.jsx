@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, User, Mail, Phone, Building2, MapPin, FileText } from 'lucide-react';
 import { createClient } from '../../api/axios';
-import { useToast } from '../ui/Toast';
+import { useToast } from '../ui/use-toast';
 import useFormValidation from '../../hooks/useFormValidation';
 import { validateClient } from '../../utils/validators';
 

@@ -209,11 +209,6 @@ export const updateQuoteStatus = (id, status) => api.put(`/api/quotes/${id}/stat
 export const convertQuoteToOrder = (id) => api.post(`/api/quotes/${id}/convert`);
 export const getQuoteItems = (quoteId) => api.get(`/api/quotes/${quoteId}/items`);
 
-// --- Notifications Management ---
-export const getNotifications = () => api.get('/api/notifications');
-export const markNotificationAsRead = (id) => api.put(`/api/notifications/${id}/read`);
-export const markAllNotificationsAsRead = () => api.put('/api/notifications/mark-all-read');
-export const deleteNotification = (id) => api.delete(`/api/notifications/${id}`);
 
 // --- Auth Management (additional) ---
 export const login = (credentials) => api.post('/api/auth/login', credentials);
@@ -361,7 +356,7 @@ export const getClient = (id) => api.get(`/api/clients/${id}`);
 export const createClient = (clientData) => api.post('/api/clients', clientData);
 export const updateClient = (id, clientData) => api.put(`/api/clients/${id}`, clientData);
 export const deleteClient = (id) => api.delete(`/api/clients/${id}`);
-export const getClientStats = () => api.get('/api/clients/stats');
+export const getAllClientsStats = () => api.get('/api/clients/stats');
 export const sendMessageToClient = (id, messageData) => api.post(`/api/clients/${id}/message`, messageData);
 
 // --- Quotations Management ---

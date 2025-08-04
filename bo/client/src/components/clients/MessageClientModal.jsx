@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, MessageSquare, AlertTriangle, Info, CheckCircle, AlertCircle } from 'lucide-react';
-import { useToast } from '../ui/Toast';
+import { useToast } from '../ui/use-toast';
 import useFormValidation from '../../hooks/useFormValidation';
 
 const MessageClientModal = ({ isOpen, onClose, onSend, client }) => {

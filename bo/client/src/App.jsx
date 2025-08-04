@@ -1,7 +1,8 @@
 
 // src/App.jsx
 
-import { Routes, Route, useLocation, Navigate, lazy, Suspense } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ToastProvider } from './hooks/useToast';
 import { LanguageProvider } from './context/LanguageContext';
 

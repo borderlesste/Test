@@ -17,7 +17,7 @@ import {
   Eye
 } from 'lucide-react';
 import { getClient } from '../../api/axios';
-import { useToast } from '../ui/Toast';
+import { useToast } from '../ui/use-toast';
 
 const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
   const [client, setClient] = useState(null);

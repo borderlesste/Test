@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api } from '../../services/api';
+import { getClientProjects } from '../../api/axios';
 import { 
   FolderOpen,
   Calendar,

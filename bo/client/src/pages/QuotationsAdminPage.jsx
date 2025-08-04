@@ -23,7 +23,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import { getQuotations, deleteQuotation, getQuotationStats, updateQuotationStatus, convertQuotationToProject } from '../api/axios';
-import { useToast } from '../components/ui/Toast';
+import { useToast } from '../components/ui/use-toast';
 
 const QuotationsAdminPage = () => {
   const [quotations, setQuotations] = useState([]);
