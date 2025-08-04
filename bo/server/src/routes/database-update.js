@@ -281,4 +281,245 @@ router.post('/create-sample-clients', async (req, res) => {
   }
 });
 
+// Route to update database schema for billing system
+router.post('/update-for-billing', async (req, res) => {
+  try {
+    const updates = [];
+    
+    // 1. Create invoices table
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS facturas (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        numero_factura VARCHAR(20) UNIQUE NOT NULL,
+        cotizacion_id INT NULL,
+        proyecto_id INT NULL,
+        cliente_id INT NOT NULL,
+        titulo VARCHAR(255) NOT NULL,
+        descripcion TEXT NULL,
+        subtotal DECIMAL(12,2) DEFAULT 0.00,
+        impuestos DECIMAL(12,2) DEFAULT 0.00,
+        descuentos DECIMAL(12,2) DEFAULT 0.00,
+        total DECIMAL(12,2) DEFAULT 0.00,
+        moneda VARCHAR(3) DEFAULT 'MXN',
+        estado ENUM('borrador', 'enviada', 'pagada', 'parcialmente_pagada', 'vencida', 'cancelada') DEFAULT 'borrador',
+        fecha_emision DATE NOT NULL,
+        fecha_vencimiento DATE NOT NULL,
+        dias_credito INT DEFAULT 30,
+        notas TEXT NULL,
+        condiciones_pago TEXT NULL,
+        metodo_pago ENUM('transferencia', 'efectivo', 'cheque', 'tarjeta_credito', 'tarjeta_debito') DEFAULT 'transferencia',
+        template_id INT NULL,
+        archivo_pdf VARCHAR(500) NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_cliente_id (cliente_id),
+        INDEX idx_cotizacion_id (cotizacion_id),
+        INDEX idx_proyecto_id (proyecto_id),
+        INDEX idx_numero_factura (numero_factura),
+        INDEX idx_estado (estado),
+        INDEX idx_fecha_emision (fecha_emision),
+        INDEX idx_fecha_vencimiento (fecha_vencimiento),
+        INDEX idx_created_at (created_at),
+        FOREIGN KEY (cliente_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+        FOREIGN KEY (cotizacion_id) REFERENCES cotizaciones(id) ON DELETE SET NULL,
+        FOREIGN KEY (proyecto_id) REFERENCES proyectos(id) ON DELETE SET NULL
+      ) ENGINE=InnoDB
+    `);
+    updates.push('Created/verified facturas table');
+
+    // 2. Create invoice items table
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS factura_items (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        factura_id INT NOT NULL,
+        descripcion TEXT NOT NULL,
+        cantidad DECIMAL(8,2) DEFAULT 1.00,
+        precio_unitario DECIMAL(12,2) DEFAULT 0.00,
+        descuento DECIMAL(5,2) DEFAULT 0.00,
+        subtotal DECIMAL(12,2) DEFAULT 0.00,
+        impuesto_porcentaje DECIMAL(5,2) DEFAULT 16.00,
+        impuesto_monto DECIMAL(12,2) DEFAULT 0.00,
+        total DECIMAL(12,2) DEFAULT 0.00,
+        orden INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_factura_id (factura_id),
+        FOREIGN KEY (factura_id) REFERENCES facturas(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB
+    `);
+    updates.push('Created/verified factura_items table');
+
+    // 3. Create payments table
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS pagos (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        numero_pago VARCHAR(20) UNIQUE NOT NULL,
+        factura_id INT NOT NULL,
+        cliente_id INT NOT NULL,
+        monto DECIMAL(12,2) NOT NULL,
+        moneda VARCHAR(3) DEFAULT 'MXN',
+        metodo_pago ENUM('transferencia', 'efectivo', 'cheque', 'tarjeta_credito', 'tarjeta_debito') NOT NULL,
+        referencia VARCHAR(100) NULL,
+        fecha_pago DATE NOT NULL,
+        estado ENUM('pendiente', 'confirmado', 'rechazado', 'cancelado') DEFAULT 'pendiente',
+        notas TEXT NULL,
+        comprobante_url VARCHAR(500) NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_factura_id (factura_id),
+        INDEX idx_cliente_id (cliente_id),
+        INDEX idx_numero_pago (numero_pago),
+        INDEX idx_estado (estado),
+        INDEX idx_fecha_pago (fecha_pago),
+        INDEX idx_created_at (created_at),
+        FOREIGN KEY (factura_id) REFERENCES facturas(id) ON DELETE CASCADE,
+        FOREIGN KEY (cliente_id) REFERENCES usuarios(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB
+    `);
+    updates.push('Created/verified pagos table');
+
+    // 4. Create invoice templates table
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS factura_templates (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(255) NOT NULL,
+        descripcion TEXT NULL,
+        contenido_html LONGTEXT NULL,
+        estilos_css TEXT NULL,
+        variables_disponibles JSON NULL,
+        es_activo BOOLEAN DEFAULT TRUE,
+        es_default BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB
+    `);
+    updates.push('Created/verified factura_templates table');
+
+    // 5. Create payment applications table (for partial payments)
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS pago_aplicaciones (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        pago_id INT NOT NULL,
+        factura_id INT NOT NULL,
+        monto_aplicado DECIMAL(12,2) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_pago_id (pago_id),
+        INDEX idx_factura_id (factura_id),
+        FOREIGN KEY (pago_id) REFERENCES pagos(id) ON DELETE CASCADE,
+        FOREIGN KEY (factura_id) REFERENCES facturas(id) ON DELETE CASCADE,
+        UNIQUE KEY unique_pago_factura (pago_id, factura_id)
+      ) ENGINE=InnoDB
+    `);
+    updates.push('Created/verified pago_aplicaciones table');
+
+    // 6. Create financial reports table
+    await pool.execute(`
+      CREATE TABLE IF NOT EXISTS reportes_financieros (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(255) NOT NULL,
+        tipo ENUM('ingresos', 'facturas_pendientes', 'clientes_morosos', 'flujo_efectivo', 'personalizado') NOT NULL,
+        parametros JSON NULL,
+        fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        generado_por INT NOT NULL,
+        archivo_url VARCHAR(500) NULL,
+        INDEX idx_tipo (tipo),
+        INDEX idx_fecha_generacion (fecha_generacion),
+        INDEX idx_generado_por (generado_por),
+        FOREIGN KEY (generado_por) REFERENCES usuarios(id) ON DELETE CASCADE
+      ) ENGINE=InnoDB
+    `);
+    updates.push('Created/verified reportes_financieros table');
+
+    // 7. Update cotizaciones table to add invoice tracking
+    try {
+      await pool.execute(`
+        ALTER TABLE cotizaciones 
+        ADD COLUMN factura_id INT NULL AFTER template_id,
+        ADD INDEX idx_factura_id (factura_id),
+        ADD FOREIGN KEY (factura_id) REFERENCES facturas(id) ON DELETE SET NULL
+      `);
+      updates.push('Added factura_id to cotizaciones table');
+    } catch (error) {
+      if (!error.message.includes('Duplicate column name')) {
+        throw error;
+      }
+      updates.push('factura_id column already exists in cotizaciones table');
+    }
+
+    // 8. Update proyectos table to add invoice tracking
+    try {
+      await pool.execute(`
+        ALTER TABLE proyectos 
+        ADD COLUMN factura_id INT NULL AFTER cliente_id,
+        ADD INDEX idx_factura_id (factura_id),
+        ADD FOREIGN KEY (factura_id) REFERENCES facturas(id) ON DELETE SET NULL
+      `);
+      updates.push('Added factura_id to proyectos table');
+    } catch (error) {
+      if (!error.message.includes('Duplicate column name')) {
+        throw error;
+      }
+      updates.push('factura_id column already exists in proyectos table');
+    }
+
+    // 9. Get table structures for verification
+    const [invoicesStructure] = await pool.execute('DESCRIBE facturas');
+    const [invoiceItemsStructure] = await pool.execute('DESCRIBE factura_items');
+    const [paymentsStructure] = await pool.execute('DESCRIBE pagos');
+    const [invoiceTemplatesStructure] = await pool.execute('DESCRIBE factura_templates');
+    const [paymentApplicationsStructure] = await pool.execute('DESCRIBE pago_aplicaciones');
+    const [reportsStructure] = await pool.execute('DESCRIBE reportes_financieros');
+    
+    // 10. Get table counts
+    const [invoicesCount] = await pool.execute('SELECT COUNT(*) as count FROM facturas');
+    const [invoiceItemsCount] = await pool.execute('SELECT COUNT(*) as count FROM factura_items');
+    const [paymentsCount] = await pool.execute('SELECT COUNT(*) as count FROM pagos');
+    const [invoiceTemplatesCount] = await pool.execute('SELECT COUNT(*) as count FROM factura_templates');
+    const [paymentApplicationsCount] = await pool.execute('SELECT COUNT(*) as count FROM pago_aplicaciones');
+    const [reportsCount] = await pool.execute('SELECT COUNT(*) as count FROM reportes_financieros');
+    
+    res.json({
+      success: true,
+      message: 'Database updated successfully for billing system',
+      updates,
+      verification: {
+        tables: {
+          facturas: {
+            columns: invoicesStructure.map(col => col.Field),
+            count: invoicesCount[0].count
+          },
+          factura_items: {
+            columns: invoiceItemsStructure.map(col => col.Field),
+            count: invoiceItemsCount[0].count
+          },
+          pagos: {
+            columns: paymentsStructure.map(col => col.Field),
+            count: paymentsCount[0].count
+          },
+          factura_templates: {
+            columns: invoiceTemplatesStructure.map(col => col.Field),
+            count: invoiceTemplatesCount[0].count
+          },
+          pago_aplicaciones: {
+            columns: paymentApplicationsStructure.map(col => col.Field),
+            count: paymentApplicationsCount[0].count
+          },
+          reportes_financieros: {
+            columns: reportsStructure.map(col => col.Field),
+            count: reportsCount[0].count
+          }
+        }
+      },
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('Error updating database for billing:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating database for billing system',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;

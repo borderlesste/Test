@@ -334,12 +334,14 @@ export const deleteEmailCampaign = (id) => api.delete(`/api/email-campaigns/${id
 export const sendEmailCampaign = (id) => api.post(`/api/email-campaigns/${id}/send`);
 
 // --- Invoices Management (Facturas) ---
-export const getInvoices = () => api.get('/api/invoices');
+export const getInvoices = (params = {}) => api.get('/api/invoices', { params });
 export const getInvoice = (id) => api.get(`/api/invoices/${id}`);
 export const createInvoice = (invoiceData) => api.post('/api/invoices', invoiceData);
 export const updateInvoice = (id, invoiceData) => api.put(`/api/invoices/${id}`, invoiceData);
 export const deleteInvoice = (id) => api.delete(`/api/invoices/${id}`);
-export const updateInvoiceStatus = (id, status) => api.put(`/api/invoices/${id}/status`, { estado: status });
+export const updateInvoiceStatus = (id, statusData) => api.put(`/api/invoices/${id}/status`, statusData);
+export const generateInvoiceFromQuotation = (quotationData) => api.post('/api/invoices/generate-from-quotation', quotationData);
+export const getInvoiceStats = () => api.get('/api/invoices/stats');
 export const generateInvoiceFromPayment = (paymentId) => api.post('/api/invoices/generate-from-payment', { pago_id: paymentId });
 export const updateOverdueInvoices = () => api.post('/api/invoices/update-overdue');
 export const getInvoiceItems = (invoiceId) => api.get(`/api/invoices/${invoiceId}/items`);

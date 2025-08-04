@@ -306,6 +306,97 @@ const validateQuotation = (quotationData) => {
   };
 };
 
+const validateInvoice = (invoiceData) => {
+  const errors = {};
+  
+  if (!invoiceData.cliente_id || !Number.isInteger(Number(invoiceData.cliente_id))) {
+    errors.cliente_id = 'ID de cliente requerido y debe ser un número válido';
+  }
+  
+  if (!invoiceData.titulo || invoiceData.titulo.trim().length < 3) {
+    errors.titulo = 'El título debe tener al menos 3 caracteres';
+  }
+  
+  if (invoiceData.titulo && invoiceData.titulo.length > 255) {
+    errors.titulo = 'El título no puede exceder los 255 caracteres';
+  }
+  
+  if (invoiceData.descripcion && invoiceData.descripcion.length > 1000) {
+    errors.descripcion = 'La descripción no puede exceder los 1000 caracteres';
+  }
+  
+  if (invoiceData.moneda && !['MXN', 'USD', 'EUR'].includes(invoiceData.moneda)) {
+    errors.moneda = 'La moneda debe ser MXN, USD o EUR';
+  }
+  
+  if (invoiceData.dias_credito && (invoiceData.dias_credito < 0 || invoiceData.dias_credito > 365)) {
+    errors.dias_credito = 'Los días de crédito deben estar entre 0 y 365';
+  }
+  
+  if (invoiceData.metodo_pago && !['transferencia', 'efectivo', 'cheque', 'tarjeta_credito', 'tarjeta_debito'].includes(invoiceData.metodo_pago)) {
+    errors.metodo_pago = 'Método de pago inválido';
+  }
+  
+  if (invoiceData.items && Array.isArray(invoiceData.items)) {
+    if (invoiceData.items.length === 0) {
+      errors.items = 'La factura debe tener al menos un item';
+    }
+    
+    invoiceData.items.forEach((item, index) => {
+      if (!item.descripcion || item.descripcion.trim().length < 3) {
+        errors[`item_${index}_descripcion`] = `Item ${index + 1}: La descripción es requerida (min 3 caracteres)`;
+      }
+      
+      if (!item.cantidad || item.cantidad <= 0) {
+        errors[`item_${index}_cantidad`] = `Item ${index + 1}: La cantidad debe ser mayor a 0`;
+      }
+      
+      if (!item.precio_unitario || item.precio_unitario <= 0) {
+        errors[`item_${index}_precio`] = `Item ${index + 1}: El precio unitario debe ser mayor a 0`;
+      }
+      
+      if (item.descuento && (item.descuento < 0 || item.descuento > 100)) {
+        errors[`item_${index}_descuento`] = `Item ${index + 1}: El descuento debe estar entre 0 y 100%`;
+      }
+      
+      if (item.impuesto_porcentaje && (item.impuesto_porcentaje < 0 || item.impuesto_porcentaje > 100)) {
+        errors[`item_${index}_impuesto`] = `Item ${index + 1}: El impuesto debe estar entre 0 y 100%`;
+      }
+    });
+  }
+  
+  if (invoiceData.notas && invoiceData.notas.length > 1000) {
+    errors.notas = 'Las notas no pueden exceder los 1000 caracteres';
+  }
+  
+  if (invoiceData.condiciones_pago && invoiceData.condiciones_pago.length > 500) {
+    errors.condiciones_pago = 'Las condiciones de pago no pueden exceder los 500 caracteres';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+const validateInvoiceStatus = (statusData) => {
+  const errors = {};
+  const validStatuses = ['borrador', 'enviada', 'pagada', 'parcialmente_pagada', 'vencida', 'cancelada'];
+  
+  if (!statusData.estado || !validStatuses.includes(statusData.estado)) {
+    errors.estado = `Estado inválido. Estados válidos: ${validStatuses.join(', ')}`;
+  }
+  
+  if (statusData.notas && statusData.notas.length > 500) {
+    errors.notas = 'Las notas no pueden exceder los 500 caracteres';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
 const sanitizeObjectInputs = (obj) => {
   const sanitized = {};
   
@@ -363,6 +454,8 @@ const validateUserMiddleware = createValidationMiddleware(validateUser);
 const validateClientMiddleware = createValidationMiddleware(validateClient);
 const validateMessageMiddleware = createValidationMiddleware(validateMessage);
 const validateQuotationMiddleware = createValidationMiddleware(validateQuotation);
+const validateInvoiceMiddleware = createValidationMiddleware(validateInvoice);
+const validateInvoiceStatusMiddleware = createValidationMiddleware(validateInvoiceStatus);
 
 // Middleware de validación de login
 const validateLoginMiddleware = (req, res, next) => {
@@ -486,11 +579,17 @@ module.exports = {
   validateClientMiddleware,
   validateMessageMiddleware,
   validateQuotationMiddleware,
+  validateInvoiceMiddleware,
+  validateInvoiceStatusMiddleware,
   validateLoginMiddleware,
   createRateLimitMiddleware,
   validateFileMiddleware,
   validateIdMiddleware,
   createValidationMiddleware,
+  
+  // Aliases for routes usage
+  validateInvoice: validateInvoiceMiddleware,
+  validateInvoiceStatus: validateInvoiceStatusMiddleware,
   
   // Funciones de validación exportadas para uso directo
   validateProject,
@@ -499,6 +598,8 @@ module.exports = {
   validateClient,
   validateMessage,
   validateQuotation,
+  validateInvoiceFunction: validateInvoice,
+  validateInvoiceStatusFunction: validateInvoiceStatus,
   validateEmail,
   validatePassword,
   validatePhone,

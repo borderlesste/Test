@@ -1,326 +1,602 @@
-const { validationResult } = require('express-validator');
-const { invoiceService } = require('../services/invoiceService.js');
-const { logActivity } = require('./dashboardController.js');
 const { pool } = require('../config/db.js');
-const emailService = require('../services/emailService.js');
-const notificationService = require('../services/notificationService.js');
 
-// Helper function para obtener el nombre del cliente
-const getClienteName = async (clienteId) => {
-  try {
-    const [rows] = await pool.execute('SELECT nombre FROM usuarios WHERE id = ?', [clienteId]);
-    return rows.length > 0 ? rows[0].nombre : 'Cliente desconocido';
-  } catch (error) {
-    return 'Cliente desconocido';
-  }
-};
-
-// Obtener todas las facturas (admin) o las facturas de un usuario (cliente)
-exports.getInvoices = async (req, res) => {
-  try {
-    const invoices = await invoiceService.getInvoices(req.user.id, req.user.role);
-    res.json(invoices);
-  } catch (err) {
-    console.error('Error fetching invoices:', err);
-    res.status(500).json({ message: 'Error al obtener las facturas.' });
-  }
-};
-
-// Obtener una factura por ID
-exports.getInvoiceById = async (req, res) => {
-  const { id } = req.params;
-  try {
-    const invoice = await invoiceService.getInvoiceById(id);
-    
-    // Verificar que el cliente solo pueda ver sus propias facturas
-    if (req.user.role !== 'admin' && invoice.cliente_id !== req.user.id) {
-      return res.status(403).json({ message: 'Acceso denegado a esta factura.' });
-    }
-    
-    res.json(invoice);
-  } catch (error) {
-    console.error(`Error fetching invoice with id ${id}:`, error);
-    if (error.message === 'Factura no encontrada') {
-      res.status(404).json({ message: error.message });
-    } else {
-      res.status(500).json({ message: 'Error interno del servidor.' });
-    }
-  }
-};
-
-// Crear una nueva factura
-exports.createInvoice = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  try {
-    const newInvoice = await invoiceService.createInvoice(req.body);
-    
-    // Registrar actividad de nueva factura
-    const clienteName = await getClienteName(newInvoice.cliente_id);
-    await logActivity(
-      'new_order', // Usando new_order como tipo de actividad más cercano
-      `Nueva factura ${newInvoice.numero_factura} creada para ${clienteName} por $${newInvoice.total.toLocaleString('es-MX')}`,
-      null, // usuarioId
-      newInvoice.id, // entidadId
-      'factura' // entidadTipo
-    );
-
-    // Enviar notificación de nueva factura por email (no bloquear si falla)
+const invoicesController = {
+  // Get all invoices with pagination and filters
+  getAllInvoices: async (req, res) => {
     try {
-      emailService.sendInvoiceNotification({
-        client_email: newInvoice.cliente_email,
-        numero_factura: newInvoice.numero_factura,
-        total: newInvoice.total,
-        fecha_vencimiento: newInvoice.fecha_vencimiento,
-        concepto: newInvoice.concepto
-      })
-      .then(result => {
-        if (result.success) {
-          console.log('✅ Notificación de factura enviada por email');
-        } else {
-          console.log('⚠️ Fallo enviando notificación de factura:', result.error);
-        }
-      })
-      .catch(err => {
-        console.log('⚠️ Error enviando notificación de factura:', err.message);
-      });
-    } catch (emailError) {
-      console.log('⚠️ Error configurando envío de factura:', emailError);
-    }
+      const {
+        page = 1,
+        limit = 20,
+        search = '',
+        estado = '',
+        cliente_id = '',
+        fecha_inicio = '',
+        fecha_fin = '',
+        sortBy = 'created_at',
+        sortOrder = 'DESC'
+      } = req.query;
 
-    // Crear notificación de nueva factura
-    try {
-      await notificationService.notifyNewInvoice({
-        numero_factura: newInvoice.numero_factura,
-        total: newInvoice.total,
-        concepto: newInvoice.concepto
-      }, clienteName);
-    } catch (notificationError) {
-      console.log('⚠️ Error creando notificación de factura:', notificationError);
-    }
-    
-    res.status(201).json(newInvoice);
-  } catch (err) {
-    console.error('Error creating invoice:', err);
-    if (err.message === 'Cliente no encontrado') {
-      res.status(404).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Error al crear la factura.' });
-    }
-  }
-};
+      const offset = (parseInt(page) - 1) * parseInt(limit);
+      
+      // Build WHERE clause
+      let whereConditions = [];
+      let queryParams = [];
 
-// Actualizar una factura
-exports.updateInvoice = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { id } = req.params;
-  try {
-    const updatedInvoice = await invoiceService.updateInvoice(id, req.body);
-    
-    // Registrar actividad de factura actualizada
-    const clienteName = await getClienteName(updatedInvoice.cliente_id);
-    await logActivity(
-      'update_order', // Usando update_order como tipo de actividad más apropiado
-      `Factura ${updatedInvoice.numero_factura} actualizada para ${clienteName}`,
-      null, // usuarioId
-      updatedInvoice.id, // entidadId
-      'factura' // entidadTipo
-    );
-    
-    res.json(updatedInvoice);
-  } catch (err) {
-    console.error(`Error updating invoice with id ${id}:`, err);
-    if (err.message === 'Factura no encontrada' || err.message === 'Cliente no encontrado') {
-      res.status(404).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Error al actualizar la factura.' });
-    }
-  }
-};
-
-// Actualizar solo el estado de una factura
-exports.updateInvoiceStatus = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { id } = req.params;
-  const { estado } = req.body;
-  
-  try {
-    const updatedInvoice = await invoiceService.updateInvoiceStatus(id, estado);
-    
-    // Registrar actividad de cambio de estado
-    const clienteName = await getClienteName(updatedInvoice.cliente_id);
-    let activityType = 'new_order';
-    let priority = 'normal';
-    
-    if (estado === 'Pagada') {
-      activityType = 'new_payment';
-      priority = 'normal';
-    } else if (estado === 'Vencida') {
-      activityType = 'overdue_payment';
-      priority = 'urgent';
-    }
-    
-    await logActivity(
-      activityType,
-      `Factura ${updatedInvoice.numero_factura} marcada como ${estado.toLowerCase()} para ${clienteName}`,
-      priority,
-      updatedInvoice.cliente_id,
-      updatedInvoice.id,
-      'pedido'
-    );
-
-    // Si la factura se marca como vencida, enviar notificación
-    if (estado === 'Vencida') {
-      try {
-        emailService.sendOverdueInvoiceNotification({
-          client_email: updatedInvoice.cliente_email,
-          numero_factura: updatedInvoice.numero_factura,
-          total: updatedInvoice.total,
-          fecha_vencimiento: updatedInvoice.fecha_vencimiento
-        })
-        .then(result => {
-          if (result.success) {
-            console.log('✅ Notificación de factura vencida enviada por email');
-          }
-        })
-        .catch(err => {
-          console.log('⚠️ Error enviando notificación de factura vencida:', err.message);
-        });
-      } catch (emailError) {
-        console.log('⚠️ Error configurando envío de notificación de vencimiento:', emailError);
+      if (search) {
+        whereConditions.push('(f.numero_factura LIKE ? OR f.titulo LIKE ? OR u.nombre LIKE ? OR u.empresa LIKE ?)');
+        queryParams.push(`%${search}%`, `%${search}%`, `%${search}%`, `%${search}%`);
       }
-    }
-    
-    res.json(updatedInvoice);
-  } catch (err) {
-    console.error(`Error updating invoice status with id ${id}:`, err);
-    if (err.message === 'Factura no encontrada' || err.message === 'Estado inválido') {
-      res.status(404).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Error al actualizar el estado de la factura.' });
-    }
-  }
-};
 
-// Eliminar una factura
-exports.deleteInvoice = async (req, res) => {
-  const { id } = req.params;
-  try {
-    // Obtener datos de la factura antes de eliminarla para logging
-    const invoice = await invoiceService.getInvoiceById(id);
-    const clienteName = await getClienteName(invoice.cliente_id);
-    
-    const result = await invoiceService.deleteInvoice(id);
-    
-    // Registrar actividad de factura eliminada
-    await logActivity(
-      'new_order',
-      `Factura ${invoice.numero_factura} eliminada para ${clienteName}`,
-      'normal',
-      invoice.cliente_id,
-      null,
-      'pedido'
-    );
-    
-    res.status(200).json(result);
-  } catch (err) {
-    console.error(`Error deleting invoice with id ${id}:`, err);
-    if (err.message === 'Factura no encontrada') {
-      res.status(404).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Error al eliminar la factura.' });
-    }
-  }
-};
+      if (estado) {
+        whereConditions.push('f.estado = ?');
+        queryParams.push(estado);
+      }
 
-// Generar factura desde un pago
-exports.generateInvoiceFromPayment = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+      if (cliente_id) {
+        whereConditions.push('f.cliente_id = ?');
+        queryParams.push(cliente_id);
+      }
 
-  const { payment_id, concepto, moneda, notas } = req.body;
-  
-  try {
-    const newInvoice = await invoiceService.generateInvoiceFromPayment(payment_id, {
-      concepto,
-      moneda,
-      notas
-    });
-    
-    // Registrar actividad de factura generada desde pago
-    const clienteName = await getClienteName(newInvoice.cliente_id);
-    await logActivity(
-      'new_payment',
-      `Factura ${newInvoice.numero_factura} generada automáticamente desde pago para ${clienteName}`,
-      'normal',
-      newInvoice.cliente_id,
-      newInvoice.id,
-      'pago'
-    );
+      if (fecha_inicio) {
+        whereConditions.push('f.fecha_emision >= ?');
+        queryParams.push(fecha_inicio);
+      }
 
-    // Enviar notificación de nueva factura
-    try {
-      emailService.sendInvoiceNotification({
-        client_email: newInvoice.cliente_email,
-        numero_factura: newInvoice.numero_factura,
-        total: newInvoice.total,
-        fecha_vencimiento: newInvoice.fecha_vencimiento,
-        concepto: newInvoice.concepto
-      })
-      .then(result => {
-        if (result.success) {
-          console.log('✅ Notificación de factura generada enviada por email');
+      if (fecha_fin) {
+        whereConditions.push('f.fecha_emision <= ?');
+        queryParams.push(fecha_fin);
+      }
+
+      const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+      
+      // Main query with client information
+      const query = `
+        SELECT 
+          f.*,
+          u.nombre as cliente_nombre,
+          u.empresa as cliente_empresa,
+          u.email as cliente_email,
+          u.telefono as cliente_telefono,
+          c.numero_cotizacion,
+          p.titulo as proyecto_titulo,
+          COALESCE(pagos_sum.total_pagado, 0) as total_pagado,
+          CASE 
+            WHEN f.estado = 'pagada' THEN 'pagada'
+            WHEN COALESCE(pagos_sum.total_pagado, 0) > 0 AND COALESCE(pagos_sum.total_pagado, 0) < f.total THEN 'parcialmente_pagada'
+            WHEN f.fecha_vencimiento < CURDATE() AND f.estado NOT IN ('pagada', 'cancelada') THEN 'vencida'
+            ELSE f.estado
+          END as estado_calculado,
+          DATEDIFF(CURDATE(), f.fecha_vencimiento) as dias_vencido
+        FROM facturas f
+        INNER JOIN usuarios u ON f.cliente_id = u.id
+        LEFT JOIN cotizaciones c ON f.cotizacion_id = c.id
+        LEFT JOIN proyectos p ON f.proyecto_id = p.id
+        LEFT JOIN (
+          SELECT 
+            factura_id,
+            SUM(CASE WHEN estado = 'confirmado' THEN monto ELSE 0 END) as total_pagado
+          FROM pagos
+          GROUP BY factura_id
+        ) pagos_sum ON f.id = pagos_sum.factura_id
+        ${whereClause}
+        ORDER BY f.${sortBy} ${sortOrder}
+        LIMIT ? OFFSET ?
+      `;
+
+      const [invoices] = await pool.execute(query, [...queryParams, parseInt(limit), offset]);
+
+      // Get total count for pagination
+      const countQuery = `
+        SELECT COUNT(*) as total
+        FROM facturas f
+        INNER JOIN usuarios u ON f.cliente_id = u.id
+        LEFT JOIN cotizaciones c ON f.cotizacion_id = c.id
+        LEFT JOIN proyectos p ON f.proyecto_id = p.id
+        ${whereClause}
+      `;
+
+      const [countResult] = await pool.execute(countQuery, queryParams);
+      const total = countResult[0].total;
+      const totalPages = Math.ceil(total / parseInt(limit));
+
+      res.json({
+        success: true,
+        data: {
+          invoices,
+          pagination: {
+            current_page: parseInt(page),
+            total_pages: totalPages,
+            total_items: total,
+            per_page: parseInt(limit)
+          }
         }
-      })
-      .catch(err => {
-        console.log('⚠️ Error enviando notificación de factura generada:', err.message);
       });
-    } catch (emailError) {
-      console.log('⚠️ Error enviando notificación de factura generada:', emailError);
+
+    } catch (error) {
+      console.error('Error fetching invoices:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al obtener facturas',
+        error: error.message
+      });
     }
+  },
+
+  // Get single invoice by ID
+  getInvoiceById: async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      // Get invoice with client and related data
+      const [invoices] = await pool.execute(`
+        SELECT 
+          f.*,
+          u.nombre as cliente_nombre,
+          u.empresa as cliente_empresa,
+          u.email as cliente_email,
+          u.telefono as cliente_telefono,
+          u.direccion as cliente_direccion,
+          u.rfc as cliente_rfc,
+          c.numero_cotizacion,
+          p.titulo as proyecto_titulo,
+          COALESCE(pagos_sum.total_pagado, 0) as total_pagado
+        FROM facturas f
+        INNER JOIN usuarios u ON f.cliente_id = u.id
+        LEFT JOIN cotizaciones c ON f.cotizacion_id = c.id
+        LEFT JOIN proyectos p ON f.proyecto_id = p.id
+        LEFT JOIN (
+          SELECT 
+            factura_id,
+            SUM(CASE WHEN estado = 'confirmado' THEN monto ELSE 0 END) as total_pagado
+          FROM pagos
+          GROUP BY factura_id
+        ) pagos_sum ON f.id = pagos_sum.factura_id
+        WHERE f.id = ?
+      `, [id]);
+
+      if (invoices.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Factura no encontrada'
+        });
+      }
+
+      // Get invoice items
+      const [items] = await pool.execute(`
+        SELECT * FROM factura_items 
+        WHERE factura_id = ? 
+        ORDER BY orden ASC, id ASC
+      `, [id]);
+
+      // Get payments
+      const [payments] = await pool.execute(`
+        SELECT * FROM pagos 
+        WHERE factura_id = ? 
+        ORDER BY fecha_pago DESC
+      `, [id]);
+
+      const invoice = {
+        ...invoices[0],
+        items,
+        payments
+      };
+
+      res.json({
+        success: true,
+        data: invoice
+      });
+
+    } catch (error) {
+      console.error('Error fetching invoice:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al obtener factura',
+        error: error.message
+      });
+    }
+  },
+
+  // Create new invoice
+  createInvoice: async (req, res) => {
+    const connection = await pool.getConnection();
     
-    res.status(201).json(newInvoice);
-  } catch (err) {
-    console.error('Error generating invoice from payment:', err);
-    if (err.message === 'Pago no encontrado') {
-      res.status(404).json({ message: err.message });
-    } else {
-      res.status(500).json({ message: 'Error al generar la factura desde el pago.' });
+    try {
+      await connection.beginTransaction();
+
+      const {
+        cotizacion_id,
+        proyecto_id,
+        cliente_id,
+        titulo,
+        descripcion,
+        items = [],
+        moneda = 'MXN',
+        dias_credito = 30,
+        notas,
+        condiciones_pago,
+        metodo_pago = 'transferencia'
+      } = req.body;
+
+      // Generate invoice number
+      const currentYear = new Date().getFullYear();
+      const [lastInvoice] = await connection.execute(
+        'SELECT numero_factura FROM facturas WHERE numero_factura LIKE ? ORDER BY id DESC LIMIT 1',
+        [`FAC-${currentYear}-%`]
+      );
+
+      let invoiceNumber;
+      if (lastInvoice.length > 0) {
+        const lastNumber = parseInt(lastInvoice[0].numero_factura.split('-')[2]);
+        const nextNumber = (lastNumber + 1).toString().padStart(4, '0');
+        invoiceNumber = `FAC-${currentYear}-${nextNumber}`;
+      } else {
+        invoiceNumber = `FAC-${currentYear}-0001`;
+      }
+
+      // Calculate totals
+      let subtotal = 0;
+      let totalImpuestos = 0;
+      let total = 0;
+
+      const processedItems = items.map((item, index) => {
+        const cantidad = parseFloat(item.cantidad) || 1;
+        const precioUnitario = parseFloat(item.precio_unitario) || 0;
+        const descuento = parseFloat(item.descuento) || 0;
+        const impuestoPorcentaje = parseFloat(item.impuesto_porcentaje) || 16;
+
+        const itemSubtotal = cantidad * precioUnitario;
+        const descuentoMonto = (itemSubtotal * descuento) / 100;
+        const subtotalConDescuento = itemSubtotal - descuentoMonto;
+        const impuestoMonto = (subtotalConDescuento * impuestoPorcentaje) / 100;
+        const itemTotal = subtotalConDescuento + impuestoMonto;
+
+        subtotal += itemSubtotal;
+        totalImpuestos += impuestoMonto;
+        total += itemTotal;
+
+        return {
+          descripcion: item.descripcion,
+          cantidad: cantidad,
+          precio_unitario: precioUnitario,
+          descuento: descuento,
+          subtotal: subtotalConDescuento,
+          impuesto_porcentaje: impuestoPorcentaje,
+          impuesto_monto: impuestoMonto,
+          total: itemTotal,
+          orden: index
+        };
+      });
+
+      const fechaEmision = new Date();
+      const fechaVencimiento = new Date(fechaEmision);
+      fechaVencimiento.setDate(fechaVencimiento.getDate() + parseInt(dias_credito));
+
+      // Insert invoice
+      const [invoiceResult] = await connection.execute(`
+        INSERT INTO facturas (
+          numero_factura, cotizacion_id, proyecto_id, cliente_id, titulo, descripcion,
+          subtotal, impuestos, total, moneda, fecha_emision, fecha_vencimiento,
+          dias_credito, notas, condiciones_pago, metodo_pago
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        invoiceNumber, cotizacion_id, proyecto_id, cliente_id, titulo, descripcion,
+        subtotal, totalImpuestos, total, moneda, fechaEmision, fechaVencimiento,
+        dias_credito, notas, condiciones_pago, metodo_pago
+      ]);
+
+      const invoiceId = invoiceResult.insertId;
+
+      // Insert invoice items
+      for (const item of processedItems) {
+        await connection.execute(`
+          INSERT INTO factura_items (
+            factura_id, descripcion, cantidad, precio_unitario, descuento,
+            subtotal, impuesto_porcentaje, impuesto_monto, total, orden
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          invoiceId, item.descripcion, item.cantidad, item.precio_unitario,
+          item.descuento, item.subtotal, item.impuesto_porcentaje,
+          item.impuesto_monto, item.total, item.orden
+        ]);
+      }
+
+      // Update quotation if linked
+      if (cotizacion_id) {
+        await connection.execute(
+          'UPDATE cotizaciones SET factura_id = ? WHERE id = ?',
+          [invoiceId, cotizacion_id]
+        );
+      }
+
+      // Update project if linked
+      if (proyecto_id) {
+        await connection.execute(
+          'UPDATE proyectos SET factura_id = ? WHERE id = ?',
+          [invoiceId, proyecto_id]
+        );
+      }
+
+      // Create activity log
+      await connection.execute(`
+        INSERT INTO actividades (usuario_id, tipo, descripcion, entidad_tipo, entidad_id)
+        VALUES (?, 'factura_creada', ?, 'factura', ?)
+      `, [req.user?.id || 1, `Nueva factura creada: ${invoiceNumber}`, invoiceId]);
+
+      // Create notification
+      await connection.execute(`
+        INSERT INTO notificaciones (usuario_id, tipo, titulo, mensaje, entidad_tipo, entidad_id)
+        VALUES (?, 'info', 'Nueva Factura', ?, 'factura', ?)
+      `, [cliente_id, `Se ha generado la factura ${invoiceNumber}`, invoiceId]);
+
+      await connection.commit();
+
+      res.status(201).json({
+        success: true,
+        message: 'Factura creada exitosamente',
+        data: {
+          id: invoiceId,
+          numero_factura: invoiceNumber,
+          total: total
+        }
+      });
+
+    } catch (error) {
+      await connection.rollback();
+      console.error('Error creating invoice:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al crear factura',
+        error: error.message
+      });
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Update invoice status
+  updateInvoiceStatus: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { estado, notas } = req.body;
+
+      // Validate status
+      const validStatuses = ['borrador', 'enviada', 'pagada', 'parcialmente_pagada', 'vencida', 'cancelada'];
+      if (!validStatuses.includes(estado)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Estado de factura inválido'
+        });
+      }
+
+      await pool.execute(
+        'UPDATE facturas SET estado = ?, notas = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [estado, notas || null, id]
+      );
+
+      // Create activity log
+      await pool.execute(`
+        INSERT INTO actividades (usuario_id, tipo, descripcion, entidad_tipo, entidad_id)
+        VALUES (?, 'factura_actualizada', ?, 'factura', ?)
+      `, [req.user?.id || 1, `Estado de factura actualizado a: ${estado}`, id]);
+
+      res.json({
+        success: true,
+        message: 'Estado de factura actualizado exitosamente'
+      });
+
+    } catch (error) {
+      console.error('Error updating invoice status:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al actualizar estado de factura',
+        error: error.message
+      });
+    }
+  },
+
+  // Generate invoice from quotation
+  generateFromQuotation: async (req, res) => {
+    const connection = await pool.getConnection();
+    
+    try {
+      await connection.beginTransaction();
+
+      const { cotizacion_id } = req.body;
+
+      // Get quotation with items
+      const [quotations] = await connection.execute(`
+        SELECT c.*, u.nombre as cliente_nombre
+        FROM cotizaciones c
+        INNER JOIN usuarios u ON c.cliente_id = u.id
+        WHERE c.id = ? AND c.estado = 'aprobada'
+      `, [cotizacion_id]);
+
+      if (quotations.length === 0) {
+        return res.status(404).json({
+          success: false,
+          message: 'Cotización no encontrada o no está aprobada'
+        });
+      }
+
+      const quotation = quotations[0];
+
+      // Check if quotation already has an invoice
+      if (quotation.factura_id) {
+        return res.status(400).json({
+          success: false,
+          message: 'Esta cotización ya tiene una factura asociada'
+        });
+      }
+
+      // Get quotation items
+      const [quotationItems] = await connection.execute(
+        'SELECT * FROM cotizacion_items WHERE cotizacion_id = ? ORDER BY orden ASC',
+        [cotizacion_id]
+      );
+
+      // Transform quotation items to invoice items
+      const invoiceItems = quotationItems.map(item => ({
+        descripcion: item.descripcion,
+        cantidad: item.cantidad,
+        precio_unitario: item.precio_unitario,
+        descuento: 0,
+        impuesto_porcentaje: 16
+      }));
+
+      // Generate invoice number
+      const currentYear = new Date().getFullYear();
+      const [lastInvoice] = await connection.execute(
+        'SELECT numero_factura FROM facturas WHERE numero_factura LIKE ? ORDER BY id DESC LIMIT 1',
+        [`FAC-${currentYear}-%`]
+      );
+
+      let invoiceNumber;
+      if (lastInvoice.length > 0) {
+        const lastNumber = parseInt(lastInvoice[0].numero_factura.split('-')[2]);
+        const nextNumber = (lastNumber + 1).toString().padStart(4, '0');
+        invoiceNumber = `FAC-${currentYear}-${nextNumber}`;
+      } else {
+        invoiceNumber = `FAC-${currentYear}-0001`;
+      }
+
+      // Calculate totals
+      let subtotal = quotation.subtotal;
+      let totalImpuestos = subtotal * 0.16; // 16% IVA
+      let total = subtotal + totalImpuestos;
+
+      const fechaEmision = new Date();
+      const fechaVencimiento = new Date(fechaEmision);
+      fechaVencimiento.setDate(fechaVencimiento.getDate() + 30);
+
+      // Insert invoice
+      const [invoiceResult] = await connection.execute(`
+        INSERT INTO facturas (
+          numero_factura, cotizacion_id, cliente_id, titulo, descripcion,
+          subtotal, impuestos, total, moneda, fecha_emision, fecha_vencimiento,
+          dias_credito, notas
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [
+        invoiceNumber, cotizacion_id, quotation.cliente_id, quotation.titulo, quotation.descripcion,
+        subtotal, totalImpuestos, total, quotation.moneda, fechaEmision, fechaVencimiento,
+        30, quotation.notas
+      ]);
+
+      const invoiceId = invoiceResult.insertId;
+
+      // Insert invoice items
+      for (let i = 0; i < invoiceItems.length; i++) {
+        const item = invoiceItems[i];
+        const itemSubtotal = item.cantidad * item.precio_unitario;
+        const impuestoMonto = itemSubtotal * 0.16;
+        const itemTotal = itemSubtotal + impuestoMonto;
+
+        await connection.execute(`
+          INSERT INTO factura_items (
+            factura_id, descripcion, cantidad, precio_unitario, descuento,
+            subtotal, impuesto_porcentaje, impuesto_monto, total, orden
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+          invoiceId, item.descripcion, item.cantidad, item.precio_unitario,
+          0, itemSubtotal, 16, impuestoMonto, itemTotal, i
+        ]);
+      }
+
+      // Update quotation
+      await connection.execute(
+        'UPDATE cotizaciones SET factura_id = ?, estado = "convertida" WHERE id = ?',
+        [invoiceId, cotizacion_id]
+      );
+
+      await connection.commit();
+
+      res.status(201).json({
+        success: true,
+        message: 'Factura generada exitosamente desde cotización',
+        data: {
+          id: invoiceId,
+          numero_factura: invoiceNumber,
+          cotizacion_numero: quotation.numero_cotizacion
+        }
+      });
+
+    } catch (error) {
+      await connection.rollback();
+      console.error('Error generating invoice from quotation:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al generar factura desde cotización',
+        error: error.message
+      });
+    } finally {
+      connection.release();
+    }
+  },
+
+  // Get invoice statistics
+  getInvoiceStats: async (req, res) => {
+    try {
+      // Summary statistics
+      const [summaryResult] = await pool.execute(`
+        SELECT 
+          COUNT(*) as total,
+          COUNT(CASE WHEN estado = 'enviada' THEN 1 END) as enviadas,
+          COUNT(CASE WHEN estado = 'pagada' THEN 1 END) as pagadas,
+          COUNT(CASE WHEN estado = 'vencida' OR (fecha_vencimiento < CURDATE() AND estado NOT IN ('pagada', 'cancelada')) THEN 1 END) as vencidas,
+          COUNT(CASE WHEN MONTH(created_at) = MONTH(CURDATE()) AND YEAR(created_at) = YEAR(CURDATE()) THEN 1 END) as this_month,
+          SUM(CASE WHEN estado = 'pagada' THEN total ELSE 0 END) as total_pagado,
+          SUM(CASE WHEN estado NOT IN ('pagada', 'cancelada') THEN total ELSE 0 END) as total_pendiente,
+          AVG(total) as ticket_promedio
+        FROM facturas
+      `);
+
+      // Overdue invoices
+      const [overdueResult] = await pool.execute(`
+        SELECT 
+          f.id,
+          f.numero_factura,
+          f.total,
+          f.fecha_vencimiento,
+          DATEDIFF(CURDATE(), f.fecha_vencimiento) as dias_vencido,
+          u.nombre as cliente_nombre
+        FROM facturas f
+        INNER JOIN usuarios u ON f.cliente_id = u.id
+        WHERE f.fecha_vencimiento < CURDATE() 
+        AND f.estado NOT IN ('pagada', 'cancelada')
+        ORDER BY f.fecha_vencimiento ASC
+        LIMIT 10
+      `);
+
+      // Monthly revenue
+      const [monthlyRevenue] = await pool.execute(`
+        SELECT 
+          DATE_FORMAT(fecha_emision, '%Y-%m') as mes,
+          SUM(total) as ingresos,
+          COUNT(*) as facturas
+        FROM facturas
+        WHERE fecha_emision >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
+        AND estado = 'pagada'
+        GROUP BY DATE_FORMAT(fecha_emision, '%Y-%m')
+        ORDER BY mes DESC
+      `);
+
+      res.json({
+        success: true,
+        data: {
+          summary: summaryResult[0],
+          overdue_invoices: overdueResult,
+          monthly_revenue: monthlyRevenue
+        }
+      });
+
+    } catch (error) {
+      console.error('Error fetching invoice stats:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error al obtener estadísticas de facturas',
+        error: error.message
+      });
     }
   }
 };
 
-// Actualizar facturas vencidas (tarea de mantenimiento)
-exports.updateOverdueInvoices = async (req, res) => {
-  try {
-    const result = await invoiceService.updateOverdueInvoices();
-    
-    // Registrar actividad de mantenimiento
-    await logActivity(
-      'overdue_payment',
-      `${result.count} facturas marcadas como vencidas automáticamente`,
-      result.count > 0 ? 'high' : 'normal',
-      null,
-      null,
-      null
-    );
-    
-    res.json(result);
-  } catch (err) {
-    console.error('Error updating overdue invoices:', err);
-    res.status(500).json({ message: 'Error al actualizar facturas vencidas.' });
-  }
-};
+module.exports = invoicesController;
