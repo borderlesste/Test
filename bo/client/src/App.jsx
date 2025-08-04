@@ -25,8 +25,16 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const Profile = lazy(() => import('./pages/Profile'));
 
-// Lazy load client pages
-const ClientDashboard = lazy(() => import('./pages/ClientDashboard'));
+// Lazy load client pages  
+const ClientLayout = lazy(() => import('./components/layout/ClientLayout'));
+const ClientDashboard = lazy(() => import('./pages/client/ClientDashboard'));
+const ClientProjects = lazy(() => import('./pages/client/ClientProjects'));
+const ClientQuotations = lazy(() => import('./pages/client/ClientQuotations'));
+const ClientInvoices = lazy(() => import('./pages/client/ClientInvoices'));
+const ClientMessages = lazy(() => import('./pages/client/ClientMessages'));
+const ClientProfile = lazy(() => import('./pages/client/ClientProfile'));
+
+// Legacy client pages (to be removed)
 const QuotesPage = lazy(() => import('./pages/QuotesPage'));
 const OrdersPage = lazy(() => import('./pages/OrdersPage'));
 const HistoryPage = lazy(() => import('./pages/HistoryPage'));
@@ -63,7 +71,7 @@ const PageLoader = () => (
 
 function App() {
   const location = useLocation();
-  const isDashboard = location.pathname.includes('/admin') || location.pathname.includes('/panel-cliente');
+  const isDashboard = location.pathname.includes('/admin') || location.pathname.includes('/client');
 
   return (
     <LanguageProvider>
@@ -90,13 +98,28 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* New Client Portal Routes */}
           <Route
-            path="/panel-cliente"
+            path="/client"
             element={
-              <ProtectedRoute>
-                <ClientDashboard />
+              <ProtectedRoute clientOnly={true}>
+                <ClientLayout />
               </ProtectedRoute>
             }
+          >
+            <Route index element={<Navigate to="/client/dashboard" replace />} />
+            <Route path="dashboard" element={<ClientDashboard />} />
+            <Route path="projects" element={<ClientProjects />} />
+            <Route path="quotations" element={<ClientQuotations />} />
+            <Route path="invoices" element={<ClientInvoices />} />
+            <Route path="messages" element={<ClientMessages />} />
+            <Route path="profile" element={<ClientProfile />} />
+          </Route>
+
+          {/* Legacy client route - redirect to new portal */}
+          <Route
+            path="/panel-cliente"
+            element={<Navigate to="/client/dashboard" replace />}
           />
           <Route
             path="/admin"

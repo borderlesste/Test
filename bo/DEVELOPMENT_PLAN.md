@@ -293,3 +293,71 @@ Completar el sistema SAAS con todas las funcionalidades necesarias para un produ
 ---
 
 *Generado automáticamente por Claude Code - Actualizado: 2025-08-02*
+
+
+
+  🔄 Funcionalidades Pendientes
+
+  1. Sistema de Mensajería Completo
+
+  - Backend: Tablas conversations y messages en la base de datos
+  - Controladores: Funciones reales para crear/obtener conversaciones y mensajes
+  - Tiempo real: WebSocket o Server-Sent Events para mensajería en vivo
+  - Archivos adjuntos: Sistema de subida y gestión de archivos en mensajes
+
+  2. Generación y Descarga de PDFs
+
+  - Cotizaciones: Generación de PDF para cotizaciones
+  - Facturas: Generación de PDF para facturas con formato profesional
+  - Reportes: PDFs de reportes de proyectos y estadísticas
+
+  3. Sistema de Notificaciones Real
+
+  - Base de datos: Tabla de configuración de notificaciones por usuario
+  - Email: Integración real con servicio de email (SendGrid, Nodemailer)
+  - Push notifications: Notificaciones en tiempo real en la aplicación
+  - Plantillas: Templates de email personalizables
+
+  4. Pasarela de Pagos
+
+  - Integración: PayPal, Stripe o pasarela local
+  - Procesamiento: Manejo de pagos de facturas desde el portal cliente
+  - Webhooks: Confirmación automática de pagos
+  - Historial: Registro detallado de transacciones
+
+  5. Sistema de Archivos y Documentos
+
+  - Upload: Subida de archivos por proyecto
+  - Galería: Visualización de imágenes y documentos
+  - Versioning: Control de versiones de documentos
+  - Permisos: Control de acceso a archivos por rol
+
+  6. Dashboard Analytics Avanzado
+
+  - Gráficos: Charts interactivos con Chart.js o similar
+  - Métricas: KPIs más detallados y comparativas
+  - Exportación: Exportar datos a Excel/CSV
+  - Filtros: Rangos de fechas y filtros avanzados
+
+  7. Funcionalidades de Administración
+
+  - Gestión masiva: Operaciones bulk en proyectos/clientes
+  - Plantillas: Templates para cotizaciones y facturas
+  - Configuración: Panel de configuración del sistema
+  - Logs: Sistema de auditoría y logs de actividad
+
+  8. Mejoras de UX/UI
+
+  - Tema oscuro: Implementación completa del dark mode
+  - Móvil: Optimización mejorada para dispositivos móviles
+  - Accesibilidad: Mejoras de accesibilidad (ARIA, contraste)
+  - Internacionalización: Soporte multi-idioma completo
+
+  9. Seguridad y Performance
+
+  - 2FA: Autenticación de dos factores
+  - Rate limiting: Más granular por endpoint
+  - Caching: Redis para cache de datos frecuentes
+  - Backup: Sistema automatizado de respaldos
+
+  ¿En cuál de estas funcionalidades quieres que me enfoque primero?

@@ -1,0 +1,310 @@
+name: Testing Pipeline
+
+on:
+  push:
+    branches: [ main, develop, feature/* ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  # Backend Unit Tests
+  backend-unit-tests:
+    name: Backend Unit Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: borderless_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P3306 -uroot -ptest_password --silent; do
+            sleep 1
+          done
+
+      - name: Run backend unit tests
+        working-directory: ./server
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test_password
+          DB_NAME: borderless_test
+          SESSION_SECRET: test_session_secret
+          JWT_SECRET: test_jwt_secret
+        run: npm run test:unit
+
+      - name: Generate backend coverage report
+        working-directory: ./server
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test_password
+          DB_NAME: borderless_test
+          SESSION_SECRET: test_session_secret
+          JWT_SECRET: test_jwt_secret
+        run: npm run test:coverage
+
+      - name: Upload backend coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./server/coverage/lcov.info
+          flags: backend
+          name: backend-coverage
+
+  # Backend Integration Tests
+  backend-integration-tests:
+    name: Backend Integration Tests
+    runs-on: ubuntu-latest
+    needs: backend-unit-tests
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: borderless_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: server/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: ./server
+        run: npm ci
+
+      - name: Wait for MySQL
+        run: |
+          while ! mysqladmin ping -h"127.0.0.1" -P3306 -uroot -ptest_password --silent; do
+            sleep 1
+          done
+
+      - name: Setup test database
+        working-directory: ./server
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test_password
+          DB_NAME: borderless_test
+        run: npm run db:setup
+
+      - name: Run backend integration tests
+        working-directory: ./server
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test_password
+          DB_NAME: borderless_test
+          SESSION_SECRET: test_session_secret
+          JWT_SECRET: test_jwt_secret
+        run: npm run test:integration
+
+  # Frontend Unit Tests
+  frontend-unit-tests:
+    name: Frontend Unit Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: Run frontend unit tests
+        working-directory: ./client
+        run: npm run test
+
+      - name: Generate frontend coverage report
+        working-directory: ./client
+        run: npm run test:coverage
+
+      - name: Upload frontend coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./client/coverage/lcov.info
+          flags: frontend
+          name: frontend-coverage
+
+  # E2E Tests
+  e2e-tests:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [backend-integration-tests, frontend-unit-tests]
+    
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: test_password
+          MYSQL_DATABASE: borderless_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd server && npm ci
+          cd ../client && npm ci
+
+      - name: Setup test database
+        working-directory: ./server
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test_password
+          DB_NAME: borderless_test
+        run: npm run db:setup
+
+      - name: Start backend server
+        working-directory: ./server
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: test_password
+          DB_NAME: borderless_test
+          SESSION_SECRET: test_session_secret
+          JWT_SECRET: test_jwt_secret
+          PORT: 4000
+        run: npm start &
+
+      - name: Start frontend server
+        working-directory: ./client
+        env:
+          VITE_API_URL: http://localhost:4000/api
+        run: npm run dev &
+
+      - name: Wait for servers to be ready
+        run: |
+          npx wait-on http://localhost:4000/api/health
+          npx wait-on http://localhost:5173
+
+      - name: Run Cypress E2E tests
+        working-directory: ./client
+        env:
+          CYPRESS_baseUrl: http://localhost:5173
+          CYPRESS_apiUrl: http://localhost:4000/api
+        run: npm run test:e2e
+
+      - name: Upload Cypress screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: client/cypress/screenshots
+
+      - name: Upload Cypress videos
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos
+          path: client/cypress/videos
+
+  # Test Results Summary
+  test-summary:
+    name: Test Results Summary
+    runs-on: ubuntu-latest
+    needs: [backend-unit-tests, backend-integration-tests, frontend-unit-tests, e2e-tests]
+    if: always()
+
+    steps:
+      - name: Download all coverage reports
+        uses: actions/download-artifact@v4
+
+      - name: Display test summary
+        run: |
+          echo "## Test Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Test Type | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend Unit | ${{ needs.backend-unit-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Backend Integration | ${{ needs.backend-integration-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Frontend Unit | ${{ needs.frontend-unit-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| E2E Tests | ${{ needs.e2e-tests.result }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Check overall test status
+        run: |
+          if [[ "${{ needs.backend-unit-tests.result }}" == "success" && 
+                "${{ needs.backend-integration-tests.result }}" == "success" && 
+                "${{ needs.frontend-unit-tests.result }}" == "success" && 
+                "${{ needs.e2e-tests.result }}" == "success" ]]; then
+            echo "✅ All tests passed!"
+            exit 0
+          else
+            echo "❌ Some tests failed!"
+            exit 1
+          fi

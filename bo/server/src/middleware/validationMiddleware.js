@@ -571,6 +571,81 @@ const validateIdMiddleware = (paramName = 'id') => {
   };
 };
 
+// Client-specific validation functions
+const validateClientProfile = (profileData) => {
+  const errors = {};
+  
+  if (!profileData.nombre || profileData.nombre.trim().length < 2) {
+    errors.nombre = 'El nombre debe tener al menos 2 caracteres';
+  }
+  
+  if (profileData.nombre && profileData.nombre.length > 100) {
+    errors.nombre = 'El nombre no puede exceder los 100 caracteres';
+  }
+  
+  if (!profileData.email || !validateEmail(profileData.email)) {
+    errors.email = 'El email no tiene un formato válido';
+  }
+  
+  if (profileData.telefono && !validatePhone(profileData.telefono)) {
+    errors.telefono = 'El formato del teléfono no es válido';
+  }
+  
+  if (profileData.empresa && profileData.empresa.length > 100) {
+    errors.empresa = 'El nombre de la empresa no puede exceder los 100 caracteres';
+  }
+  
+  if (profileData.direccion && profileData.direccion.length > 500) {
+    errors.direccion = 'La dirección no puede exceder los 500 caracteres';
+  }
+  
+  if (profileData.ciudad && profileData.ciudad.length > 100) {
+    errors.ciudad = 'La ciudad no puede exceder los 100 caracteres';
+  }
+  
+  if (profileData.pais && profileData.pais.length > 100) {
+    errors.pais = 'El país no puede exceder los 100 caracteres';
+  }
+  
+  if (profileData.sitio_web && profileData.sitio_web.length > 255) {
+    errors.sitio_web = 'El sitio web no puede exceder los 255 caracteres';
+  }
+  
+  if (profileData.sitio_web && !validator.isURL(profileData.sitio_web, { require_protocol: true })) {
+    errors.sitio_web = 'El sitio web debe tener un formato de URL válido';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+const validatePasswordUpdate = (passwordData) => {
+  const errors = {};
+  
+  if (!passwordData.currentPassword || passwordData.currentPassword.length < 1) {
+    errors.currentPassword = 'La contraseña actual es requerida';
+  }
+  
+  if (!passwordData.newPassword || passwordData.newPassword.length < 6) {
+    errors.newPassword = 'La nueva contraseña debe tener al menos 6 caracteres';
+  }
+  
+  if (passwordData.newPassword && passwordData.newPassword === passwordData.currentPassword) {
+    errors.newPassword = 'La nueva contraseña debe ser diferente a la actual';
+  }
+  
+  return {
+    isValid: Object.keys(errors).length === 0,
+    errors
+  };
+};
+
+// Client validation middlewares
+const validateClientProfileMiddleware = createValidationMiddleware(validateClientProfile);
+const validatePasswordUpdateMiddleware = createValidationMiddleware(validatePasswordUpdate);
+
 module.exports = {
   sanitizationMiddleware,
   validateProjectMiddleware,
@@ -582,6 +657,8 @@ module.exports = {
   validateInvoiceMiddleware,
   validateInvoiceStatusMiddleware,
   validateLoginMiddleware,
+  validateClientProfileMiddleware,
+  validatePasswordUpdateMiddleware,
   createRateLimitMiddleware,
   validateFileMiddleware,
   validateIdMiddleware,
@@ -590,6 +667,8 @@ module.exports = {
   // Aliases for routes usage
   validateInvoice: validateInvoiceMiddleware,
   validateInvoiceStatus: validateInvoiceStatusMiddleware,
+  validateClientProfile: validateClientProfileMiddleware,
+  validatePasswordUpdate: validatePasswordUpdateMiddleware,
   
   // Funciones de validación exportadas para uso directo
   validateProject,
@@ -600,6 +679,8 @@ module.exports = {
   validateQuotation,
   validateInvoiceFunction: validateInvoice,
   validateInvoiceStatusFunction: validateInvoiceStatus,
+  validateClientProfileFunction: validateClientProfile,
+  validatePasswordUpdateFunction: validatePasswordUpdate,
   validateEmail,
   validatePassword,
   validatePhone,
