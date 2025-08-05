@@ -48,7 +48,7 @@ router.get('/projects', getClientProjects);
 
 // Quotations routes
 router.get('/quotations', getClientQuotations);
-router.put('/quotations/:quotationId/:action', updateQuotationStatus);
+router.put('/quotations/:quotationId/:action', (req, res) => updateQuotationStatus(req, res));
 
 // Invoices routes
 router.get('/invoices', getClientInvoices);
