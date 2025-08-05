@@ -1,6 +1,6 @@
 {
   "framework": "vite",
-  "buildCommand": "cd client && npm install && ls -la && npx vite build",
+  "buildCommand": "cd client && npm install && npm run vercel-build",
   "outputDirectory": "client/dist",
   "installCommand": "echo 'Skipping root install'",
   "devCommand": "cd client && npm run dev",
