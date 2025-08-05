@@ -58,7 +58,6 @@ class Logger {
       console.error('Failed to write log file:', error);
     }
   }
-}
 
   error(message, meta = {}) {
     return this.writeLog(ERROR_LEVELS.ERROR, message, meta);
