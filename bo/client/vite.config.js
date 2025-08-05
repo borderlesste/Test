@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
@@ -35,6 +34,7 @@ export default defineConfig(({ mode }) => ({
     target: 'es2018',
     chunkSizeWarningLimit: 1000,
     rollupOptions: {
+      input: './index.html', // Especificar explícitamente la ruta del index.html
       output: {
         manualChunks: (id) => {
           // Vendor chunk for React and core libraries

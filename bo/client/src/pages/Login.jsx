@@ -2,11 +2,11 @@
 
   // src/pages/Login.jsx
 import { useState, useEffect } from 'react';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
-  const { login } = useApi();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -38,6 +38,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     try {
       const user = await login({ email, password });
       
@@ -51,18 +52,14 @@ function Login() {
         localStorage.removeItem('rememberedCredentials');
       }
       
-      // Guardar el rol del usuario en localStorage
-      if (user && user.rol) {
-        localStorage.setItem('userRole', user.rol);
-      }
-      
+      // La redirección ahora se basa en el usuario del contexto
       if (user && user.rol === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/panel-cliente');
+        navigate('/client');
       }
     } catch (err) {
-      setError('Credenciales inválidas');
+      setError(err.userMessage || 'Credenciales inválidas');
     }
   };
 
