@@ -24,10 +24,6 @@ const clientRateLimit = rateLimit({
   }
 });
 
-// Apply rate limiting and authentication to all client routes
-router.use(clientRateLimit);
-router.use(authenticateToken);
-
 // Middleware to ensure user is a client
 const requireClient = (req, res, next) => {
   if (req.user.role !== 'client') {
@@ -39,6 +35,9 @@ const requireClient = (req, res, next) => {
   next();
 };
 
+// Apply rate limiting and authentication to all client routes
+router.use(clientRateLimit);
+router.use(authenticateToken);
 router.use(requireClient);
 
 // Dashboard routes
