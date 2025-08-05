@@ -361,19 +361,12 @@ CREATE TABLE IF NOT EXISTS `servicios` (
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `sesiones` (
-  `id` bigint(20) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
-  `token` varchar(255) NOT NULL,
-  `ip` varchar(45) NOT NULL,
-  `user_agent` varchar(500) DEFAULT NULL,
-  `dispositivo` varchar(255) DEFAULT NULL,
-  `ubicacion` varchar(255) DEFAULT NULL,
-  `fecha_inicio` datetime NOT NULL DEFAULT current_timestamp(),
-  `ultima_actividad` datetime NOT NULL DEFAULT current_timestamp(),
-  `fecha_expiracion` datetime NOT NULL,
-  `activa` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `session_id` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `expires` int(11) unsigned NOT NULL,
+  `data` text COLLATE utf8mb4_bin,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(11) NOT NULL,
