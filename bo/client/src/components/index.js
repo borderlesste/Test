@@ -4,7 +4,8 @@ export { default as Button } from './Button.jsx';
 export { default as Input } from './Input.jsx';
 export { default as LoadingSpinner } from './LoadingSpinner.jsx';
 export { default as Skeleton, SkeletonCard, SkeletonText } from './Skeleton.jsx';
-export { default as Toast, ToastContainer } from './Toast.jsx';
+export { default as Toast } from './Toast.jsx';
+export { default as ToastContainer } from './ToastContainer.jsx';
 
 // Layout Components
 export { default as Header } from './Header';

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { Monitor, X, BarChart3, Zap, Clock, TrendingUp } from 'lucide-react';
 
 const PerformanceMonitor = memo(function PerformanceMonitor() {
@@ -14,11 +14,6 @@ const PerformanceMonitor = memo(function PerformanceMonitor() {
   const [renderCount, setRenderCount] = useState(0);
   const [lastRenderTime, setLastRenderTime] = useState(performance.now());
 
-  // Only show in development
-  if (import.meta.env.PROD) {
-    return null;
-  }
-
   // Track renders
   useEffect(() => {
     const renderTime = performance.now() - lastRenderTime;
@@ -29,13 +24,13 @@ const PerformanceMonitor = memo(function PerformanceMonitor() {
       renderTime: renderTime
     }));
     setLastRenderTime(performance.now());
-  });
+  }, [lastRenderTime, renderCount]);
 
   // Monitor performance metrics
   useEffect(() => {
     const updateMetrics = () => {
       // Memory usage (if available)
-      const memory = (performance as any).memory;
+      const memory = performance.memory;
       if (memory) {
         setMetrics(prev => ({
           ...prev,
@@ -79,7 +74,7 @@ const PerformanceMonitor = memo(function PerformanceMonitor() {
 
   // Get performance entries
   const getPerformanceEntries = () => {
-    const entries = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+    const entries = performance.getEntriesByType('navigation')[0];
     if (!entries) return {};
 
     return {
@@ -104,6 +99,11 @@ const PerformanceMonitor = memo(function PerformanceMonitor() {
         </button>
       </div>
     );
+  }
+
+  // Only show in development
+  if (import.meta.env.PROD) {
+    return null;
   }
 
   return (

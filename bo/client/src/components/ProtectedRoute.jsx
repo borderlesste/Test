@@ -1,9 +1,9 @@
 import { Navigate, useLocation } from 'react-router-dom';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children, adminOnly = false, clientOnly = false }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const location = useLocation();
 
   if (!user) {

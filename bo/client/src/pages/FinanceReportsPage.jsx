@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Skeleton } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { getPayments, getOrders, getUsers, getQuotes } from '../api/axios';
 import { 
   BarChart3, 
@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 
 const FinanceReportsPage = ({ showNavigation = true }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [payments, setPayments] = useState([]);
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Skeleton } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { getPayments } from '../api/axios';
 
 const PaymentsPage = () => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');

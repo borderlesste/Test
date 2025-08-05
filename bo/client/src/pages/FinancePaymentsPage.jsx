@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Skeleton } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { getPayments, createAdminPayment, updateAdminPayment, deletePayment, getUsers, getOrders } from '../api/axios';
 import { 
   Search, 
@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 
 const FinancePaymentsPage = ({ showNavigation = true }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [payments, setPayments] = useState([]);
   const [clients, setClients] = useState([]);
   const [orders, setOrders] = useState([]);

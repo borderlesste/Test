@@ -1,3 +1,4 @@
+
 export default {
   // Header Navigation
   nav: {
@@ -46,11 +47,21 @@ export default {
   
   // Home page
   home: {
-    title: 'Welcome to Borderless Techno Company',
-    subtitle: 'Technology solutions without borders',
-    description: 'We transform ideas into digital reality with our web development, mobile applications and technology consulting services.',
-    getStarted: 'Get Started',
-    learnMore: 'Learn More'
+    title: 'We Transform Ideas into Digital Solutions',
+    subtitle: 'Borderless technology solutions',
+    description: 'We develop innovative software, web and mobile applications that drive your business growth in the digital age',
+    getStarted: 'Start Project',
+    learnMore: 'View Portfolio',
+    servicesTitle: 'Our Services',
+    servicesSubtitle: 'We offer comprehensive technology solutions adapted to your company\'s needs',
+    aboutTitle: 'About Borderless Techno Company',
+    aboutDescription1: 'We are a passionate team of developers, designers and technology consultants specialized in creating innovative digital solutions for companies of all sizes in Latin America.',
+    aboutDescription2: 'With over 5 years of market experience, we have helped more than 100 companies digitally transform their businesses, optimize processes and achieve their goals through technology.',
+    valuesTitle: 'Our Values',
+    contactTitle: 'Ready to get started?',
+    contactSubtitle: 'Let\'s talk about your project and discover how we can help you achieve your goals',
+    formTitle: 'Send us a message',
+    contactInfoTitle: 'Contact Information'
   },
   
   // Services page
@@ -101,7 +112,7 @@ export default {
     email: 'Email',
     password: 'Password',
     loginButton: 'Login',
-    noAccount: "Don't have an account?",
+    noAccount: 'Don\'t have an account?',
     createAccount: 'Create account',
     forgotPassword: 'Forgot your password?'
   },
@@ -159,5 +170,219 @@ export default {
     cancelled: 'Cancelled',
     active: 'Active',
     inactive: 'Inactive'
+  },
+
+  // Privacy Policy
+  privacy: {
+    title: 'Privacy Policy',
+    lastUpdated: 'Last updated',
+    date: 'July 27, 2025',
+    introduction: {
+      title: 'Introduction',
+      content1: 'At Borderless Techno Company, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy describes how we collect, use, disclose, and protect your information when you use our services.',
+      content2: 'By using our services, you accept the practices described in this policy. If you do not agree with these practices, we recommend that you do not use our services.'
+    },
+    collection: {
+      title: 'Information We Collect',
+      personalInfo: {
+        title: 'Personal Information',
+        name: 'Full name',
+        email: 'Email address',
+        phone: 'Phone number',
+        company: 'Company name',
+        address: 'Mailing address'
+      },
+      technicalInfo: {
+        title: 'Technical Information',
+        ip: 'IP address',
+        browser: 'Browser type and version',
+        device: 'Device information',
+        cookies: 'Cookies and similar technologies',
+        usage: 'Website usage data'
+      }
+    },
+    usage: {
+      title: 'How We Use Your Information',
+      services: 'Provide and improve our services',
+      communication: 'Communicate with you about projects and services',
+      improvement: 'Improve user experience',
+      support: 'Provide technical support and customer service',
+      legal: 'Comply with legal obligations',
+      marketing: 'Send marketing communications (with your consent)'
+    },
+    sharing: {
+      title: 'Information Sharing',
+      content1: 'We do not sell, trade, or transfer your personal information to third parties, except in the following circumstances:',
+      consent: 'With your explicit consent',
+      legal: 'To comply with legal requirements',
+      business: 'With trusted business partners to provide services',
+      protection: 'To protect our rights or the safety of others'
+    },
+    security: {
+      title: 'Data Security',
+      content1: 'We implement technical, administrative, and physical security measures to protect your personal information:',
+      encryption: 'Data encryption in transit and at rest',
+      access: 'Limited access control to personal information',
+      monitoring: 'Continuous monitoring of security systems',
+      updates: 'Regular updates to security protocols'
+    },
+    rights: {
+      title: 'Your Rights',
+      access: 'Access your personal information',
+      correct: 'Correct inaccurate information',
+      delete: 'Request deletion of your data',
+      restrict: 'Restrict processing of your data',
+      portability: 'Request data portability',
+      object: 'Object to processing for direct marketing'
+    },
+    cookies: {
+      title: 'Cookie Usage',
+      content1: 'We use cookies and similar technologies to improve your experience:',
+      essential: 'Essential cookies for site functionality',
+      analytics: 'Analytics cookies to improve our services',
+      preferences: 'Preference cookies to personalize your experience',
+      marketing: 'Marketing cookies (with your consent)'
+    },
+    changes: {
+      title: 'Changes to this Policy',
+      content: 'We reserve the right to update this Privacy Policy at any time. We will notify you of important changes by email or through a notice on our website.'
+    },
+    contact: {
+      title: 'Contact Information',
+      content: 'If you have questions about this Privacy Policy or wish to exercise your rights, you can contact us:',
+      company: 'Company',
+      email: 'Email',
+      address: 'Address'
+    }
+  },
+
+  // Terms of Service
+  terms: {
+    title: 'Terms of Service',
+    lastUpdated: 'Last updated',
+    date: 'July 27, 2025',
+    introduction: {
+      title: 'Introduction',
+      content1: 'Welcome to Borderless Techno Company. These Terms of Service govern the use of our software development, web applications, mobile applications, and technology consulting services.',
+      content2: 'By contracting our services, you agree to comply with these terms. If you do not agree, you should not use our services.'
+    },
+    acceptance: {
+      title: 'Acceptance of Terms',
+      content: 'By accessing and using our services, you confirm that you have read, understood, and agree to be bound by these Terms of Service and all applicable laws and regulations.'
+    },
+    services: {
+      title: 'Service Description',
+      content1: 'Borderless Techno Company provides the following services:',
+      webDevelopment: 'Web application and website development',
+      mobileDevelopment: 'Mobile application development for iOS and Android',
+      backend: 'Backend development and APIs',
+      consulting: 'Technology consulting and software architecture',
+      security: 'Cybersecurity services and audits',
+      ai: 'Artificial intelligence and machine learning integration'
+    },
+    responsibilities: {
+      title: 'User Responsibilities',
+      content1: 'As a user of our services, you agree to:',
+      accurate: 'Provide accurate and up-to-date information',
+      compliance: 'Comply with all applicable laws and regulations',
+      security: 'Maintain the security of your access credentials',
+      prohibited: 'Not use our services for illegal activities',
+      cooperation: 'Cooperate in project development and testing'
+    },
+    payment: {
+      title: 'Payment Terms',
+      quotes: 'All prices are based on personalized quotes',
+      methods: 'We accept payments by bank transfer, card, and PayPal',
+      schedule: 'Payments are made according to the agreed schedule',
+      late: 'Late payments may incur additional charges',
+      disputes: 'Payment disputes must be communicated within 30 days'
+    },
+    intellectual: {
+      title: 'Intellectual Property',
+      content1: 'Intellectual property rights are distributed as follows:',
+      ownership: {
+        title: 'Asset Ownership',
+        client: 'The client owns project-specific code and content',
+        company: 'Borderless Techno owns general tools and frameworks',
+        thirdParty: 'All third-party rights and licenses are respected'
+      }
+    },
+    privacy: {
+      title: 'Privacy and Confidentiality',
+      content1: 'We are committed to maintaining the confidentiality of your information:',
+      confidential: 'All project information is treated as confidential',
+      disclosure: 'We do not disclose information without your explicit consent',
+      protection: 'We implement measures to protect sensitive data'
+    },
+    liability: {
+      title: 'Limitation of Liability',
+      content1: 'Our liability is limited in the following ways:',
+      indirect: 'We are not responsible for indirect or consequential damages',
+      loss: 'We are not responsible for client data loss',
+      interruption: 'We do not guarantee continuous availability without interruptions',
+      maximum: 'Maximum liability is limited to the contract value'
+    },
+    warranties: {
+      title: 'Warranties',
+      content1: 'We provide the following warranties in our services:',
+      quality: 'We guarantee code quality and best practices',
+      timeline: 'We commit to meeting agreed deadlines',
+      support: 'We offer post-launch support according to the contract',
+      bugs: 'We fix bugs identified during the warranty period'
+    },
+    termination: {
+      title: 'Termination',
+      content1: 'These terms may be terminated under the following circumstances:',
+      convenience: 'Either party may terminate with 30 days\' notice',
+      breach: 'Immediate termination for material breach',
+      effect: 'Termination does not affect obligations already incurred'
+    },
+    law: {
+      title: 'Governing Law',
+      content: 'These terms are governed by the laws of Mexico. Any dispute will be resolved in the competent courts of Mexico City.'
+    },
+    changes: {
+      title: 'Changes to Terms',
+      content: 'We reserve the right to modify these terms at any time. Changes will take effect upon posting on our website.'
+    },
+    contact: {
+      title: 'Contact Information',
+      content: 'For questions about these Terms of Service, you can contact us:',
+      company: 'Company',
+      email: 'Email',
+      address: 'Address'
+    }
+  },
+
+  // Footer
+  footer: {
+    privacyPolicy: 'Privacy Policy',
+    termsOfService: 'Terms of Service',
+    followUs: 'Follow Us',
+    allRightsReserved: '© 2025 Borderless Techno Company. All rights reserved.',
+    subscribe: 'Subscribe to our newsletter',
+    subscribeDescription: 'Stay updated with our latest news and offers',
+    subscribeButton: 'Subscribe',
+    quickLinks: 'Quick Links',
+    socialMedia: 'Social Media',
+    contactInfo: 'Contact Information',
+    address: 'Address', 
+    phone: 'Phone',
+    email: 'Email',
+    support: 'Support',
+    faq: 'FAQ',
+    careers: 'Careers',
+    terms: 'Terms of Service',
+    privacy: 'Privacy Policy',
+    siteMap: 'Site Map',
+    copyright: '© 2025 Borderless Techno Company. All rights reserved.',
+    servicios: 'Services',
+    proyectos: 'Projects',
+    sobreNosotros: 'About Us',
+    contacto: 'Contact',
+    inicio: 'Home',
+    portafolio: 'Portfolio',
+    nosotros: 'About Us',
+  
   }
 };

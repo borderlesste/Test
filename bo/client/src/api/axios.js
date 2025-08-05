@@ -9,7 +9,7 @@ import axios from 'axios';
 // Si quieres que axios nunca haga peticiones automáticas, asegúrate de que solo se use en handlers (onSubmit, etc.)
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:4000',
+  baseURL: import.meta.env.VITE_API_URL || 'https://saas-backend-33g1.onrender.com',
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
   timeout: 10000,
@@ -56,8 +56,11 @@ api.interceptors.response.use(
       duration = endTime - error.config.metadata.startTime;
     }
     
-    // Log error
-    console.error(`❌ API Error: ${error.config?.method?.toUpperCase() || 'UNKNOWN'} ${error.config?.url || 'UNKNOWN'} (${duration}ms)`, error);
+    // Log error - pero no para errores 401 en auth/profile (es normal)
+    const isAuthProfileCheck = error.config?.url?.includes('/api/auth/profile') && error.response?.status === 401;
+    if (!isAuthProfileCheck) {
+      console.error(`❌ API Error: ${error.config?.method?.toUpperCase() || 'UNKNOWN'} ${error.config?.url || 'UNKNOWN'} (${duration}ms)`, error);
+    }
     
     // Manejo específico de errores
     const errorMessage = getErrorMessage(error);

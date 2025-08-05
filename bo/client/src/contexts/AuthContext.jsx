@@ -20,7 +20,18 @@ export const AuthProvider = ({ children }) => {
       const res = await getProfile();
       setUser(res.data);
     } catch (error) {
-      setUser(null);
+      // Error 401 es normal cuando el usuario no está autenticado
+      if (error.response?.status === 401) {
+        setUser(null);
+      } else if (error.code === 'ERR_NETWORK' || !error.response) {
+        // Error de red real - log para debugging pero no bloquear la app
+        console.warn('Network error al verificar sesión (servidor posiblemente no disponible):', error.message);
+        setUser(null);
+      } else {
+        // Otros errores inesperados
+        console.error('Error inesperado al verificar sesión:', error);
+        setUser(null);
+      }
     } finally {
       setLoading(false);
     }

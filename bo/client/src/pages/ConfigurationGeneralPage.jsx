@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button, LoadingSpinner } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 import { 
   Globe, 
@@ -25,7 +25,7 @@ import {
 } from 'lucide-react';
 
 const ConfigurationGeneralPage = ({ showNavigation = true }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');

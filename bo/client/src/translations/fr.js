@@ -4,11 +4,11 @@ export default {
     home: 'Accueil',
     services: 'Services',
     portfolio: 'Portfolio',
-    about: 'À Propos',
-    dashboard: 'Tableau de Bord',
+    about: 'À propos',
+    dashboard: 'Tableau de bord',
     myPanel: 'Mon Panneau',
-    login: 'Connexion',
-    logout: 'Déconnexion',
+    login: 'Se connecter',
+    logout: 'Se déconnecter',
     register: 'S\'inscrire'
   },
   
@@ -37,7 +37,7 @@ export default {
     error: 'Erreur',
     success: 'Succès',
     cancel: 'Annuler',
-    save: 'Sauvegarder',
+    save: 'Enregistrer',
     edit: 'Modifier',
     delete: 'Supprimer',
     confirm: 'Confirmer',
@@ -46,11 +46,21 @@ export default {
   
   // Home page
   home: {
-    title: 'Bienvenue chez Borderless Techno Company',
+    title: 'Nous Transformons les Idées en Solutions Numériques',
     subtitle: 'Solutions technologiques sans frontières',
-    description: 'Nous transformons les idées en réalité numérique avec nos services de développement web, d\'applications mobiles et de conseil technologique.',
-    getStarted: 'Commencer',
-    learnMore: 'En Savoir Plus'
+    description: 'Nous développons des logiciels innovants, des applications web et mobiles qui stimulent la croissance de votre entreprise à l\'ère numérique',
+    getStarted: 'Commencer le Projet',
+    learnMore: 'Voir le Portfolio',
+    servicesTitle: 'Nos Services',
+    servicesSubtitle: 'Nous offrons des solutions technologiques complètes adaptées aux besoins de votre entreprise',
+    aboutTitle: 'À propos de Borderless Techno Company',
+    aboutDescription1: 'Nous sommes une équipe passionnée de développeurs, designers et consultants technologiques spécialisés dans la création de solutions numériques innovantes pour les entreprises de toutes tailles en Amérique latine.',
+    aboutDescription2: 'Avec plus de 5 ans d\'expérience sur le marché, nous avons aidé plus de 100 entreprises à transformer numériquement leurs activités, optimiser leurs processus et atteindre leurs objectifs grâce à la technologie.',
+    valuesTitle: 'Nos Valeurs',
+    contactTitle: 'Prêt à commencer ?',
+    contactSubtitle: 'Parlons de votre projet et découvrez comment nous pouvons vous aider à atteindre vos objectifs',
+    formTitle: 'Envoyez-nous un message',
+    contactInfoTitle: 'Informations de Contact'
   },
   
   // Services page
@@ -97,13 +107,13 @@ export default {
 
   // Login page
   login: {
-    title: 'Connexion',
+    title: 'Se Connecter',
     email: 'Email',
     password: 'Mot de passe',
-    loginButton: 'Se connecter',
-    noAccount: 'Pas de compte?',
+    loginButton: 'Se Connecter',
+    noAccount: 'Vous n\'avez pas de compte ?',
     createAccount: 'Créer un compte',
-    forgotPassword: 'Mot de passe oublié?'
+    forgotPassword: 'Mot de passe oublié ?'
   },
 
   // Dashboard
@@ -135,8 +145,8 @@ export default {
     projectManagement: 'Gestion de Projets',
     financialReports: 'Rapports Financiers',
     systemSettings: 'Paramètres Système',
-    userActivity: 'Activité Utilisateur',
-    analytics: 'Analytiques'
+    userActivity: 'Activité des Utilisateurs',
+    analytics: 'Analytics'
   },
 
   // Forms
@@ -153,11 +163,199 @@ export default {
 
   // Status
   status: {
-    pending: 'En Attente',
-    inProgress: 'En Cours',
+    pending: 'En attente',
+    inProgress: 'En cours',
     completed: 'Terminé',
     cancelled: 'Annulé',
     active: 'Actif',
     inactive: 'Inactif'
+  },
+
+  // Privacy Policy
+  privacy: {
+    title: 'Politique de Confidentialité',
+    lastUpdated: 'Dernière mise à jour',
+    date: '27 juillet 2025',
+    introduction: {
+      title: 'Introduction',
+      content1: 'Chez Borderless Techno Company, nous nous engageons à protéger votre vie privée et à garantir la sécurité de vos informations personnelles. Cette Politique de Confidentialité décrit comment nous collectons, utilisons, divulguons et protégeons vos informations lorsque vous utilisez nos services.',
+      content2: 'En utilisant nos services, vous acceptez les pratiques décrites dans cette politique. Si vous n\'êtes pas d\'accord avec ces pratiques, nous vous recommandons de ne pas utiliser nos services.'
+    },
+    collection: {
+      title: 'Informations que Nous Collectons',
+      personalInfo: {
+        title: 'Informations Personnelles',
+        name: 'Nom complet',
+        email: 'Adresse e-mail',
+        phone: 'Numéro de téléphone',
+        company: 'Nom de l\'entreprise',
+        address: 'Adresse postale'
+      },
+      technicalInfo: {
+        title: 'Informations Techniques',
+        ip: 'Adresse IP',
+        browser: 'Type et version du navigateur',
+        device: 'Informations sur l\'appareil',
+        cookies: 'Cookies et technologies similaires',
+        usage: 'Données d\'utilisation du site web'
+      }
+    },
+    usage: {
+      title: 'Comment Nous Utilisons Vos Informations',
+      services: 'Fournir et améliorer nos services',
+      communication: 'Communiquer avec vous concernant les projets et services',
+      improvement: 'Améliorer l\'expérience utilisateur',
+      support: 'Fournir un support technique et un service client',
+      legal: 'Respecter les obligations légales',
+      marketing: 'Envoyer des communications marketing (avec votre consentement)'
+    },
+    sharing: {
+      title: 'Partage d\'Informations',
+      content1: 'Nous ne vendons, n\'échangeons, ni ne transférons vos informations personnelles à des tiers, sauf dans les circonstances suivantes :',
+      consent: 'Avec votre consentement explicite',
+      legal: 'Pour respecter les exigences légales',
+      business: 'Avec des partenaires commerciaux de confiance pour fournir des services',
+      protection: 'Pour protéger nos droits ou la sécurité d\'autrui'
+    },
+    security: {
+      title: 'Sécurité des Données',
+      content1: 'Nous mettons en œuvre des mesures de sécurité techniques, administratives et physiques pour protéger vos informations personnelles :',
+      encryption: 'Chiffrement des données en transit et au repos',
+      access: 'Contrôle d\'accès limité aux informations personnelles',
+      monitoring: 'Surveillance continue des systèmes de sécurité',
+      updates: 'Mises à jour régulières des protocoles de sécurité'
+    },
+    rights: {
+      title: 'Vos Droits',
+      access: 'Accéder à vos informations personnelles',
+      correct: 'Corriger les informations inexactes',
+      delete: 'Demander la suppression de vos données',
+      restrict: 'Restreindre le traitement de vos données',
+      portability: 'Demander la portabilité des données',
+      object: 'Vous opposer au traitement pour le marketing direct'
+    },
+    cookies: {
+      title: 'Utilisation des Cookies',
+      content1: 'Nous utilisons des cookies et des technologies similaires pour améliorer votre expérience :',
+      essential: 'Cookies essentiels pour le fonctionnement du site',
+      analytics: 'Cookies d\'analyse pour améliorer nos services',
+      preferences: 'Cookies de préférences pour personnaliser votre expérience',
+      marketing: 'Cookies marketing (avec votre consentement)'
+    },
+    changes: {
+      title: 'Modifications de cette Politique',
+      content: 'Nous nous réservons le droit de mettre à jour cette Politique de Confidentialité à tout moment. Nous vous informerons des changements importants par e-mail ou par un avis sur notre site web.'
+    },
+    contact: {
+      title: 'Informations de Contact',
+      content: 'Si vous avez des questions concernant cette Politique de Confidentialité ou souhaitez exercer vos droits, vous pouvez nous contacter :',
+      company: 'Entreprise',
+      email: 'Email',
+      address: 'Adresse'
+    }
+  },
+
+  // Terms of Service
+  terms: {
+    title: 'Conditions de Service',
+    lastUpdated: 'Dernière mise à jour',
+    date: '27 juillet 2025',
+    introduction: {
+      title: 'Introduction',
+      content1: 'Bienvenue chez Borderless Techno Company. Ces Conditions de Service régissent l\'utilisation de nos services de développement de logiciels, d\'applications web, mobiles et de conseil technologique.',
+      content2: 'En contractant nos services, vous acceptez de vous conformer à ces conditions. Si vous n\'êtes pas d\'accord, vous ne devez pas utiliser nos services.'
+    },
+    acceptance: {
+      title: 'Acceptation des Conditions',
+      content: 'En accédant et utilisant nos services, vous confirmez que vous avez lu, compris et acceptez d\'être lié par ces Conditions de Service et toutes les lois et réglementations applicables.'
+    },
+    services: {
+      title: 'Description des Services',
+      content1: 'Borderless Techno Company fournit les services suivants :',
+      webDevelopment: 'Développement d\'applications web et de sites web',
+      mobileDevelopment: 'Développement d\'applications mobiles pour iOS et Android',
+      backend: 'Développement de backend et d\'APIs',
+      consulting: 'Conseil technologique et architecture logicielle',
+      security: 'Services de cybersécurité et audits',
+      ai: 'Intégration d\'intelligence artificielle et d\'apprentissage automatique'
+    },
+    responsibilities: {
+      title: 'Responsabilités de l\'Utilisateur',
+      content1: 'En tant qu\'utilisateur de nos services, vous vous engagez à :',
+      accurate: 'Fournir des informations précises et à jour',
+      compliance: 'Respecter toutes les lois et réglementations applicables',
+      security: 'Maintenir la sécurité de vos identifiants d\'accès',
+      prohibited: 'Ne pas utiliser nos services pour des activités illégales',
+      cooperation: 'Coopérer dans le développement et les tests des projets'
+    },
+    payment: {
+      title: 'Conditions de Paiement',
+      quotes: 'Tous les prix sont basés sur des devis personnalisés',
+      methods: 'Nous acceptons les paiements par virement bancaire, carte et PayPal',
+      schedule: 'Les paiements sont effectués selon le calendrier convenu',
+      late: 'Les paiements en retard peuvent entraîner des frais supplémentaires',
+      disputes: 'Les litiges de paiement doivent être communiqués dans les 30 jours'
+    },
+    intellectual: {
+      title: 'Propriété Intellectuelle',
+      content1: 'Les droits de propriété intellectuelle sont répartis comme suit :',
+      ownership: {
+        title: 'Propriété des Actifs',
+        client: 'Le client possède le code et le contenu spécifiques au projet',
+        company: 'Borderless Techno possède les outils et frameworks généraux',
+        thirdParty: 'Tous les droits de tiers et licences sont respectés'
+      }
+    },
+    privacy: {
+      title: 'Confidentialité et Confidentialité',
+      content1: 'Nous nous engageons à maintenir la confidentialité de vos informations :',
+      confidential: 'Toutes les informations du projet sont traitées comme confidentielles',
+      disclosure: 'Nous ne divulguons pas d\'informations sans votre consentement explicite',
+      protection: 'Nous mettons en œuvre des mesures pour protéger les données sensibles'
+    },
+    liability: {
+      title: 'Limitation de Responsabilité',
+      content1: 'Notre responsabilité est limitée de la manière suivante :',
+      indirect: 'Nous ne sommes pas responsables des dommages indirects ou consécutifs',
+      loss: 'Nous ne sommes pas responsables de la perte de données du client',
+      interruption: 'Nous ne garantissons pas une disponibilité continue sans interruption',
+      maximum: 'La responsabilité maximale est limitée à la valeur du contrat'
+    },
+    warranties: {
+      title: 'Garanties',
+      content1: 'Nous fournissons les garanties suivantes dans nos services :',
+      quality: 'Nous garantissons la qualité du code et les meilleures pratiques',
+      timeline: 'Nous nous engageons à respecter les délais convenus',
+      support: 'Nous offrons un support post-lancement selon le contrat',
+      bugs: 'Nous corrigeons les erreurs identifiées pendant la période de garantie'
+    },
+    termination: {
+      title: 'Résiliation',
+      content1: 'Ces conditions peuvent être résiliées dans les circonstances suivantes :',
+      convenience: 'Toute partie peut résilier avec un préavis de 30 jours',
+      breach: 'Résiliation immédiate pour violation substantielle',
+      effect: 'La résiliation n\'affecte pas les obligations déjà contractées'
+    },
+    law: {
+      title: 'Loi Applicable',
+      content: 'Ces conditions sont régies par les lois du Mexique. Tout litige sera résolu devant les tribunaux compétents de Mexico.'
+    },
+    changes: {
+      title: 'Modifications des Conditions',
+      content: 'Nous nous réservons le droit de modifier ces conditions à tout moment. Les modifications prendront effet dès leur publication sur notre site web.'
+    },
+    contact: {
+      title: 'Informations de Contact',
+      content: 'Pour des questions concernant ces Conditions de Service, vous pouvez nous contacter :',
+      company: 'Entreprise',
+      email: 'Email',
+      address: 'Adresse'
+    }
+  },
+
+  // Footer
+  footer: {
+    privacyPolicy: 'Politique de Confidentialité',
+    termsOfService: 'Conditions de Service'
   }
 };

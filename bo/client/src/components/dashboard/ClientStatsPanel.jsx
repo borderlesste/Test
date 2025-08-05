@@ -125,6 +125,11 @@ const ClientStatsPanel = ({ clientData: propClientData, formatCurrency, classNam
     );
   };
 
+  ProjectProgress.propTypes = {
+    completed: PropTypes.number.isRequired,
+    total: PropTypes.number.isRequired
+  };
+
   const renderTabContent = () => {
     switch (activeTab) {
       case 'overview':

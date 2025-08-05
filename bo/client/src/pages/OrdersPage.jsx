@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Skeleton } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { getOrders, updateOrder, updateOrderStatus, deleteOrder, createOrder } from '../api/axios';
 import OrdersNavigation from '../components/OrdersNavigation';
 import { 
@@ -30,7 +30,7 @@ import {
 } from 'lucide-react';
 
 const OrdersPage = ({ showNavigation = true }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');

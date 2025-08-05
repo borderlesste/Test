@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Skeleton } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { getQuotes, getOrders, getPayments } from '../api/axios';
 import OrdersNavigation from '../components/OrdersNavigation';
 import { 
@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 
 const HistoryPage = ({ showNavigation = true }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [quotes, setQuotes] = useState([]);
   const [orders, setOrders] = useState([]);
   const [payments, setPayments] = useState([]);

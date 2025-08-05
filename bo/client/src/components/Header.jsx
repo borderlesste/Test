@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect, useCallback, memo } from 'react';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import useClickOutside from '../hooks/useClickOutside';
 import Button from './Button';
@@ -11,7 +11,7 @@ import { getUnreadCount } from '../api/axios';
 import PropTypes from 'prop-types';
 
 const Header = memo(function Header({ companyName = "Borderless Techno Company" }) {
-  const { user, logout } = useApi();
+  const { user, logout } = useAuth();
   const { t, currentLanguage, supportedLanguages, changeLanguage } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);

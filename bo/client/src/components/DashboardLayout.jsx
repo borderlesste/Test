@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import AdminSidebar from './AdminSidebar';
 import ClientSidebar from './ClientSidebar';
 import PropTypes from 'prop-types';
 
 const DashboardLayout = ({ children, onSidebarOptionSelect }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

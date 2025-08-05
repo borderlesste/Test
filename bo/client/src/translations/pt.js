@@ -5,11 +5,11 @@ export default {
     services: 'Serviços',
     portfolio: 'Portfólio',
     about: 'Sobre Nós',
-    dashboard: 'Painel',
+    dashboard: 'Dashboard',
     myPanel: 'Meu Painel',
-    login: 'Login',
+    login: 'Entrar',
     logout: 'Sair',
-    register: 'Registrar'
+    register: 'Cadastrar'
   },
   
   // User roles
@@ -46,11 +46,21 @@ export default {
   
   // Home page
   home: {
-    title: 'Bem-vindo à Borderless Techno Company',
+    title: 'Transformamos Ideias em Soluções Digitais',
     subtitle: 'Soluções tecnológicas sem fronteiras',
-    description: 'Transformamos ideias em realidade digital com nossos serviços de desenvolvimento web, aplicativos móveis e consultoria tecnológica.',
-    getStarted: 'Começar',
-    learnMore: 'Saiba Mais'
+    description: 'Desenvolvemos software inovador, aplicações web e móveis que impulsionam o crescimento do seu negócio na era digital',
+    getStarted: 'Começar Projeto',
+    learnMore: 'Ver Portfólio',
+    servicesTitle: 'Nossos Serviços',
+    servicesSubtitle: 'Oferecemos soluções tecnológicas completas adaptadas às necessidades da sua empresa',
+    aboutTitle: 'Sobre a Borderless Techno Company',
+    aboutDescription1: 'Somos uma equipe apaixonada de desenvolvedores, designers e consultores tecnológicos especializados em criar soluções digitais inovadoras para empresas de todos os tamanhos na América Latina.',
+    aboutDescription2: 'Com mais de 5 anos de experiência no mercado, ajudamos mais de 100 empresas a transformar digitalmente seus negócios, otimizar processos e alcançar seus objetivos através da tecnologia.',
+    valuesTitle: 'Nossos Valores',
+    contactTitle: 'Pronto para começar?',
+    contactSubtitle: 'Vamos conversar sobre seu projeto e descobrir como podemos ajudá-lo a alcançar seus objetivos',
+    formTitle: 'Envie-nos uma mensagem',
+    contactInfoTitle: 'Informações de Contato'
   },
   
   // Services page
@@ -78,7 +88,7 @@ export default {
     description: 'Somos uma empresa de tecnologia especializada em desenvolvimento web e soluções digitais.',
     teamTitle: 'Nossa Equipe',
     experience: 'Anos de Experiência',
-    projects: 'Projetos Concluídos',
+    projects: 'Projetos Completados',
     clients: 'Clientes Satisfeitos'
   },
 
@@ -92,16 +102,16 @@ export default {
     send: 'Enviar',
     phone: 'Telefone',
     address: 'Endereço',
-    followUs: 'Siga-nos'
+    followUs: 'Nos Siga'
   },
 
   // Login page
   login: {
-    title: 'Login',
+    title: 'Entrar',
     email: 'Email',
     password: 'Senha',
     loginButton: 'Entrar',
-    noAccount: 'Não tem conta?',
+    noAccount: 'Não tem uma conta?',
     createAccount: 'Criar conta',
     forgotPassword: 'Esqueceu sua senha?'
   },
@@ -122,7 +132,7 @@ export default {
   clientPanel: {
     myProjects: 'Meus Projetos',
     activeProjects: 'Projetos Ativos',
-    completedProjects: 'Projetos Concluídos',
+    completedProjects: 'Projetos Completados',
     invoices: 'Faturas',
     payments: 'Pagamentos',
     support: 'Suporte',
@@ -135,8 +145,8 @@ export default {
     projectManagement: 'Gestão de Projetos',
     financialReports: 'Relatórios Financeiros',
     systemSettings: 'Configurações do Sistema',
-    userActivity: 'Atividade do Usuário',
-    analytics: 'Analíticas'
+    userActivity: 'Atividade dos Usuários',
+    analytics: 'Analytics'
   },
 
   // Forms
@@ -145,7 +155,7 @@ export default {
     invalidEmail: 'Email inválido',
     passwordTooShort: 'Senha muito curta',
     confirmPassword: 'Confirmar senha',
-    passwordsDoNotMatch: 'Senhas não coincidem',
+    passwordsDoNotMatch: 'As senhas não coincidem',
     submit: 'Enviar',
     reset: 'Redefinir',
     search: 'Pesquisar'
@@ -159,5 +169,193 @@ export default {
     cancelled: 'Cancelado',
     active: 'Ativo',
     inactive: 'Inativo'
+  },
+
+  // Privacy Policy
+  privacy: {
+    title: 'Política de Privacidade',
+    lastUpdated: 'Última atualização',
+    date: '27 de julho de 2025',
+    introduction: {
+      title: 'Introdução',
+      content1: 'Na Borderless Techno Company, estamos comprometidos em proteger sua privacidade e garantir a segurança de suas informações pessoais. Esta Política de Privacidade descreve como coletamos, usamos, divulgamos e protegemos suas informações quando você utiliza nossos serviços.',
+      content2: 'Ao utilizar nossos serviços, você aceita as práticas descritas nesta política. Se não concordar com essas práticas, recomendamos que não utilize nossos serviços.'
+    },
+    collection: {
+      title: 'Informações que Coletamos',
+      personalInfo: {
+        title: 'Informações Pessoais',
+        name: 'Nome completo',
+        email: 'Endereço de email',
+        phone: 'Número de telefone',
+        company: 'Nome da empresa',
+        address: 'Endereço postal'
+      },
+      technicalInfo: {
+        title: 'Informações Técnicas',
+        ip: 'Endereço IP',
+        browser: 'Tipo e versão do navegador',
+        device: 'Informações do dispositivo',
+        cookies: 'Cookies e tecnologias similares',
+        usage: 'Dados de uso do site'
+      }
+    },
+    usage: {
+      title: 'Como Utilizamos suas Informações',
+      services: 'Fornecer e melhorar nossos serviços',
+      communication: 'Nos comunicar com você sobre projetos e serviços',
+      improvement: 'Melhorar a experiência do usuário',
+      support: 'Fornecer suporte técnico e atendimento ao cliente',
+      legal: 'Cumprir obrigações legais',
+      marketing: 'Enviar comunicações de marketing (com seu consentimento)'
+    },
+    sharing: {
+      title: 'Compartilhamento de Informações',
+      content1: 'Não vendemos, trocamos ou transferimos suas informações pessoais para terceiros, exceto nas seguintes circunstâncias:',
+      consent: 'Com seu consentimento explícito',
+      legal: 'Para cumprir requisitos legais',
+      business: 'Com parceiros comerciais confiáveis para prestar serviços',
+      protection: 'Para proteger nossos direitos ou a segurança de outros'
+    },
+    security: {
+      title: 'Segurança dos Dados',
+      content1: 'Implementamos medidas de segurança técnicas, administrativas e físicas para proteger suas informações pessoais:',
+      encryption: 'Criptografia de dados em trânsito e em repouso',
+      access: 'Controle de acesso limitado a informações pessoais',
+      monitoring: 'Monitoramento contínuo dos sistemas de segurança',
+      updates: 'Atualizações regulares dos protocolos de segurança'
+    },
+    rights: {
+      title: 'Seus Direitos',
+      access: 'Acessar suas informações pessoais',
+      correct: 'Corrigir informações imprecisas',
+      delete: 'Solicitar a exclusão de seus dados',
+      restrict: 'Restringir o processamento de seus dados',
+      portability: 'Solicitar a portabilidade dos dados',
+      object: 'Se opor ao processamento para marketing direto'
+    },
+    cookies: {
+      title: 'Uso de Cookies',
+      content1: 'Utilizamos cookies e tecnologias similares para melhorar sua experiência:',
+      essential: 'Cookies essenciais para o funcionamento do site',
+      analytics: 'Cookies de análise para melhorar nossos serviços',
+      preferences: 'Cookies de preferências para personalizar sua experiência',
+      marketing: 'Cookies de marketing (com seu consentimento)'
+    },
+    changes: {
+      title: 'Alterações nesta Política',
+      content: 'Reservamo-nos o direito de atualizar esta Política de Privacidade a qualquer momento. Notificaremos sobre mudanças importantes por email ou através de um aviso em nosso site.'
+    },
+    contact: {
+      title: 'Informações de Contato',
+      content: 'Se tiver dúvidas sobre esta Política de Privacidade ou desejar exercer seus direitos, pode nos contatar:',
+      company: 'Empresa',
+      email: 'Email',
+      address: 'Endereço'
+    }
+  },
+
+  // Terms of Service
+  terms: {
+    title: 'Termos de Serviço',
+    lastUpdated: 'Última atualização',
+    date: '27 de julho de 2025',
+    introduction: {
+      title: 'Introdução',
+      content1: 'Bem-vindo à Borderless Techno Company. Estes Termos de Serviço regem o uso de nossos serviços de desenvolvimento de software, aplicações web, móveis e consultoria tecnológica.',
+      content2: 'Ao contratar nossos serviços, você concorda em cumprir estes termos. Se não concordar, não deve utilizar nossos serviços.'
+    },
+    acceptance: {
+      title: 'Aceitação dos Termos',
+      content: 'Ao acessar e utilizar nossos serviços, você confirma que leu, entendeu e concorda em estar sujeito a estes Termos de Serviço e a todas as leis e regulamentações aplicáveis.'
+    },
+    services: {
+      title: 'Descrição dos Serviços',
+      content1: 'A Borderless Techno Company fornece os seguintes serviços:',
+      webDevelopment: 'Desenvolvimento de aplicações web e sites',
+      mobileDevelopment: 'Desenvolvimento de aplicativos móveis para iOS e Android',
+      backend: 'Desenvolvimento de backend e APIs',
+      consulting: 'Consultoria tecnológica e arquitetura de software',
+      security: 'Serviços de cibersegurança e auditorias',
+      ai: 'Integração de inteligência artificial e machine learning'
+    },
+    responsibilities: {
+      title: 'Responsabilidades do Usuário',
+      content1: 'Como usuário de nossos serviços, você se compromete a:',
+      accurate: 'Fornecer informações precisas e atualizadas',
+      compliance: 'Cumprir todas as leis e regulamentações aplicáveis',
+      security: 'Manter a segurança de suas credenciais de acesso',
+      prohibited: 'Não utilizar nossos serviços para atividades ilegais',
+      cooperation: 'Cooperar no desenvolvimento e testes dos projetos'
+    },
+    payment: {
+      title: 'Termos de Pagamento',
+      quotes: 'Todos os preços são baseados em orçamentos personalizados',
+      methods: 'Aceitamos pagamentos por transferência bancária, cartão e PayPal',
+      schedule: 'Os pagamentos são realizados conforme cronograma acordado',
+      late: 'Pagamentos em atraso podem incorrer em taxas adicionais',
+      disputes: 'Disputas de pagamento devem ser comunicadas em até 30 dias'
+    },
+    intellectual: {
+      title: 'Propriedade Intelectual',
+      content1: 'Os direitos de propriedade intelectual são distribuídos da seguinte forma:',
+      ownership: {
+        title: 'Propriedade de Ativos',
+        client: 'O cliente possui o código e conteúdo específicos do projeto',
+        company: 'A Borderless Techno possui ferramentas e frameworks gerais',
+        thirdParty: 'Todos os direitos de terceiros e licenças são respeitados'
+      }
+    },
+    privacy: {
+      title: 'Privacidade e Confidencialidade',
+      content1: 'Comprometemo-nos a manter a confidencialidade de suas informações:',
+      confidential: 'Todas as informações do projeto são tratadas como confidenciais',
+      disclosure: 'Não divulgamos informações sem seu consentimento explícito',
+      protection: 'Implementamos medidas para proteger dados sensíveis'
+    },
+    liability: {
+      title: 'Limitação de Responsabilidade',
+      content1: 'Nossa responsabilidade é limitada das seguintes formas:',
+      indirect: 'Não somos responsáveis por danos indiretos ou consequenciais',
+      loss: 'Não nos responsabilizamos por perda de dados do cliente',
+      interruption: 'Não garantimos disponibilidade contínua sem interrupções',
+      maximum: 'A responsabilidade máxima se limita ao valor do contrato'
+    },
+    warranties: {
+      title: 'Garantias',
+      content1: 'Fornecemos as seguintes garantias em nossos serviços:',
+      quality: 'Garantimos a qualidade do código e melhores práticas',
+      timeline: 'Nos comprometemos a cumprir os prazos acordados',
+      support: 'Oferecemos suporte pós-lançamento conforme contrato',
+      bugs: 'Corrigimos erros identificados durante o período de garantia'
+    },
+    termination: {
+      title: 'Rescisão',
+      content1: 'Estes termos podem ser rescindidos nas seguintes circunstâncias:',
+      convenience: 'Qualquer parte pode rescindir com 30 dias de aviso',
+      breach: 'Rescisão imediata por descumprimento material',
+      effect: 'A rescisão não afeta obrigações já assumidas'
+    },
+    law: {
+      title: 'Lei Aplicável',
+      content: 'Estes termos são regidos pelas leis do México. Qualquer disputa será resolvida nos tribunais competentes da Cidade do México.'
+    },
+    changes: {
+      title: 'Alterações nos Termos',
+      content: 'Reservamo-nos o direito de modificar estes termos a qualquer momento. As alterações entrarão em vigor ao serem publicadas em nosso site.'
+    },
+    contact: {
+      title: 'Informações de Contato',
+      content: 'Para dúvidas sobre estes Termos de Serviço, pode nos contatar:',
+      company: 'Empresa',
+      email: 'Email',
+      address: 'Endereço'
+    }
+  },
+
+  // Footer
+  footer: {
+    privacyPolicy: 'Política de Privacidade',
+    termsOfService: 'Termos de Serviço'
   }
 };

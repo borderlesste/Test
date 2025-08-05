@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button, LoadingSpinner } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api/axios';
 import { 
   CreditCard,
@@ -44,7 +44,7 @@ const IntegrationsPage = ({ showNavigation = true }) => {
 
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  const { user } = useApi();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (user) {

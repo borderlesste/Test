@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { X, User, Mail, Phone, Building2, MapPin, FileText, Shield } from 'lucide-react';
 import { updateClient } from '../../api/axios';
 import { useToast } from '../ui/use-toast';
@@ -30,12 +31,8 @@ const EditClientModal = ({ isOpen, onClose, onSuccess, client }) => {
   };
 
   const {
-    values,
     errors,
-    handleChange,
-    handleBlur,
     handleSubmit,
-    resetForm,
     getFieldProps,
     setFieldValue
   } = useFormValidation(initialValues, validationSchema, {
@@ -313,6 +310,25 @@ const EditClientModal = ({ isOpen, onClose, onSuccess, client }) => {
       </div>
     </div>
   );
+};
+
+EditClientModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired,
+  client: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    nombre: PropTypes.string,
+    email: PropTypes.string,
+    telefono: PropTypes.string,
+    direccion: PropTypes.string,
+    empresa: PropTypes.string,
+    rfc: PropTypes.string,
+    estado: PropTypes.string,
+    created_at: PropTypes.string,
+    total_proyectos: PropTypes.number,
+    proyectos_completados: PropTypes.number
+  })
 };
 
 export default EditClientModal;

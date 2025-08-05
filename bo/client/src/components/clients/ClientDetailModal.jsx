@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { 
   X, 
   User, 
@@ -8,7 +8,6 @@ import {
   MapPin, 
   Calendar, 
   FileText,
-  TrendingUp,
   Package,
   CheckCircle,
   Clock,
@@ -16,6 +15,7 @@ import {
   Activity,
   Eye
 } from 'lucide-react';
+import PropTypes from 'prop-types';
 import { getClient } from '../../api/axios';
 import { useToast } from '../ui/use-toast';
 
@@ -29,9 +29,9 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
     if (isOpen && clientId) {
       loadClientDetail();
     }
-  }, [isOpen, clientId]);
+  }, [isOpen, clientId, loadClientDetail]);
 
-  const loadClientDetail = async () => {
+  const loadClientDetail = useCallback(async () => {
     try {
       setLoading(true);
       const response = await getClient(clientId);
@@ -45,7 +45,7 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [clientId, addToast]);
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('es-ES', {
@@ -105,15 +105,15 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
             <div className="flex items-center">
               <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mr-4">
                 <span className="text-blue-600 dark:text-blue-400 font-bold text-lg">
-                  {client.client.nombre.charAt(0).toUpperCase()}
+                  {client.nombre.charAt(0).toUpperCase()}
                 </span>
               </div>
               <div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                  {client.client.nombre}
+                  {client.nombre}
                 </h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  {client.client.empresa || 'Cliente individual'}
+                  {client.empresa || 'Cliente individual'}
                 </p>
               </div>
             </div>
@@ -179,7 +179,7 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
                       <div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">Nombre</div>
                         <div className="font-medium text-gray-900 dark:text-white">
-                          {client.client.nombre}
+                          {client.nombre}
                         </div>
                       </div>
                     </div>
@@ -189,54 +189,54 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
                       <div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">Email</div>
                         <div className="font-medium text-gray-900 dark:text-white">
-                          {client.client.email}
+                          {client.email}
                         </div>
                       </div>
                     </div>
 
-                    {client.client.telefono && (
+                    {client.telefono && (
                       <div className="flex items-center">
                         <Phone className="w-5 h-5 text-gray-400 mr-3" />
                         <div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">Teléfono</div>
                           <div className="font-medium text-gray-900 dark:text-white">
-                            {client.client.telefono}
+                            {client.telefono}
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {client.client.empresa && (
+                    {client.empresa && (
                       <div className="flex items-center">
                         <Building2 className="w-5 h-5 text-gray-400 mr-3" />
                         <div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">Empresa</div>
                           <div className="font-medium text-gray-900 dark:text-white">
-                            {client.client.empresa}
+                            {client.empresa}
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {client.client.rfc && (
+                    {client.rfc && (
                       <div className="flex items-center">
                         <FileText className="w-5 h-5 text-gray-400 mr-3" />
                         <div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">RFC</div>
                           <div className="font-medium text-gray-900 dark:text-white">
-                            {client.client.rfc}
+                            {client.rfc}
                           </div>
                         </div>
                       </div>
                     )}
 
-                    {client.client.direccion && (
+                    {client.direccion && (
                       <div className="flex items-start">
                         <MapPin className="w-5 h-5 text-gray-400 mr-3 mt-1" />
                         <div>
                           <div className="text-sm text-gray-600 dark:text-gray-400">Dirección</div>
                           <div className="font-medium text-gray-900 dark:text-white">
-                            {client.client.direccion}
+                            {client.direccion}
                           </div>
                         </div>
                       </div>
@@ -247,7 +247,7 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
                       <div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">Cliente desde</div>
                         <div className="font-medium text-gray-900 dark:text-white">
-                          {formatDate(client.client.created_at)}
+                          {formatDate(client.created_at)}
                         </div>
                       </div>
                     </div>
@@ -420,6 +420,15 @@ const ClientDetailModal = ({ isOpen, onClose, clientId }) => {
       </div>
     </div>
   );
+};
+
+ClientDetailModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  clientId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ])
 };
 
 export default ClientDetailModal;

@@ -6,7 +6,6 @@ import axios from '../../api/axios';
 const AdvancedStats = ({ stats, formatCurrency, className = '' }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('month');
   const [animatedValues, setAnimatedValues] = useState({});
-  const [historicalData, setHistoricalData] = useState(null);
   const [growthMetrics, setGrowthMetrics] = useState({});
 
   // Cargar datos históricos para cálculos de tendencias
@@ -20,7 +19,6 @@ const AdvancedStats = ({ stats, formatCurrency, className = '' }) => {
 
         if (monthlyResponse.data?.success) {
           const data = monthlyResponse.data.data;
-          setHistoricalData(data);
           
           // Calcular métricas de crecimiento
           if (data.length >= 2) {

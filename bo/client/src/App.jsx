@@ -5,6 +5,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ToastProvider } from './hooks/useToast';
 import { LanguageProvider } from './context/LanguageContext';
+import { AuthProvider } from './contexts/AuthContext';
 
 import Header from './components/Header';
 import ToastContainer from './components/ToastContainer';
@@ -46,7 +47,6 @@ const NotificationsPage = lazy(() => import('./pages/NotificationsPage'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const ProjectsAdminPage = lazy(() => import('./pages/ProjectsAdminPage'));
 const ClientsAdminPage = lazy(() => import('./pages/ClientsAdminPage'));
-const ClientsViewPage = lazy(() => import('./pages/ClientsViewPage'));
 const ClientsNewPage = lazy(() => import('./pages/ClientsNewPage'));
 const ClientsStatsPage = lazy(() => import('./pages/ClientsStatsPage'));
 const QuotationsAdminPage = lazy(() => import('./pages/QuotationsAdminPage'));
@@ -75,9 +75,10 @@ function App() {
   const isDashboard = location.pathname.includes('/admin') || location.pathname.includes('/client');
 
   return (
-    <LanguageProvider>
-      <ToastProvider>
-        <div className="min-h-screen flex flex-col">
+    <AuthProvider>
+      <LanguageProvider>
+        <ToastProvider>
+          <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-grow pt-20">
             <Suspense fallback={<PageLoader />}>
@@ -291,9 +292,10 @@ function App() {
           </main>
           {!isDashboard && <Footer />}
           <ToastContainer />
-        </div>
-      </ToastProvider>
-    </LanguageProvider>
+          </div>
+        </ToastProvider>
+      </LanguageProvider>
+    </AuthProvider>
   );
 }
 

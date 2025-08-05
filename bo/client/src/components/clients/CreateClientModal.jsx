@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { X, User, Mail, Phone, Building2, MapPin, FileText } from 'lucide-react';
 import { createClient } from '../../api/axios';
 import { useToast } from '../ui/use-toast';
@@ -28,10 +29,7 @@ const CreateClientModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   const {
-    values,
     errors,
-    handleChange,
-    handleBlur,
     handleSubmit,
     resetForm,
     getFieldProps
@@ -226,7 +224,7 @@ const CreateClientModal = ({ isOpen, onClose, onSuccess }) => {
               <ul className="text-sm text-blue-700 dark:text-blue-300 space-y-1">
                 <li>• Se creará una cuenta automáticamente con contraseña temporal: <code>cliente123</code></li>
                 <li>• El cliente recibirá una notificación de bienvenida</li>
-                <li>• El estado inicial será "activo"</li>
+                <li>• El estado inicial será &quot;activo&quot;</li>
               </ul>
             </div>
 
@@ -252,6 +250,12 @@ const CreateClientModal = ({ isOpen, onClose, onSuccess }) => {
       </div>
     </div>
   );
+};
+
+CreateClientModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSuccess: PropTypes.func.isRequired
 };
 
 export default CreateClientModal;

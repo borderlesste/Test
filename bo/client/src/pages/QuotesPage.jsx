@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card, Button, Skeleton } from '../components';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { getQuotes, updateQuote, deleteQuote, convertQuoteToOrder } from '../api/axios';
 import OrdersNavigation from '../components/OrdersNavigation';
 import { 
@@ -24,7 +24,7 @@ import {
 } from 'lucide-react';
 
 const QuotesPage = ({ showNavigation = true }) => {
-  const { user } = useApi();
+  const { user } = useAuth();
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');

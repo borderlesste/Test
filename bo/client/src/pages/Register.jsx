@@ -1,10 +1,10 @@
 // src/pages/Register.jsx
 import { useState } from 'react';
-import { useApi } from '../context/ApiContext';
+import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Register() {
-  const { register } = useApi();
+  const { register } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     nombre: '',

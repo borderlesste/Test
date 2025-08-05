@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
 import { X, MessageSquare, AlertTriangle, Info, CheckCircle, AlertCircle } from 'lucide-react';
 import { useToast } from '../ui/use-toast';
 import useFormValidation from '../../hooks/useFormValidation';
@@ -24,8 +25,6 @@ const MessageClientModal = ({ isOpen, onClose, onSend, client }) => {
   const {
     values,
     errors,
-    handleChange,
-    handleBlur,
     handleSubmit,
     resetForm,
     getFieldProps
@@ -262,6 +261,16 @@ const MessageClientModal = ({ isOpen, onClose, onSend, client }) => {
       </div>
     </div>
   );
+};
+
+MessageClientModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onSend: PropTypes.func.isRequired,
+  client: PropTypes.shape({
+    nombre: PropTypes.string,
+    email: PropTypes.string
+  })
 };
 
 export default MessageClientModal;
