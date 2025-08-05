@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { authenticateToken } = require('../middleware/authMiddleware');
+const { isAuthenticated } = require('../middleware/authMiddleware');
 const { validateClientProfile, validatePasswordUpdate } = require('../middleware/validationMiddleware');
 const {
   getClientStats,
@@ -37,7 +37,7 @@ const requireClient = (req, res, next) => {
 
 // Apply rate limiting and authentication to all client routes
 router.use(clientRateLimit);
-router.use(authenticateToken);
+router.use(isAuthenticated);
 router.use(requireClient);
 
 // Dashboard routes
