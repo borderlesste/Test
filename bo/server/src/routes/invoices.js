@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const invoicesController = require('../controllers/invoicesController');
-const { requireAuth, requireAdmin } = require('../middleware/authMiddleware');
+const { isAuthenticated, requireAdmin } = require('../middleware/authMiddleware');
 const { validateInvoice, validateInvoiceStatus } = require('../middleware/validationMiddleware');
 
 // Rate limiting for invoice operations
@@ -21,7 +21,7 @@ const invoiceRateLimit = rateLimit({
 router.use(invoiceRateLimit);
 
 // Apply authentication to all routes
-router.use(requireAuth);
+router.use(isAuthenticated);
 
 // GET /api/invoices - Get all invoices with pagination and filters
 router.get('/', requireAdmin, invoicesController.getAllInvoices);
