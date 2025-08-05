@@ -59,7 +59,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     const isProduction = process.env.NODE_ENV === 'production';
     const allowedOrigins = isProduction
-      ? ['https://borderlesstechno.com', 'https://www.borderlesstechno.com', 'https://salas-taupe.vercel.app']
+      ? ['https://borderlesstechno.com', 'https://www.borderlesstechno.com']
       : ['http://localhost:5173', 'http://localhost:4000', 'http://127.0.0.1:5173'];
 
     if (!origin) return callback(null, true);
