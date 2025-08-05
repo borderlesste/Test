@@ -256,6 +256,7 @@ process.on('unhandledRejection', async (reason, promise) => {
 
 // Uncaught exception handler
 process.on('uncaughtException', async (error) => {
+  console.error(error); // Log the full error to the console immediately
   await logger.error('Uncaught Exception', {
     error: {
       name: error.name,
