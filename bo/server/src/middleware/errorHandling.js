@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const path = require('path');
 
 // Error levels
@@ -13,14 +13,12 @@ const ERROR_LEVELS = {
 class Logger {
   constructor() {
     this.logDir = path.join(process.cwd(), 'logs');
-    this.ensureLogDirectory();
+    this.ensureLogDirectorySync();
   }
 
-  async ensureLogDirectory() {
-    try {
-      await fs.access(this.logDir);
-    } catch (error) {
-      await fs.mkdir(this.logDir, { recursive: true });
+  ensureLogDirectorySync() {
+    if (!fs.existsSync(this.logDir)) {
+      fs.mkdirSync(this.logDir, { recursive: true });
     }
   }
 
@@ -55,11 +53,12 @@ class Logger {
     try {
       const filename = `${level}-${new Date().toISOString().split('T')[0]}.log`;
       const filepath = path.join(this.logDir, filename);
-      await fs.appendFile(filepath, logLine);
+      await fs.promises.appendFile(filepath, logLine);
     } catch (error) {
       console.error('Failed to write log file:', error);
     }
   }
+}
 
   error(message, meta = {}) {
     return this.writeLog(ERROR_LEVELS.ERROR, message, meta);
